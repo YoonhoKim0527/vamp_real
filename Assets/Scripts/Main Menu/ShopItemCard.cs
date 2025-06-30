@@ -37,12 +37,21 @@ namespace Vampire
 
         private void BuyItem()
         {
+            Debug.Log("buy1");
             int coins = PlayerPrefs.GetInt("Coins", 0);
             if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
             {
+                Debug.Log("buy2");
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
                 itemBlueprint.owned = true;
                 buyButton.interactable = false;
+                Debug.Log(itemBlueprint.type);
+                // 🔥 아이템 타입에 따른 효과 처리
+                if (itemBlueprint.type == ShopItemType.ProjectileUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.ExtraProjectile = true;
+                }
                 coinDisplay.UpdateDisplay();
             }
         }

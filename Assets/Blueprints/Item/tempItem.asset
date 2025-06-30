@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3f53b992e1d1043965c8080d51c0f7, type: 3}
   m_Name: tempItem
   m_EditorClassIdentifier: 
+  type: 1
   itemName: temp
   itemSprite: {fileID: 2742238272864707359, guid: 5f7d372e57fc28f4baab9ef31f75a4bc, type: 3}
-  cost: 100
+  cost: 1
   description: none
   owned: 1

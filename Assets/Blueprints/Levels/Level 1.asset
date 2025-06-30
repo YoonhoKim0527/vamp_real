@@ -203,5 +203,5 @@ MonoBehaviour:
   chestBlueprint: {fileID: 11400000, guid: 7306af3f2b7df4c818a7f7d847d30570, type: 2}
   chestSpawnDelay: 30
   chestSpawnAmount: 2
-  initialExpGemCount: 25
+  initialExpGemCount: 500
   initialExpGemType: 1

@@ -85,11 +85,14 @@ MonoBehaviour:
     - -0.2
     - -0.2
   effectSprite: {fileID: 21300000, guid: 05c1da091a3527243bdfe07151093e61, type: 3}
+  redEyeEffectSprite: {fileID: 21300000, guid: 74512e15eb651644fa782de0d149f988, type: 3}
   projectileCount:
     value: 1
     upgrades: 01000000010000000100000001000000
     projectilesPer: 1
-  blastSound: {fileID: 8300000, guid: de83a897770f03c439fea2dc0fa5a7ac, type: 3}
+  redEyeProjectileSprite: {fileID: 21300000, guid: 74512e15eb651644fa782de0d149f988, type: 3}
+  normalClip: {fileID: 8300000, guid: de83a897770f03c439fea2dc0fa5a7ac, type: 3}
+  evolvedClip: {fileID: 8300000, guid: 1a582ad2fc40bbf49be4a1ee65ce912b, type: 3}
   references:
     version: 2
     RefIds: []

@@ -156,6 +156,13 @@ namespace Vampire
             if (level >= upgrades.Length || upgrades[level] == 0) return "";
             return DescriptionUtils.GetUpgradeDescription(UpgradeName, upgrades[level]*projectilesPer);
         }
+        public void ForceAdd(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Upgrade();
+            }
+        }
     }
     [System.Serializable] public class UpgradeableRecovery : UpgradeableInt
     {
