@@ -5,20 +5,15 @@ namespace Vampire
 {
     public class RadialBlastAbility : ProjectileAbility
     {
-        [Header("Radial Blast Stats")]
-        [SerializeField] private Sprite effectSprite;
-        [SerializeField] private UpgradeableFloat cooldown;
+        [SerializeField] private Sprite effectSprite; // 큰 이펙트 이미지
         [SerializeField] private UpgradeableProjectileCount projectileCount;
+        [SerializeField] private AudioClip blastSound;
 
         private float timeSinceLastCast;
 
         protected override void Use()
         {
             base.Use();
-            if (projectileIndex == -1 && projectilePrefab != null)
-            {
-                projectileIndex = entityManager.AddPoolForProjectile(projectilePrefab);
-            }
             timeSinceLastCast = cooldown.Value;
         }
 
@@ -28,58 +23,52 @@ namespace Vampire
             timeSinceLastCast += Time.deltaTime;
             if (timeSinceLastCast >= cooldown.Value)
             {
-                Attack();
+                StartCoroutine(CastRadialBlast());
                 timeSinceLastCast = 0f;
             }
         }
 
         protected override void Attack()
         {
-            StartCoroutine(CastRadialBlast());
+            // 부모에서 호출될 수 있으므로 빈 override로 무력화
         }
 
         private IEnumerator CastRadialBlast()
         {
-            // 1. 이펙트 이미지 표시
+            // 1. 이펙트 이미지 표시 (잠시 후 제거)
             GameObject effect = new GameObject("RadialBlastEffect");
             SpriteRenderer sr = effect.AddComponent<SpriteRenderer>();
             sr.sprite = effectSprite;
             sr.sortingOrder = 1000;
             effect.transform.position = playerCharacter.CenterTransform.position;
-            effect.transform.localScale = Vector3.one * 4f;
+            effect.transform.localScale = Vector3.one * 4f; // 크게
 
-            yield return new WaitForSeconds(0.5f);
+            // 🔊 AudioSource 생성 및 blastSound 재생
+            AudioSource audioSource = effect.AddComponent<AudioSource>();
+            audioSource.clip = blastSound;
+            audioSource.playOnAwake = false;
+            audioSource.volume = 1f; // 조정 가능
+            audioSource.Play();
+
+            yield return new WaitForSeconds(1.5f);
             Destroy(effect);
 
-            // 2. 12방향 투사체 발사
+            // 2. 투사체 12방향 발사
             for (int i = 0; i < projectileCount.Value; i++)
             {
                 float angle = 360f / projectileCount.Value * i;
                 Vector2 dir = Quaternion.Euler(0, 0, angle) * Vector2.right;
-                LaunchProjectile(dir);
+                Projectile p = entityManager.SpawnProjectile(
+                    projectileIndex,
+                    playerCharacter.CenterTransform.position,
+                    damage.Value,
+                    knockback.Value,
+                    speed.Value,
+                    monsterLayer
+                );
+                p.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+                p.Launch(dir);
             }
         }
-
-        // Shuriken처럼 direction 기반으로 launch
-        protected void LaunchProjectile(Vector2 direction)
-        {
-            Projectile projectile = entityManager.SpawnProjectile(
-                projectileIndex,
-                playerCharacter.CenterTransform.position,
-                damage.Value,
-                knockback.Value,
-                speed.Value,
-                monsterLayer
-            );
-
-            if (projectile == null)
-            {
-                Debug.LogError("[RadialBlast] Spawned projectile is NULL!");
-                return;
-            }
-
-            projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
-            projectile.Launch(direction);
-        }
-    }   
+    }
 }
