@@ -42,7 +42,7 @@ MonoBehaviour:
   - {fileID: 628412716, guid: 02288e18bb6844bd09c390d973e71969, type: 3}
   - {fileID: 546453949, guid: 02288e18bb6844bd09c390d973e71969, type: 3}
   walkFrameTime: 0.2
-  projectilePrefab: {fileID: 7669521032070789568, guid: 05da18cc29e0549b094ccd6c62ca69e5, type: 3}
+  projectilePrefab: {fileID: 7669521032070789568, guid: 1b6da83723c9f4501a4c1db54d6d0386, type: 3}
   targetLayer:
     serializedVersion: 2
     m_Bits: 1280

@@ -125,6 +125,7 @@ namespace Vampire
 
         protected virtual void OnTriggerEnter2D(Collider2D collider)
         {
+            Debug.Log($"Projectile hit something: {collider.name}");
             CollisionCheck(collider);
         }
 

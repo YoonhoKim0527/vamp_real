@@ -37,9 +37,9 @@ MonoBehaviour:
   monsters:
   - monstersPrefab: {fileID: 8960830493049914446, guid: 12adb3a92ed404612906d2c1fe4b586e, type: 3}
     monsterBlueprints:
+    - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
     - {fileID: 11400000, guid: 1d1547b98475241e798c26597f6553a5, type: 2}
     - {fileID: 11400000, guid: 03a9f1276c78f4503b3757f7e14adbed, type: 2}
-    - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
   - monstersPrefab: {fileID: 8960830493049914446, guid: dfcf798c11f284752815ead20a8dbaeb, type: 3}
     monsterBlueprints:
     - {fileID: 11400000, guid: 38f13c65830f840f99434d21ce75baef, type: 2}
@@ -49,6 +49,9 @@ MonoBehaviour:
   - monstersPrefab: {fileID: 8960830493049914446, guid: f221b6d092ee543038a69c17c526bab0, type: 3}
     monsterBlueprints:
     - {fileID: 11400000, guid: f2518533fe52946a188a4e6a74ecff6e, type: 2}
+  - monstersPrefab: {fileID: 2494044529700043267, guid: c791f15608b92f14db475b8fb52b602c, type: 3}
+    monsterBlueprints:
+    - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
   miniBosses:
   - bossPrefab: {fileID: 8960830493049914446, guid: bf088821f793b4654a2ba39cb4266ae9, type: 3}
     bossBlueprint: {fileID: 11400000, guid: 6aa76d11a438f4bd0aab1e7b138ef8f9, type: 2}
