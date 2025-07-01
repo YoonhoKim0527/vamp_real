@@ -8,7 +8,7 @@ namespace Vampire
         public SpawnRateKeyframe[] spawnRateKeyframes;
         public SpawnChanceKeyframe[] spawnChanceKeyframes;
         public HPMultiplierKeyframe[] hpMultiplierKeyframes;
-
+        
         public float GetSpawnRate(float t)
         {
             if (t == 0)

@@ -16,6 +16,7 @@ namespace Vampire
     public enum ShopItemType
     {
         None,
-        ProjectileUpgrade
+        ProjectileUpgrade,
+        DamageU
     }
 }
