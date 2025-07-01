@@ -12,11 +12,15 @@ namespace Vampire
     public class EntityManager : MonoBehaviour
     {
         [Header("Monster Spawning Settings")]
-        [SerializeField] private float monsterSpawnBufferDistance;  // Extra distance outside of the screen view at which monsters should be spawned
-        [SerializeField] private float playerDirectionSpawnWeight;  // How much do we weight the player's movement direction in the spawning of monsters
+        [SerializeField] private float monsterSpawnBufferDistance;
+        [SerializeField] private float playerDirectionSpawnWeight;
         [Header("Chest Spawning Settings")]
-        [SerializeField] private  float chestSpawnRange = 5;
+        [SerializeField] private float chestSpawnRange = 5;
         [Header("Object Pool Settings")]
+        [SerializeField] private GameObject poisonCloudPrefab;
+        [SerializeField] private GameObject poisonCloudPoolParent;
+        private List<PoisonCloudPool> poisonCloudPools;
+        private Dictionary<GameObject, int> poisonCloudIndexByPrefab;
         [SerializeField] private GameObject monsterPoolParent;
         private MonsterPool[] monsterPools;
         [SerializeField] private GameObject projectilePoolParent;
@@ -41,14 +45,14 @@ namespace Vampire
         [SerializeField] private Vector2Int gridDimensions;
         [Header("Dependencies")]
         [SerializeField] private SpriteRenderer flashSpriteRenderer;
-        [SerializeField] private Camera playerCamera;  // 攝像頭
-        private Character playerCharacter;  // 玩家的角色
+        [SerializeField] private Camera playerCamera;
+        private Character playerCharacter;
         private StatsManager statsManager;
         private Inventory inventory;
         private InfiniteBackground infiniteBackground;
         private FastList<Monster> livingMonsters;
         private FastList<Collectable> magneticCollectables;
-        public FastList<Chest> chests; 
+        public FastList<Chest> chests;
         private float timeSinceLastMonsterSpawned;
         private float timeSinceLastChestSpawned;
         private float screenWidthWorldSpace, screenHeightWorldSpace, screenDiagonalWorldSpace;
@@ -70,47 +74,69 @@ namespace Vampire
             this.statsManager = statsManager;
             AbilitySelectionDialog = abilitySelectionDialog;
 
-            // Determine the screen size in world space so that we can spawn enemies outside of it
             Vector2 bottomLeft = playerCamera.ViewportToWorldPoint(new Vector3(0, 0, playerCamera.nearClipPlane));
             Vector2 topRight = playerCamera.ViewportToWorldPoint(new Vector3(1, 1, playerCamera.nearClipPlane));
             screenWidthWorldSpace = topRight.x - bottomLeft.x;
             screenHeightWorldSpace = topRight.y - bottomLeft.y;
             screenDiagonalWorldSpace = (topRight - bottomLeft).magnitude;
-            minSpawnDistance = screenDiagonalWorldSpace/2;
+            minSpawnDistance = screenDiagonalWorldSpace / 2;
 
-            // Init fast lists
             livingMonsters = new FastList<Monster>();
             magneticCollectables = new FastList<Collectable>();
             chests = new FastList<Chest>();
-            
-            // Initialize a monster pool for each monster prefab
+
             monsterPools = new MonsterPool[levelBlueprint.monsters.Length + 1];
             for (int i = 0; i < levelBlueprint.monsters.Length; i++)
             {
                 monsterPools[i] = monsterPoolParent.AddComponent<MonsterPool>();
                 monsterPools[i].Init(this, playerCharacter, levelBlueprint.monsters[i].monstersPrefab);
             }
-            monsterPools[monsterPools.Length-1] = monsterPoolParent.AddComponent<MonsterPool>();
-            monsterPools[monsterPools.Length-1].Init(this, playerCharacter, levelBlueprint.finalBoss.bossPrefab);
-            // Initialize a projectile pool for each ranged projectile type
+            monsterPools[monsterPools.Length - 1] = monsterPoolParent.AddComponent<MonsterPool>();
+            monsterPools[monsterPools.Length - 1].Init(this, playerCharacter, levelBlueprint.finalBoss.bossPrefab);
+
             projectileIndexByPrefab = new Dictionary<GameObject, int>();
             projectilePools = new List<ProjectilePool>();
-            // Initialize a throwable pool for each throwable type
             throwableIndexByPrefab = new Dictionary<GameObject, int>();
             throwablePools = new List<ThrowablePool>();
-            // Initialize a boomerang pool for each boomerang type
             boomerangIndexByPrefab = new Dictionary<GameObject, int>();
             boomerangPools = new List<BoomerangPool>();
-            // Initialize remaining one-off object pools
+            poisonCloudIndexByPrefab = new Dictionary<GameObject, int>();
+            poisonCloudPools = new List<PoisonCloudPool>();
+
             expGemPool.Init(this, playerCharacter, expGemPrefab);
             coinPool.Init(this, playerCharacter, coinPrefab);
             chestPool.Init(this, playerCharacter, chestPrefab);
             textPool.Init(this, playerCharacter, textPrefab);
 
-            // Init spatial hash grid
-            Vector2[] bounds = new Vector2[] { (Vector2)playerCharacter.transform.position - gridSize/2, (Vector2)playerCharacter.transform.position + gridSize/2 };
+            Vector2[] bounds = new Vector2[] { (Vector2)playerCharacter.transform.position - gridSize / 2, (Vector2)playerCharacter.transform.position + gridSize / 2 };
             grid = new SpatialHashGrid(bounds, gridDimensions);
         }
+
+        public int AddPoolForPoisonCloud(GameObject prefab)
+        {
+            if (!poisonCloudIndexByPrefab.ContainsKey(prefab))
+            {
+                poisonCloudIndexByPrefab[prefab] = poisonCloudPools.Count;
+                PoisonCloudPool pool = poisonCloudPoolParent.AddComponent<PoisonCloudPool>();
+                pool.Init(this, playerCharacter, prefab);
+                poisonCloudPools.Add(pool);
+            }
+            return poisonCloudIndexByPrefab[prefab];
+        }
+
+        public PoisonCloud SpawnPoisonCloud(int poolIndex, Vector2 position)
+        {
+            PoisonCloud cloud = poisonCloudPools[poolIndex].Get();
+            cloud.transform.position = position;
+            return cloud;
+        }
+
+        public void DespawnPoisonCloud(int poolIndex, PoisonCloud cloud)
+        {
+            poisonCloudPools[poolIndex].Release(cloud);
+        }
+
+
 
         void Update()
         {

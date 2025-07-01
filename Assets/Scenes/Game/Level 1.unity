@@ -2213,6 +2213,7 @@ Transform:
   - {fileID: 201181012}
   - {fileID: 732231382}
   - {fileID: 1025842198}
+  - {fileID: 1090578877}
   m_Father: {fileID: 1547352218}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8138,6 +8139,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077823141}
   m_CullTransparentMesh: 1
+--- !u!1 &1090578876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1090578877}
+  m_Layer: 0
+  m_Name: PoisonCloudPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1090578877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090578876}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 777177184}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1098123512
 GameObject:
   m_ObjectHideFlags: 0
@@ -13982,6 +14014,8 @@ MonoBehaviour:
   monsterSpawnBufferDistance: 0.5
   playerDirectionSpawnWeight: 5
   chestSpawnRange: 10
+  poisonCloudPrefab: {fileID: 6983629839828086126, guid: ae105d79e753b4847b16eb33f55ee530, type: 3}
+  poisonCloudPoolParent: {fileID: 1090578876}
   monsterPoolParent: {fileID: 1098123512}
   projectilePoolParent: {fileID: 201181011}
   throwablePoolParent: {fileID: 732231381}

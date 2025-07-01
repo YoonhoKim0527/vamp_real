@@ -35,7 +35,11 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 5ef555eded0e44e25a78b4f84fb661bd, type: 3}
   - {fileID: 7378740072262091319, guid: 1f4699d7a46c44170930119aed6fe806, type: 3}
   - {fileID: 7378740072262091319, guid: 39204614fc67b40eaa117e59ba519b20, type: 3}
+  - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
   monsters:
+  - monstersPrefab: {fileID: 8960830493049914446, guid: 32acffa87c5128f47bf52716a872bbad, type: 3}
+    monsterBlueprints:
+    - {fileID: 11400000, guid: c54a6635d5ec3734597c9de9fcd58185, type: 2}
   - monstersPrefab: {fileID: 8960830493049914446, guid: 12adb3a92ed404612906d2c1fe4b586e, type: 3}
     monsterBlueprints:
     - {fileID: 11400000, guid: 03a9f1276c78f4503b3757f7e14adbed, type: 2}
@@ -64,30 +68,18 @@ MonoBehaviour:
     spawnRateKeyframes:
     - t: 0
       spawnRate: 1
-    - t: 0.1
-      spawnRate: 3
-    - t: 0.43
-      spawnRate: 4.5
-    - t: 0.48
-      spawnRate: 1
-    - t: 0.55
-      spawnRate: 1.5
-    - t: 0.65
-      spawnRate: 3.5
-    - t: 0.975
-      spawnRate: 6
-    - t: 1
-      spawnRate: 2
+    - t: 0.02
+      spawnRate: 30
     spawnChanceKeyframes:
     - t: 0
       spawnChances:
+      - 0
       - 1
       - 0
       - 0
       - 0
       - 0
-      - 0
-    - t: 0.05
+    - t: 0.02
       spawnChances:
       - 1
       - 0
