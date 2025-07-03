@@ -74,7 +74,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ResetBlend: 1.000308
+    - _ResetBlend: 1.0003122
     - _Resetting: 0
     - _Ripple: 2.76
     - _RippleIntensity: 0.1
@@ -91,7 +91,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ResetOffset: {r: -11.079383, g: -23.722815, b: 0, a: 0}
-    - _TempResetOffset: {r: 12.86889, g: -7.7343016, b: 0, a: 0}
+    - _ResetOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _TempResetOffset: {r: -14.929658, g: -1.7113688, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -1751,12 +1751,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 02309cd829b224b648ed3c3df7c86e6c, type: 2}
   - {fileID: 11400000, guid: afa99349eb3ad4e2aa7701749ec87eea, type: 2}
   - {fileID: 11400000, guid: 1a2f0d9c7b8550549a0015e3fed67711, type: 2}
-  - {fileID: 11400000, guid: 78d5cb3f22ba92a4fa05eee37232f9ca, type: 2}
-  - {fileID: 11400000, guid: de73314b3a2481446a336db448f72e06, type: 2}
   - {fileID: 11400000, guid: d40bd28c852b3fd4ba080fe8fd6fca24, type: 2}
+  - {fileID: 11400000, guid: de73314b3a2481446a336db448f72e06, type: 2}
   - {fileID: 11400000, guid: 6cc5cc9012a5c26479124544863c5de7, type: 2}
   - {fileID: 11400000, guid: fe661697c12688845a956f252d874992, type: 2}
-  - {fileID: 11400000, guid: 718965a2cb809b141b0acd8a13dad3a8, type: 2}
   characterCardPrefab: {fileID: 979783560240380161, guid: 886cc4577ecba4fc6af0c792a1e21501, type: 3}
   coinDisplay: {fileID: 667823177}
 --- !u!1 &823479996
