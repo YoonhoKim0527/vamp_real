@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7822634639757199850}
   - component: {fileID: 4915996707842535573}
   m_Layer: 0
-  m_Name: Shuriken 2
+  m_Name: 200carrot shuri
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,9 +50,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.022561654, y: -0.01968427}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.11596045
 --- !u!114 &7822634639757199850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +251,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5be127c6cc92c3547b4dffb172ef002d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 08c5fdac87eec6443bac5eccfbf3a9bf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
