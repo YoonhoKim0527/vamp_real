@@ -198,12 +198,20 @@ MonoBehaviour:
     m_Localized: "\u5F37\u5316"
     m_Metadata:
       m_Items: []
-  - m_Id: 157393695065825280
-    m_Localized: skunk
+  - m_Id: 157382557837029376
+    m_Localized: g
     m_Metadata:
       m_Items: []
-  - m_Id: 157393840432013312
-    m_Localized: damage many
+  - m_Id: 157382639114252288
+    m_Localized: a
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157757179933749248
+    m_Localized: a
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157757271747063808
+    m_Localized: a
     m_Metadata:
       m_Items: []
   references:

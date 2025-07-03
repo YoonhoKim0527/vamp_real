@@ -48,6 +48,7 @@ MonoBehaviour:
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
+      m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
       m_KeyId: 157393695065825280
       m_Key: 
@@ -56,6 +57,7 @@ MonoBehaviour:
     m_LocalVariables: []
   localizedDescription:
     m_TableReference:
+      m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
       m_KeyId: 157393840432013312

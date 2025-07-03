@@ -14,6 +14,13 @@ namespace Vampire
         private float resetDistance = 15;
         private float resetDuration = 5;
 
+        [SerializeField] private GameObject volcanoTilePrefab;
+        [SerializeField] private float spawnInterval = 3f;
+        [SerializeField] private float volcanoSpawnChance = 1f;
+        [SerializeField] private float spawnRadius = 2f;
+        
+        private Coroutine volcanoSpawner;
+
         void Awake()
         {
             // Determine the screen size in world space so that we can spawn enemies outside of it
@@ -22,6 +29,29 @@ namespace Vampire
             Vector3 screenSizeWorldSpace = new Vector3(topRight.x - bottomLeft.x, topRight.y - bottomLeft.y, 1);
             transform.localScale = screenSizeWorldSpace;
             GetComponent<MeshRenderer>().sharedMaterial = backgroundMaterial;
+        }
+
+
+        public void Start()
+        {
+            volcanoSpawner = StartCoroutine(SpawnVolcanoTilesRoutine());
+        }
+
+        private IEnumerator SpawnVolcanoTilesRoutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(spawnInterval);
+
+                // ✅ 충돌 방지: UnityEngine.Random
+                if (UnityEngine.Random.value < volcanoSpawnChance && playerTransform != null)
+                {
+                    Debug.Log("spawn volcano");
+                    Vector2 spawnPos = (Vector2)playerTransform.position + UnityEngine.Random.insideUnitCircle * spawnRadius;
+                    Instantiate(volcanoTilePrefab, spawnPos, Quaternion.identity);
+                    Debug.Log(spawnPos);
+                }
+            }
         }
 
         public void Init(Texture2D backgroundTexture, Transform playerTransform)
