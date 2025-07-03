@@ -30,7 +30,7 @@ namespace Vampire
         public void StartGame(CharacterBlueprint characterBlueprint)
         {
             CrossSceneData.CharacterBlueprint = characterBlueprint;
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         }
     }
 }

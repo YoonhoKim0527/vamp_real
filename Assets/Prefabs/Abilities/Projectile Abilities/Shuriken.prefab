@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99a6bc29b922498da41d7188c31e619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 5be127c6cc92c3547b4dffb172ef002d, type: 3}
+  image: {fileID: 21300000, guid: 83572cec508d34b4a95f305ee0e2eeeb, type: 3}
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
@@ -64,7 +64,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   rarity: 50
-  projectilePrefab: {fileID: 7669521032070789568, guid: 12a3fbace2fff3140b9e9a36322c21b7, type: 3}
+  projectilePrefab: {fileID: 7669521032070789568, guid: ef96a333935e70a4884fd0eb3b124726, type: 3}
   monsterLayer:
     serializedVersion: 2
     m_Bits: 1088

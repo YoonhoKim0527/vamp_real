@@ -103,7 +103,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6587841241088
-    m_Localized: Shuriken
+    m_Localized: Carrot Shuriken
     m_Metadata:
       m_Items: []
   - m_Id: 7050871431168
@@ -204,6 +204,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 156992523820593152
     m_Localized: Real Jaeang Jamei Ham
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157382557837029376
+    m_Localized: gas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157382639114252288
+    m_Localized: "smells bad\t\t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157757179933749248
+    m_Localized: Ice age
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157757271747063808
+    m_Localized: ICE~~~AGE
     m_Metadata:
       m_Items: []
   references:
