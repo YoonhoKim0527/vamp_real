@@ -17,4 +17,4 @@ MonoBehaviour:
   itemSprite: {fileID: -1743837342, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
   cost: 1
   description: none
-  owned: 1
+  owned: 0

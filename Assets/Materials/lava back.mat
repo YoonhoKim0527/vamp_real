@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 42b11be826072496a9d57814c0ca6576, type: 3}
+        m_Texture: {fileID: 2800000, guid: 93a726948508cc14eab67fb1abe2daa8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -74,7 +74,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ResetBlend: 1.0002366
+    - _ResetBlend: 1.000308
     - _Resetting: 0
     - _Ripple: 2.76
     - _RippleIntensity: 0.1
@@ -91,7 +91,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ResetOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _TempResetOffset: {r: 12.677128, g: -8.132191, b: 0, a: 0}
+    - _ResetOffset: {r: -11.079383, g: -23.722815, b: 0, a: 0}
+    - _TempResetOffset: {r: 12.86889, g: -7.7343016, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

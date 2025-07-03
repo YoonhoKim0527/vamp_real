@@ -64,6 +64,8 @@ namespace Vampire
         public Vector2 Size => meleeHitboxCollider.bounds.size;
         public Dictionary<int, int> ListIndexByCellIndex { get; set; }
         public int QueryID { get; set; } = -1;
+        CharacterStats stats;  
+        public CharacterStats Stats => stats;
 
         void Awake()
         {
@@ -103,6 +105,8 @@ namespace Vampire
             armor.Value = characterBlueprint.armor;
             abilityManager.RegisterUpgradeableValue(armor, true);
             zPositioner.Init(transform);
+
+            stats = new CharacterStats(characterBlueprint);
         }
 
         protected virtual void Update()

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: strong
   description: more strong
-  upgradeSprite: {fileID: -683249406, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
+  upgradeSprite: {fileID: 21300000, guid: 2564366b0db3b442f96b7d83cc9db628, type: 3}
   cost: 1
-  purchased: 0
+  owned: 0
   type: 1

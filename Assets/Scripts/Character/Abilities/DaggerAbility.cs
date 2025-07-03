@@ -10,23 +10,26 @@ namespace Vampire
         [SerializeField] protected UpgradeableBleedDamage bleedDamage;
         [SerializeField] protected UpgradeableBleedRate bleedRate;
         [SerializeField] protected UpgradeableBleedDuration bleedDuration;
-
+        Character character;
         protected override void DamageMonster(Monster monster, float damage, Vector2 knockback)
         {
             base.DamageMonster(monster, damage, knockback);
             Coroutine monsterBleed = StartCoroutine(BleedMonster(monster));
-            monster.OnKilled.AddListener( delegate { StopMonsterBleed(monsterBleed); } );
+            monster.OnKilled.AddListener(delegate { StopMonsterBleed(monsterBleed); });
         }
 
         protected IEnumerator BleedMonster(Monster monster)
         {
             float bleedDelay = 1/bleedRate.Value;
             int bleedCount = Mathf.RoundToInt(bleedDuration.Value * bleedRate.Value);
+            Debug.Log($"bleedDamage.Value = {bleedDamage.Value}");
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * bleedDamage.Value;
             for (int i = 0; i < bleedCount; i++)
             {
                 yield return new WaitForSeconds(bleedDelay);
-                monster.TakeDamage(bleedDamage.Value);
-                playerCharacter.OnDealDamage.Invoke(bleedDamage.Value);
+
+                monster.TakeDamage(totalDamage);
+                playerCharacter.OnDealDamage.Invoke(totalDamage);
                 if (monster.HP <= 0)
                     break;
             }

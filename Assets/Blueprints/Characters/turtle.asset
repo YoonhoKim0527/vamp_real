@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
-  m_Name: oing
+  m_Name: turtle
   m_EditorClassIdentifier: 
-  name: what
+  name: Penguin
   owned: 1
   cost: 999
-  baseDamage: 4
+  baseDamage: 100
   hp: 1000
   recovery: 0
   armor: 100
   movespeed: 2
   luck: 1
-  acceleration: 32.65
+  acceleration: 50
   walkSpriteSequence:
-  - {fileID: 2742238272864707359, guid: 5f7d372e57fc28f4baab9ef31f75a4bc, type: 3}
-  - {fileID: 1229771443119327036, guid: 1544dcfa642130a45be38de38cc68fae, type: 3}
-  - {fileID: 6936713861258854839, guid: 0f6639ad26652b94899a70bfa1ad30c5, type: 3}
-  walkFrameTime: 34.54
+  - {fileID: -1919162409, guid: 1c14dae94ef13e449902ba45ec3ed8c0, type: 3}
+  - {fileID: 863480105, guid: 1c14dae94ef13e449902ba45ec3ed8c0, type: 3}
+  - {fileID: 389286658, guid: 1c14dae94ef13e449902ba45ec3ed8c0, type: 3}
+  walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
+  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: asd
   description: asdasda
-  upgradeSprite: {fileID: 6936713861258854839, guid: 0f6639ad26652b94899a70bfa1ad30c5, type: 3}
+  upgradeSprite: {fileID: 1484808113, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
   cost: 2
-  purchased: 0
-  type: 4
+  owned: 0
+  type: 2

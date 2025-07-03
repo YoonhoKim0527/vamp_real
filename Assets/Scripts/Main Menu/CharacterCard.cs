@@ -12,6 +12,7 @@ namespace Vampire
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image characterImage;
         [SerializeField] private RectTransform characterImageRect;
+        [SerializeField] private TextMeshProUGUI baseDamageText;
         [SerializeField] private TextMeshProUGUI hpText;
         [SerializeField] private TextMeshProUGUI armorText;
         [SerializeField] private TextMeshProUGUI mvspdText;
@@ -48,6 +49,7 @@ namespace Vampire
             characterImage.sprite = characterBlueprint.walkSpriteSequence[0];
 
             nameText.text = characterBlueprint.name.ToString();
+            baseDamageText.text = characterBlueprint.baseDamage.ToString();
             hpText.text = characterBlueprint.hp.ToString();
             armorText.text = characterBlueprint.armor.ToString();
             mvspdText.text = Mathf.RoundToInt(characterBlueprint.movespeed/1.15f * 100f).ToString()+"%";

@@ -52,6 +52,21 @@ namespace Vampire
                     Debug.Log("bu3");
                     CrossSceneData.ExtraProjectile = true;
                 }
+                if (itemBlueprint.type == ShopItemType.DamageUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.ExtraDamage = true;
+                }
+                if (itemBlueprint.type == ShopItemType.HPUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.ExtraHP = true;
+                }
+                if (itemBlueprint.type == ShopItemType.SpeedUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.ExtraSpeed = true;
+                }
                 coinDisplay.UpdateDisplay();
             }
         }

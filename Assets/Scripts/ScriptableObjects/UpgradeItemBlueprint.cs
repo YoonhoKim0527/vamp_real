@@ -10,17 +10,16 @@ namespace Vampire
         public string description;
         public Sprite upgradeSprite;
         public int cost;
-        public bool purchased = false;
-
-        public UpgradeType type;
+        public bool owned = false;
+        public UpgradeType type =  UpgradeType.None;
     }
 
     public enum UpgradeType
     {
         None,
-        DamageUp,
-        MaxHPUp,
-        MoveSpeedUp,
-        ProjectilePlus
+        ProjectileUpgrade,
+        DamageUpgrade,
+        HPUpgrade,
+        SpeedUpgrade
     }
 }

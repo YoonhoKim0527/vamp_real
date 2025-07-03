@@ -8,6 +8,7 @@ namespace Vampire
         public new string name;  // 名字
         public bool owned = false;
         public int cost = 999;
+        public float baseDamage = 1f;
         public float hp;  // 血量
         public float recovery;  // 血量恢復再生率
         public int armor;  // 裝甲減傷

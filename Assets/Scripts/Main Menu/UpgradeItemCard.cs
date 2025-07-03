@@ -30,7 +30,7 @@ namespace Vampire
             // descriptionText.text = blueprint.description;
             itemImage.sprite = blueprint.upgradeSprite;
             costText.text = "BUY $" + blueprint.cost.ToString();
-            buyButton.interactable = !blueprint.purchased;
+            buyButton.interactable = !blueprint.owned;
 
             buyButton.onClick.AddListener(BuyUpgrade);
         }
@@ -39,29 +39,36 @@ namespace Vampire
         {
             Debug.Log("Attempting to buy upgrade...");
             int coins = PlayerPrefs.GetInt("Coins", 0);
-            if (coins >= itemBlueprint.cost && !itemBlueprint.purchased)
+            if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
             {
                 Debug.Log("Upgrade purchase successful.");
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
-                itemBlueprint.purchased = true;
+                itemBlueprint.owned = true;
                 buyButton.interactable = false;
 
                 // 🛠️ 실제 업그레이드 효과 적용
-                switch (itemBlueprint.type)
+
+                if (itemBlueprint.type == UpgradeType.ProjectileUpgrade)
                 {
-                    case UpgradeType.ProjectilePlus:
-                        CrossSceneData.ExtraProjectile = true;
-                        break;
-                    case UpgradeType.DamageUp:
-                        CrossSceneData.ExtraDamage = true;
-                        break;
-                    case UpgradeType.MaxHPUp:
-                        CrossSceneData.ExtraHP = true;
-                        break;
-                    case UpgradeType.MoveSpeedUp:
-                        CrossSceneData.ExtraSpeed = true;
-                        break;
+                    Debug.Log("bu3");
+                    CrossSceneData.BonusProjectile ++;
                 }
+                if (itemBlueprint.type == UpgradeType.DamageUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.BonusDamage ++;
+                }
+                if (itemBlueprint.type == UpgradeType.HPUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.BonusHP ++;
+                }
+                if (itemBlueprint.type == UpgradeType.SpeedUpgrade)
+                {
+                    Debug.Log("bu3");
+                    CrossSceneData.BonusSpeed ++;
+                }
+                
 
                 coinDisplay.UpdateDisplay();
             }

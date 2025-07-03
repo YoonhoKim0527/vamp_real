@@ -17,6 +17,8 @@ namespace Vampire
     {
         None,
         ProjectileUpgrade,
-        DamageU
+        DamageUpgrade,
+        HPUpgrade,
+        SpeedUpgrade
     }
 }

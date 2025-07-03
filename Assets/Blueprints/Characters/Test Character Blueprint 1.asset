@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Test
   owned: 1
   cost: 999
+  baseDamage: 8
   hp: 50
   recovery: 0
   armor: 0

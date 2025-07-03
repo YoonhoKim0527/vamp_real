@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Penguin
   owned: 1
   cost: 999
+  baseDamage: 5
   hp: 1000
   recovery: 0
   armor: 100
@@ -28,4 +29,4 @@ MonoBehaviour:
   - {fileID: -1668147796, guid: 3488b902bd1f9fc4daa50ee7aac2789a, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
+  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}

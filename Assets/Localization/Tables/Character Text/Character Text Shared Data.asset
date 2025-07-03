@@ -43,6 +43,10 @@ MonoBehaviour:
     m_Key: Select
     m_Metadata:
       m_Items: []
+  - m_Id: 158418081424138240
+    m_Key: Base Damage
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Monkey
   owned: 1
   cost: 999
+  baseDamage: 3
   hp: 1000
   recovery: 0
   armor: 100

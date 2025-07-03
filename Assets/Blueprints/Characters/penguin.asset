@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Penguin
   owned: 1
   cost: 999
+  baseDamage: 5
   hp: 1000
   recovery: 0
   armor: 100
