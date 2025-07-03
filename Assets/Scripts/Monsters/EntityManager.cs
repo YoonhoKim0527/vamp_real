@@ -17,6 +17,7 @@ namespace Vampire
         [Header("Chest Spawning Settings")]
         [SerializeField] private float chestSpawnRange = 5;
         [Header("Object Pool Settings")]
+
         [SerializeField] private GameObject poisonCloudPrefab;
         [SerializeField] private GameObject poisonCloudPoolParent;
         private List<PoisonCloudPool> poisonCloudPools;
@@ -135,7 +136,6 @@ namespace Vampire
         {
             poisonCloudPools[poolIndex].Release(cloud);
         }
-
 
 
         void Update()

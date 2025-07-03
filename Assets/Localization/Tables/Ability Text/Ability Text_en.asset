@@ -206,6 +206,14 @@ MonoBehaviour:
     m_Localized: Real Jaeang Jamei Ham
     m_Metadata:
       m_Items: []
+  - m_Id: 157393695065825280
+    m_Localized: skunk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157393840432013312
+    m_Localized: damage many
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

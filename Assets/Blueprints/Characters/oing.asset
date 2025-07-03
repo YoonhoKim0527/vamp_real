@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
-  m_Name: Quokka char
+  m_Name: oing
   m_EditorClassIdentifier: 
-  name: Quokka
+  name: what
   owned: 1
   cost: 999
   hp: 1000
@@ -20,14 +20,11 @@ MonoBehaviour:
   armor: 100
   movespeed: 2
   luck: 1
-  acceleration: 50
+  acceleration: 32.65
   walkSpriteSequence:
-  - {fileID: -1743837342, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
-  - {fileID: 1484808113, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
-  - {fileID: -683249406, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
-  - {fileID: -1743837342, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
-  walkFrameTime: 0.1
+  - {fileID: 2742238272864707359, guid: 5f7d372e57fc28f4baab9ef31f75a4bc, type: 3}
+  - {fileID: 1229771443119327036, guid: 1544dcfa642130a45be38de38cc68fae, type: 3}
+  - {fileID: 6936713861258854839, guid: 0f6639ad26652b94899a70bfa1ad30c5, type: 3}
+  walkFrameTime: 34.54
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: ad7ae2010ff3f409aae00371b1f7d578, type: 3}
   - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
-  - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
