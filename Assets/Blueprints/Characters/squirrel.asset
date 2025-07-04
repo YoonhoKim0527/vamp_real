@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
+  m_Name: squirrel
+  m_EditorClassIdentifier: 
+  name: squirrel
+  owned: 1
+  cost: 999
+  baseDamage: 2
+  hp: 1000
+  recovery: 0
+  armor: 100
+  movespeed: 2
+  luck: 1
+  acceleration: 50
+  walkSpriteSequence:
+  - {fileID: 727792854, guid: 00c3f3bb1803c67469fd43d65473b979, type: 3}
+  - {fileID: 727792854, guid: 00c3f3bb1803c67469fd43d65473b979, type: 3}
+  - {fileID: 727792854, guid: 00c3f3bb1803c67469fd43d65473b979, type: 3}
+  - {fileID: -723382198, guid: 00c3f3bb1803c67469fd43d65473b979, type: 3}
+  walkFrameTime: 0.1
+  startingAbilities:
+  - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
