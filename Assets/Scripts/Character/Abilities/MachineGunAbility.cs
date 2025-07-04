@@ -32,7 +32,8 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, launchTransform.position, damage.Value, knockback.Value, speed.Value, monsterLayer);
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, launchTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             projectile.Launch(gunDirection);
         }

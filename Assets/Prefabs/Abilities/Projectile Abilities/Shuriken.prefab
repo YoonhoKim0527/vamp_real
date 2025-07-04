@@ -69,7 +69,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1088
   damage:
-    value: 5
+    value: 10
     upgrades:
     - 1
     - 1

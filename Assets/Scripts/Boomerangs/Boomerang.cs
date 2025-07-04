@@ -152,8 +152,9 @@ namespace Vampire
                     {
                         hitMonsterTimes[hitGameObject] = 0.0f;
                         IDamageable damageable = hitGameObject.GetComponentInParent<IDamageable>();
-                        damageable.TakeDamage(damage, circleCastDir.normalized*knockback);
-                        OnHitDamageable.Invoke(damage);
+                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage;
+                        damageable.TakeDamage(totalDamage, circleCastDir.normalized*knockback);
+                        OnHitDamageable.Invoke(totalDamage);
                     }
                 }
                 prevPosition = transform.position;
@@ -197,8 +198,9 @@ namespace Vampire
                     {
                         hitMonsterTimes[hitGameObject] = 0.0f;
                         IDamageable damageable = hitGameObject.GetComponentInParent<IDamageable>();
-                        damageable.TakeDamage(damage);//-circleCastDir.normalized*knockback);
-                        OnHitDamageable.Invoke(damage);
+                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage;
+                        damageable.TakeDamage(totalDamage);//-circleCastDir.normalized*knockback);
+                        OnHitDamageable.Invoke(totalDamage);
                     }
                 }
                 prevPosition = transform.position;

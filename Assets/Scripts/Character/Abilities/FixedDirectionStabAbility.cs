@@ -28,8 +28,9 @@ namespace Vampire
                     {
                         hitMonsters.Add(collider.gameObject);
                         Monster monster = collider.gameObject.GetComponentInParent<Monster>();
-                        DamageMonster(monster, damage.Value, dir*knockback.Value);
-                        playerCharacter.OnDealDamage.Invoke(damage.Value);
+                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+                        DamageMonster(monster, totalDamage, dir*knockback.Value);
+                        playerCharacter.OnDealDamage.Invoke(totalDamage);
                     }
                 }
 

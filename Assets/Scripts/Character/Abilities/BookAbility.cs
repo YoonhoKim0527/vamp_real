@@ -45,9 +45,10 @@ namespace Vampire
 
         public void Damage(IDamageable damageable)
         {
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
             Vector2 knockbackDirection = (damageable.transform.position - playerCharacter.transform.position).normalized;
-            damageable.TakeDamage(damage.Value, knockback.Value * knockbackDirection);
-            playerCharacter.OnDealDamage.Invoke(damage.Value);
+            damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+            playerCharacter.OnDealDamage.Invoke(totalDamage);
         }
 
         private void RefreshBooks()

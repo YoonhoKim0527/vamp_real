@@ -10,7 +10,8 @@ namespace Vampire
         public string description;
         public Sprite upgradeSprite;
         public int cost;
-        public bool owned = false;
+        public int level = 0;
+        public int maxLevel = 5;
         public UpgradeType type =  UpgradeType.None;
     }
 

@@ -62,8 +62,9 @@ namespace Vampire
         private void Damage(IDamageable damageable)
         {
             Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;
-            damageable.TakeDamage(damage.Value, knockback.Value * knockbackDirection);
-            playerCharacter.OnDealDamage.Invoke(damage.Value);
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+            damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+            playerCharacter.OnDealDamage.Invoke(totalDamage);
         }
 
         private void DeregisterMonster(Monster monster)
