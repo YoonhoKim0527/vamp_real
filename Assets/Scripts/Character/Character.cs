@@ -78,36 +78,39 @@ namespace Vampire
 
         public virtual void Init(EntityManager entityManager, AbilityManager abilityManager, StatsManager statsManager)
         {
-            //this.characterBlueprint = characterBlueprint;
             this.entityManager = entityManager;
             this.abilityManager = abilityManager;
             this.statsManager = statsManager;
-            // Add listener to increase damage dealt whenever player deals damage
+
             OnDealDamage.AddListener(statsManager.IncreaseDamageDealt);
-            // Initialize the coroutine queue
+            
             coroutineQueue = new CoroutineQueue(this);
             coroutineQueue.StartLoop();
-            // Initialize starting health and exp
-            currentHealth = characterBlueprint.hp;
-            healthBar.Setup(currentHealth, 0, characterBlueprint.hp);
+
+            stats = new CharacterStats(characterBlueprint); // 🔸 Stats 먼저 초기화
+
+            currentHealth = stats.GetTotalHP();
+            healthBar.Setup(currentHealth, 0, stats.GetTotalHP());
+
             expBar.Setup(currentExp, 0, nextLevelExp);
             currentLevel = 1;
             UpdateLevelDisplay();
-            // Initialize animations
+
             spriteAnimator.Init(characterBlueprint.walkSpriteSequence, characterBlueprint.walkFrameTime, false);
-            // Limit max speed using drag
+
             movementSpeed = new UpgradeableMovementSpeed();
-            movementSpeed.Value = characterBlueprint.movespeed;
+            movementSpeed.Value = stats.GetTotalSpeed(); // 🔸 Stats 연동
             abilityManager.RegisterUpgradeableValue(movementSpeed, true);
             UpdateMoveSpeed();
-            // Initialize upgradeable armor
+
             armor = new UpgradeableArmor();
             armor.Value = characterBlueprint.armor;
             abilityManager.RegisterUpgradeableValue(armor, true);
-            zPositioner.Init(transform);
 
-            stats = new CharacterStats(characterBlueprint);
-        }
+            zPositioner.Init(transform);
+}
+
+
 
         protected virtual void Update()
         {

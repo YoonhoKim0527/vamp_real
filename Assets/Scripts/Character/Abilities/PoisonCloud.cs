@@ -12,15 +12,16 @@ namespace Vampire
 
         LayerMask monsterLayer;
         Character owner;
+        protected Character playerCharacter;
 
-        public void Init(float damage, float radius, float duration, LayerMask layer, Character owner)
+        public void Init(float damage, float radius, float duration, LayerMask layer, Character owner, Character playerCharacter)
         {
             this.damagePerTick = damage;
             this.radius = radius;
             this.duration = duration;
             this.monsterLayer = layer;
             this.owner = owner;
-
+            this.playerCharacter = playerCharacter;
             transform.localScale = Vector3.one * radius * 0.2f;
             StartCoroutine(ApplyEffect());
         }
@@ -36,8 +37,9 @@ namespace Vampire
                     IDamageable d = hit.GetComponentInParent<IDamageable>();
                     if (d != null)
                     {
-                        d.TakeDamage(damagePerTick, Vector2.zero);
-                        owner.OnDealDamage.Invoke(damagePerTick);
+                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damagePerTick;
+                        d.TakeDamage(totalDamage, Vector2.zero);
+                        owner.OnDealDamage.Invoke(totalDamage);
                     }
                 }
 

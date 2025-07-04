@@ -49,10 +49,11 @@ namespace Vampire
                 {
                     if (!damagedColliders.ContainsKey(collider))
                     {
+                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * explosionDamage;
                         Vector2 dir = collider.transform.position - transform.position;
-                        collider.GetComponentInParent<IDamageable>().TakeDamage(explosionDamage, dir.normalized * explosionKnockback);
+                        collider.GetComponentInParent<IDamageable>().TakeDamage(totalDamage, dir.normalized * explosionKnockback);
                         damagedColliders[collider] = true;
-                        OnHitDamageable.Invoke(explosionDamage);
+                        OnHitDamageable.Invoke(totalDamage);
                     }
                 }
                 t += Time.deltaTime/explosionDuration;

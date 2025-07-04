@@ -24,14 +24,11 @@ namespace Vampire
             this.itemBlueprint = blueprint;
             this.coinDisplay = coinDisplay;
 
-            Debug.Log($"Init UpgradeItemCard: {blueprint.upgradeName}, {blueprint.cost}, {blueprint.upgradeSprite}");
-
             nameText.text = blueprint.upgradeName;
-            // descriptionText.text = blueprint.description;
             itemImage.sprite = blueprint.upgradeSprite;
-            costText.text = "BUY $" + blueprint.cost.ToString();
-            buyButton.interactable = !blueprint.owned;
+            costText.text = $"BUY ${blueprint.cost} (Lv. {blueprint.level}/{blueprint.maxLevel})";
 
+            buyButton.interactable = blueprint.level < blueprint.maxLevel;
             buyButton.onClick.AddListener(BuyUpgrade);
         }
 
@@ -39,41 +36,43 @@ namespace Vampire
         {
             Debug.Log("Attempting to buy upgrade...");
             int coins = PlayerPrefs.GetInt("Coins", 0);
-            if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
+
+            if (coins >= itemBlueprint.cost && itemBlueprint.level < itemBlueprint.maxLevel)
             {
                 Debug.Log("Upgrade purchase successful.");
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
-                itemBlueprint.owned = true;
-                buyButton.interactable = false;
+                itemBlueprint.level++;
 
-                // 🛠️ 실제 업그레이드 효과 적용
+                // ✅ 실제 업그레이드 효과 누적 적용
+                switch (itemBlueprint.type)
+                {
+                    case UpgradeType.ProjectileUpgrade:
+                        CrossSceneData.BonusProjectile++;
+                        break;
+                    case UpgradeType.DamageUpgrade:
+                        CrossSceneData.BonusDamage++;
+                        break;
+                    case UpgradeType.HPUpgrade:
+                        CrossSceneData.BonusHP++;
+                        break;
+                    case UpgradeType.SpeedUpgrade:
+                        CrossSceneData.BonusSpeed++;
+                        break;
+                }
 
-                if (itemBlueprint.type == UpgradeType.ProjectileUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.BonusProjectile ++;
-                }
-                if (itemBlueprint.type == UpgradeType.DamageUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.BonusDamage ++;
-                }
-                if (itemBlueprint.type == UpgradeType.HPUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.BonusHP ++;
-                }
-                if (itemBlueprint.type == UpgradeType.SpeedUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.BonusSpeed ++;
-                }
-                
+                // ✅ UI 업데이트
+                costText.text = $"BUY ${itemBlueprint.cost} (Lv. {itemBlueprint.level}/{itemBlueprint.maxLevel})";
+
+                // ✅ 더 이상 못 사면 비활성화
+                buyButton.interactable = itemBlueprint.level < itemBlueprint.maxLevel;
 
                 coinDisplay.UpdateDisplay();
             }
+            else
+            {
+                Debug.Log("Not enough coins or already max level.");
+            }
         }
-
         public void UpdateLayout()
         {
             float yHeight = Mathf.Abs(itemImageRect.sizeDelta.y);

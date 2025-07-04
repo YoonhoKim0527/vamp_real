@@ -26,7 +26,9 @@ namespace Vampire
 
         protected void LaunchProjectile(Vector2 direction)
         {
-            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, playerCharacter.CenterTransform.position, damage.Value, knockback.Value, speed.Value, monsterLayer);
+            Debug.Log("shuriken");
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, playerCharacter.CenterTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             projectile.Launch(direction);
         }

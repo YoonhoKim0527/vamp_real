@@ -16,5 +16,6 @@ MonoBehaviour:
   description: more strong
   upgradeSprite: {fileID: 21300000, guid: 2564366b0db3b442f96b7d83cc9db628, type: 3}
   cost: 1
-  owned: 0
+  level: 0
+  maxLevel: 5
   type: 1

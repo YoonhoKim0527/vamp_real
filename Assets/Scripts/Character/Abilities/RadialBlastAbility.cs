@@ -15,7 +15,7 @@ namespace Vampire
         [SerializeField] private AudioClip evolvedClip;
         private AudioSource audioSource;
 
-        private float timeSinceLastCast;
+        private float timeSinceLastCast;    
 
         protected override void Use()
         {
@@ -79,10 +79,11 @@ namespace Vampire
             {
                 float angle = 360f / projectileCount.Value * i;
                 Vector2 dir = Quaternion.Euler(0, 0, angle) * Vector2.right;
+                float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
                 Projectile p = entityManager.SpawnProjectile(
                     projectileIndex,
                     playerCharacter.CenterTransform.position,
-                    damage.Value,
+                    totalDamage,
                     knockback.Value,
                     speed.Value,
                     monsterLayer

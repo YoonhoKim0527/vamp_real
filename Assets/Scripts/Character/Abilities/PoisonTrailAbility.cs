@@ -31,7 +31,7 @@ namespace Vampire
 
             // Projectile 사용 ❌
             PoisonCloud pc = entityManager.SpawnPoisonCloud(cloudPoolIndex, pos);
-            pc.Init(damage.Value, radius.Value, duration.Value, monsterLayer, playerCharacter);
+            pc.Init(damage.Value, radius.Value, duration.Value, monsterLayer, playerCharacter, playerCharacter);
         }
 
         void Update()
