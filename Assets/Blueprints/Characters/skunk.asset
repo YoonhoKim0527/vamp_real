@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
-  m_Name: penguin
+  m_Name: skunk
   m_EditorClassIdentifier: 
-  name: Penguin
+  name: skunk
   owned: 1
   cost: 999
-  baseDamage: 5
+  baseDamage: 2
   hp: 1000
   recovery: 0
   armor: 100
@@ -23,10 +23,10 @@ MonoBehaviour:
   luck: 1
   acceleration: 50
   walkSpriteSequence:
-  - {fileID: -44017297, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
-  - {fileID: 480792624, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
-  - {fileID: -1247746349, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
-  - {fileID: 1097689610, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
+  - {fileID: -2131067551, guid: d88383adb1d000f42a868c3652ab2726, type: 3}
+  - {fileID: -387013099, guid: d88383adb1d000f42a868c3652ab2726, type: 3}
+  - {fileID: -1178280617, guid: d88383adb1d000f42a868c3652ab2726, type: 3}
+  - {fileID: -770645946, guid: d88383adb1d000f42a868c3652ab2726, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
+  - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
