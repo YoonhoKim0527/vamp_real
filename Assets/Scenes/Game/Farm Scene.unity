@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -186,14 +186,14 @@ MonoBehaviour:
   allBlueprints:
   - {fileID: 11400000, guid: fe661697c12688845a956f252d874992, type: 2}
   - {fileID: 11400000, guid: 397be85db15d45f4a8a62d74c6677a5e, type: 2}
-  - {fileID: 11400000, guid: 138b085873865480984b6ebcd8312fae, type: 2}
+  - {fileID: 11400000, guid: 51ec1045910c4db4ead9691d89a9de07, type: 2}
   - {fileID: 11400000, guid: d40bd28c852b3fd4ba080fe8fd6fca24, type: 2}
   - {fileID: 11400000, guid: de73314b3a2481446a336db448f72e06, type: 2}
   - {fileID: 11400000, guid: 1a2f0d9c7b8550549a0015e3fed67711, type: 2}
   - {fileID: 11400000, guid: 6cc5cc9012a5c26479124544863c5de7, type: 2}
   - {fileID: 11400000, guid: 0b4e4a01361ac30489a2b4b3993c7dd0, type: 2}
-  - {fileID: 11400000, guid: 02309cd829b224b648ed3c3df7c86e6c, type: 2}
   - {fileID: 11400000, guid: 718965a2cb809b141b0acd8a13dad3a8, type: 2}
+  - {fileID: 11400000, guid: 9195d8ae6254efb45bacbb140419920f, type: 2}
   farmCharacterPrefab: {fileID: 2308979744516850094, guid: bb0f5f504ae147f4ca23d51094a6e066, type: 3}
   farmArea: {fileID: 154860538}
 --- !u!4 &621730066
