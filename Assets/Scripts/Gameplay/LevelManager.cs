@@ -5,7 +5,7 @@ namespace Vampire
 {
     public class LevelManager : MonoBehaviour
     {
-        [SerializeField] private LevelBlueprint levelBlueprint;
+        private LevelBlueprint levelBlueprint;
         [SerializeField] private Character playerCharacter;
         [SerializeField] private EntityManager entityManager;
         [SerializeField] private AbilityManager abilityManager;
@@ -47,9 +47,14 @@ namespace Vampire
         // Start is called before the first frame update
         void Start()
         {
-            Init(levelBlueprint);
-        }
+            if (CrossSceneData.LevelBlueprint == null)
+            {
+                Debug.LogError("LevelBlueprint is null! æ¿ ¡¯¿‘ ¿¸ ∏  º±≈√¿Ã ¥©∂Ùµ ");
+                return;
+            }
 
+            Init(CrossSceneData.LevelBlueprint);
+        }
         // Update is called once per frame
         void Update()
         {

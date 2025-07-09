@@ -88,7 +88,7 @@ MonoBehaviour:
     upgrades: []
   boomerangCount:
     value: 1
-    upgrades: 
+    upgrades: 010000000100000001000000
     projectilesPer: 1
   references:
     version: 2

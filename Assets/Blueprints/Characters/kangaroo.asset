@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Penguin
   owned: 1
-  cost: 999
+  cost: 1
   baseDamage: 5
   hp: 1000
   recovery: 0

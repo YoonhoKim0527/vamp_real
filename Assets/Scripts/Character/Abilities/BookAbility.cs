@@ -19,6 +19,14 @@ namespace Vampire
         protected override void Use()
         {
             base.Use();
+            if (CrossSceneData.ExtraProjectile && projectileCount != null)
+            {
+                projectileCount.ForceAdd(1);  
+            }
+            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
+            {
+                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);  
+            }
             gameObject.SetActive(true);
             projectileCount.OnChanged.AddListener(RefreshBooks);
             books = new List<Book>();

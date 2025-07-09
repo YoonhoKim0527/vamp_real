@@ -20,6 +20,7 @@ namespace Vampire
         public void SetupGrenade(int fragmentCount)
         {
             this.fragmentCount = fragmentCount;
+            Debug.Log($"[Grenade Setup] fragmentCount = {fragmentCount}");
         }
 
         protected override void Explode()
