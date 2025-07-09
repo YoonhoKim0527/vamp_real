@@ -9,7 +9,6 @@ namespace Vampire
         float baseSpeed;
 
         float damageMultiplier = 1f;
-
         float hpMultiplier = 1f;
         float speedMultiplier = 1f;
 
@@ -36,7 +35,6 @@ namespace Vampire
             damageMultiplier += 0.1f * CrossSceneData.BonusDamage;
             hpMultiplier += 0.5f * CrossSceneData.BonusHP;
             speedMultiplier += 0.5f * CrossSceneData.BonusSpeed;
-
             Debug.Log($"[Upgrade] Damage x{damageMultiplier}, HP x{hpMultiplier}, Speed x{speedMultiplier}");
         }
 
@@ -44,7 +42,7 @@ namespace Vampire
         public float GetTotalDamage()
         {
             return baseDamage * (damageMultiplier);
-        } 
+        }
 
         // 🔹 체력 계산
         public float GetTotalHP()

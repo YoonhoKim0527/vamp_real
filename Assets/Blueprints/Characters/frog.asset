@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
-  m_Name: kangaroo
+  m_Name: frog
   m_EditorClassIdentifier: 
-  name: kangaroo
+  name: frog
   owned: 1
-  cost: 1
-  baseDamage: 5
+  cost: 999
+  baseDamage: 2
   hp: 1000
   recovery: 0
   armor: 100
@@ -23,10 +23,10 @@ MonoBehaviour:
   luck: 1
   acceleration: 50
   walkSpriteSequence:
-  - {fileID: 708233302, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
-  - {fileID: 708233302, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
-  - {fileID: 708233302, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
-  - {fileID: 1274901905, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
+  - {fileID: 993851342, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
+  - {fileID: -1870314288, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
+  - {fileID: -1209027723, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
+  - {fileID: 7378740072262091319, guid: 6bf0c7ded38f2427f8fbf34693543d88, type: 3}

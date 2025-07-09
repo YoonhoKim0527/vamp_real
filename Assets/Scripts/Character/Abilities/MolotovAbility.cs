@@ -10,9 +10,23 @@ namespace Vampire
         [SerializeField] protected UpgradeableAOE fireRadius;
         [SerializeField] protected UpgradeableDamageRate fireDamageRate;
 
+
+        protected override void Use()
+        {
+            base.Use();
+
+            if (CrossSceneData.ExtraProjectile && throwableCount != null)
+            {
+                throwableCount.ForceAdd(1);
+            }
+            if (CrossSceneData.BonusProjectile > 0 && throwableCount != null)
+            {
+                throwableCount.ForceAdd(CrossSceneData.BonusProjectile);
+            }
+        }
         protected override void LaunchThrowable()
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;            
+            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
             MolotovThrowable throwable = (MolotovThrowable)entityManager.SpawnThrowable(throwableIndex, playerCharacter.CenterTransform.position, totalDamage, knockback.Value, 0, monsterLayer);
             throwable.SetupFire(duration.Value, fireRadius.Value, fireDamageRate.Value);
             // Throw randomly at nearby enemies

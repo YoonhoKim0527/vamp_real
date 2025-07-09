@@ -26,12 +26,16 @@ namespace Vampire
             {
                 projectileCount.ForceAdd(1);  
             }
+            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
+            {
+                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);  
+            }
 
             if (audioSource == null)
-            {
-                audioSource = gameObject.AddComponent<AudioSource>();
-                audioSource.playOnAwake = false;
-            }
+                {
+                    audioSource = gameObject.AddComponent<AudioSource>();
+                    audioSource.playOnAwake = false;
+                }
         }
 
 

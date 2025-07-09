@@ -1,36 +1,53 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Vampire
 {
     public class CharacterSelector : MonoBehaviour
     {
-        [SerializeField] protected CharacterBlueprint[] characterBlueprints;
-        [SerializeField] protected GameObject characterCardPrefab;
-        [SerializeField] protected CoinDisplay coinDisplay;
+        [SerializeField] CharacterBlueprint[] characterBlueprints;
+        [SerializeField] GameObject characterCardPrefab;
+        [SerializeField] CoinDisplay coinDisplay;
+        [SerializeField] Transform cardContainer;
 
-        private CharacterCard[] characterCards;
-        
+        CharacterCard[] characterCards;
+
+        void OnEnable() // UI가 켜질 때마다 호출됨
+        {
+            Init();
+        }
+
         public void Init()
         {
-            characterCards = new CharacterCard[characterBlueprints.Length];
-            for (int i = 0; i < characterBlueprints.Length; i++)
+            // 이전에 생성된 카드 제거 (중복 방지)
+            if (characterCards != null)
             {
-                characterCards[i] = Instantiate(characterCardPrefab, this.transform).GetComponent<CharacterCard>();
-                characterCards[i].Init(this, characterBlueprints[i], coinDisplay);
+                foreach (var card in characterCards)
+                    Destroy(card.gameObject);
             }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+
+            characterCards = new CharacterCard[characterBlueprints.Length];
+
             for (int i = 0; i < characterBlueprints.Length; i++)
             {
-                characterCards[i].UpdateLayout();
+                var cardObj = Instantiate(characterCardPrefab, cardContainer);
+                var card = cardObj.GetComponent<CharacterCard>();
+                card.Init(this, characterBlueprints[i], coinDisplay);
+                characterCards[i] = card;
             }
         }
-        
-        public void StartGame(CharacterBlueprint characterBlueprint)
+
+        public void StartGame(CharacterBlueprint blueprint)
         {
-            CrossSceneData.CharacterBlueprint = characterBlueprint;
-            SceneManager.LoadScene(2);
+            CrossSceneData.CharacterBlueprint = blueprint;
+
+            if (CrossSceneData.LevelBlueprint == null)
+            {
+                Debug.LogError("LevelBlueprint is null! 맵이 선택되지 않았습니다.");
+                return;
+            }
+
+            SceneManager.LoadScene(1); // 게임 씬으로 이동
         }
     }
 }

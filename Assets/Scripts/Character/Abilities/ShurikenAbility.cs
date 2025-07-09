@@ -9,6 +9,18 @@ namespace Vampire
         [SerializeField] protected UpgradeableProjectileCount projectileCount;
         [SerializeField] protected float shurikenDelay;
 
+        protected override void Use()
+        {
+            base.Use();
+            if (CrossSceneData.ExtraProjectile && projectileCount != null)
+            {
+                projectileCount.ForceAdd(1);
+            }
+            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
+            {
+                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);
+            }
+        }
         protected override void Attack()
         {
             StartCoroutine(LuanchShurikens());
@@ -16,7 +28,7 @@ namespace Vampire
 
         protected IEnumerator LuanchShurikens()
         {
-            timeSinceLastAttack -= projectileCount.Value*shurikenDelay;
+            timeSinceLastAttack -= projectileCount.Value * shurikenDelay;
             for (int i = 0; i < projectileCount.Value; i++)
             {
                 LaunchProjectile(playerCharacter.LookDirection);
@@ -34,3 +46,4 @@ namespace Vampire
         }
     }
 }
+

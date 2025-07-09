@@ -162,6 +162,7 @@ namespace Vampire
             {
                 Upgrade();
             }
+            OnChanged.Invoke();
         }
     }
     [System.Serializable] public class UpgradeableRecovery : UpgradeableInt

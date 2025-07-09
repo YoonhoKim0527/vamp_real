@@ -22,6 +22,14 @@ namespace Vampire
         protected override void Use()
         {
             base.Use();
+            if (CrossSceneData.ExtraProjectile && boomerangCount != null)
+            {
+                boomerangCount.ForceAdd(1);  
+            }
+            if (CrossSceneData.BonusProjectile > 0 && boomerangCount != null)
+            {
+                boomerangCount.ForceAdd(CrossSceneData.BonusProjectile);  
+            }
             gameObject.SetActive(true);
             timeSinceLastAttack = cooldown.Value;
             boomerangIndex = entityManager.AddPoolForBoomerang(boomerangPrefab);

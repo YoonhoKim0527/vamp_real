@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f064162d931c43449b82110832a23c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 05c1da091a3527243bdfe07151093e61, type: 3}
+  image: {fileID: -1490207750, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
@@ -64,7 +64,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   rarity: 50
-  projectilePrefab: {fileID: 7319530421430732312, guid: 6f625e5facc695743a843ac77ca8d501, type: 3}
+  projectilePrefab: {fileID: 7319530421430732312, guid: f2f52b35dd4ad244f934bfbab4ea9ff5, type: 3}
   monsterLayer:
     serializedVersion: 2
     m_Bits: 1088
@@ -84,7 +84,7 @@ MonoBehaviour:
     - -0.2
     - -0.2
     - -0.2
-  effectSprite: {fileID: 21300000, guid: 05c1da091a3527243bdfe07151093e61, type: 3}
+  effectSprite: {fileID: -1490207750, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}
   redEyeEffectSprite: {fileID: 21300000, guid: 74512e15eb651644fa782de0d149f988, type: 3}
   projectileCount:
     value: 1

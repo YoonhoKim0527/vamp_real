@@ -2,6 +2,7 @@ namespace Vampire
 {
     public static class CrossSceneData
     {
+        public static LevelBlueprint LevelBlueprint { get; set; }
         public static CharacterBlueprint CharacterBlueprint { get; set; }
         public static bool ExtraProjectile = false;
         public static bool ExtraDamage = false;

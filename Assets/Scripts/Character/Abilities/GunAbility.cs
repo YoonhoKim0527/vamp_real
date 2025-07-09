@@ -14,14 +14,27 @@ namespace Vampire
             StartCoroutine(FireClip());
         }
 
+        protected override void Use()
+        {
+            base.Use();
+
+            if (CrossSceneData.ExtraProjectile && projectileCount != null)
+            {
+                projectileCount.ForceAdd(1);
+            }
+            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
+            {
+                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);
+            }
+        }
         protected IEnumerator FireClip()
         {
             int clipSize = projectileCount.Value;
-            timeSinceLastAttack -= clipSize/firerate.Value;
+            timeSinceLastAttack -= clipSize / firerate.Value;
             for (int i = 0; i < clipSize; i++)
             {
                 LaunchProjectile();
-                yield return new WaitForSeconds(1/firerate.Value);
+                yield return new WaitForSeconds(1 / firerate.Value);
             }
         }
     }
