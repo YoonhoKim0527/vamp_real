@@ -49,7 +49,7 @@ namespace Vampire
         {
             if (CrossSceneData.LevelBlueprint == null)
             {
-                Debug.LogError("LevelBlueprint is null! ¾À ÁøÀÔ Àü ¸Ê ¼±ÅÃÀÌ ´©¶ôµÊ");
+                Debug.LogError("LevelBlueprint is null! ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
 
@@ -105,19 +105,47 @@ namespace Vampire
         public void GameOver()
         {
             Time.timeScale = 0;
+
+            // ê¸°ì¡´ ì½”ì¸ ëˆ„ì 
             int coinCount = PlayerPrefs.GetInt("Coins");
             PlayerPrefs.SetInt("Coins", coinCount + statsManager.CoinsGained);
+
+            // SaveGame í˜¸ì¶œ (ì¤‘ë³µ ë°©ì§€)
+            var gameStateManager = FindObjectOfType<GameStateManager>();
+            if (gameStateManager != null)
+            {
+                gameStateManager.SaveGame();
+            }
+            else
+            {
+                Debug.LogWarning("[LevelManager] GameStateManager not found! Skipping SaveGame.");
+            }
+
             gameOverDialog.Open(false, statsManager);
         }
 
         public void LevelPassed(Monster finalBossKilled)
         {
             Time.timeScale = 0;
+
+            // ê¸°ì¡´ ì½”ì¸ ëˆ„ì 
             int coinCount = PlayerPrefs.GetInt("Coins");
             PlayerPrefs.SetInt("Coins", coinCount + statsManager.CoinsGained);
+
+            // SaveGame í˜¸ì¶œ (ì¤‘ë³µ ë°©ì§€)
+            var gameStateManager = FindObjectOfType<GameStateManager>();
+            if (gameStateManager != null)
+            {
+                gameStateManager.SaveGame();
+            }
+            else
+            {
+                Debug.LogWarning("[LevelManager] GameStateManager not found! Skipping SaveGame.");
+            }
+
             gameOverDialog.Open(true, statsManager);
         }
-
+        
         public void Restart()
         {
             Time.timeScale = 1;

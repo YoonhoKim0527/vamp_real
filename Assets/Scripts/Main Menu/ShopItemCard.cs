@@ -23,51 +23,62 @@ namespace Vampire
             this.shop = shop;
             this.itemBlueprint = blueprint;
             this.coinDisplay = coinDisplay;
-            
+
             Debug.Log($"Init ShopItemCard: {blueprint.itemName}, {blueprint.cost}, {blueprint.itemSprite}");
 
-            nameText.text = blueprint.itemName.ToString();
-            itemImage.sprite = blueprint.itemSprite;
-            costText.text = "BUY $" + blueprint.cost.ToString();
-            buyButton.interactable = !blueprint.owned;
-
+            Refresh(); // ✅ 상태를 UI에 반영
             buyButton.onClick.AddListener(BuyItem);
-
         }
 
         private void BuyItem()
         {
-            Debug.Log("buy1");
             int coins = PlayerPrefs.GetInt("Coins", 0);
             if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
             {
-                Debug.Log("buy2");
+                // ✅ 돈 차감
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
+
+                // ✅ 아이템 구매 상태 갱신
                 itemBlueprint.owned = true;
-                buyButton.interactable = false;
-                Debug.Log(itemBlueprint.type);
-                // 🔥 아이템 타입에 따른 효과 처리
-                if (itemBlueprint.type == ShopItemType.ProjectileUpgrade)
+                Debug.Log($"[ShopItemCard] Purchased {itemBlueprint.itemName}");
+
+                // ✅ 구매 직후 게임 상태 저장
+                var gameStateManager = FindObjectOfType<GameStateManager>();
+                if (gameStateManager != null)
                 {
-                    Debug.Log("bu3");
-                    CrossSceneData.ExtraProjectile = true;
+                    gameStateManager.SaveGame();
+                    Debug.Log("[ShopItemCard] Saved game after purchase.");
                 }
-                if (itemBlueprint.type == ShopItemType.DamageUpgrade)
+                else
                 {
-                    Debug.Log("bu3");
-                    CrossSceneData.ExtraDamage = true;
+                    Debug.LogWarning("[ShopItemCard] GameStateManager not found! SaveGame skipped.");
                 }
-                if (itemBlueprint.type == ShopItemType.HPUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.ExtraHP = true;
-                }
-                if (itemBlueprint.type == ShopItemType.SpeedUpgrade)
-                {
-                    Debug.Log("bu3");
-                    CrossSceneData.ExtraSpeed = true;
-                }
+
+                // ✅ UI 갱신
+                Refresh();
+
+                // ✅ 코인 UI 갱신
                 coinDisplay.UpdateDisplay();
+            }
+        }
+
+        public void Refresh()
+        {
+            // ✅ 구매 여부에 따라 UI 갱신
+            nameText.text = itemBlueprint.itemName;
+            itemImage.sprite = itemBlueprint.itemSprite;
+
+            if (itemBlueprint.owned)
+            {
+                costText.text = "OWNED";
+                buyButton.interactable = false;
+                buttonImage.color = Color.gray; // 비활성화된 버튼 색
+            }
+            else
+            {
+                costText.text = "BUY $" + itemBlueprint.cost.ToString();
+                buyButton.interactable = true;
+                buttonImage.color = Color.white; // 기본 버튼 색
             }
         }
 

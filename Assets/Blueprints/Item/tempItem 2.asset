@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: tempItem 2
   m_EditorClassIdentifier: 
   type: 2
-  itemName: temp333
+  itemName: temp2
   itemSprite: {fileID: -1743837342, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
   cost: 1
   description: none
