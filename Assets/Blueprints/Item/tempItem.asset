@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   itemName: temp
-  itemSprite: {fileID: 2742238272864707359, guid: 5f7d372e57fc28f4baab9ef31f75a4bc, type: 3}
+  itemSprite: {fileID: 1713860565, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
   cost: 1
   description: none
   owned: 0

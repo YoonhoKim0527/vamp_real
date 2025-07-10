@@ -25,12 +25,6 @@ MonoBehaviour:
     m_Address: Assets/Localization/Font Table/Font Table Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
-  - m_GUID: 0e5f8d21122b64a7a8459a1c61b9b9d8
-    m_Address: NotoSansMonoCJKtc-Regular SDF
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-zh
-    - Locale-zh-Hant
   - m_GUID: b33cf4ad3225b41c9b095285edde9353
     m_Address: Assets/Localization/Tables/Character Text/Character Shared Data.asset
     m_ReadOnly: 1
@@ -48,6 +42,13 @@ MonoBehaviour:
       Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
+  - m_GUID: 4774615783447484ebed8fb5822a06bf
+    m_Address: asdafadsfasdfasdfasdfadfsadf
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Locale-zh
+    - Locale-zh-Hant
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 7e3d66dc8cb9f42809017db168ce4406, type: 2}
   m_SchemaSet:

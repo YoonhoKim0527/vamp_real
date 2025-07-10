@@ -19428,7 +19428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6e809e8c06884d9d86b735fedb25b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelBlueprint: {fileID: 11400000, guid: 638a1f5775a98904481ef9d3f47f66ec, type: 2}
   playerCharacter: {fileID: 856782961}
   entityManager: {fileID: 1547352219}
   abilityManager: {fileID: 1727210731}
@@ -19456,7 +19455,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1778359097
 SpriteRenderer:
   m_ObjectHideFlags: 0

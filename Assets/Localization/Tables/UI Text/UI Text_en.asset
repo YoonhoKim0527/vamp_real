@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 123949015040
-    m_Localized: Vampire Survivors Clone
+    m_Localized: vampire
     m_Metadata:
       m_Items: []
   - m_Id: 1437881851904
@@ -36,6 +36,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 334637481058304
     m_Localized: Character Selection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 160649929772556288
+    m_Localized: Farm
     m_Metadata:
       m_Items: []
   references:
