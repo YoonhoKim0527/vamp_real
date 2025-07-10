@@ -15,31 +15,47 @@ namespace Vampire
 
         public virtual void Open()
         {
+            // ✅ 다른 DialogBox 비활성화
+            CloseAllOtherDialogs();
+
             // ✅ LocalizeFontEvent 방어: 폰트 없으면 fallback 적용
             var localizeFontEvent = GetComponentInChildren<LocalizeFontEvent>(true);
             if (localizeFontEvent != null)
             {
-                // _tmpUITexts 배열 점검
-                foreach (var tmpText in localizeFontEvent.GetType().GetField("_tmpUITexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(localizeFontEvent) as TextMeshProUGUI[])
+                var tmpUITextField = localizeFontEvent.GetType()
+                    .GetField("_tmpUITexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    ?.GetValue(localizeFontEvent) as TextMeshProUGUI[];
+
+                var tmpTextField = localizeFontEvent.GetType()
+                    .GetField("_tmpTexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    ?.GetValue(localizeFontEvent) as TextMeshPro[];
+
+                if (tmpUITextField != null)
                 {
-                    if (tmpText != null && tmpText.font == null)
+                    foreach (var tmpText in tmpUITextField)
                     {
-                        Debug.LogWarning($"[DialogBox] Missing font on TMP_UI_Text: {tmpText.name}. Applying fallback font.");
-                        tmpText.font = fallbackFont;
+                        if (tmpText != null && tmpText.font == null)
+                        {
+                            Debug.LogWarning($"[DialogBox] Missing font on TMP_UI_Text: {tmpText.name}. Applying fallback font.");
+                            tmpText.font = fallbackFont;
+                        }
                     }
                 }
 
-                // _tmpTexts 배열 점검
-                foreach (var tmpText in localizeFontEvent.GetType().GetField("_tmpTexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(localizeFontEvent) as TextMeshPro[])
+                if (tmpTextField != null)
                 {
-                    if (tmpText != null && tmpText.font == null)
+                    foreach (var tmpText in tmpTextField)
                     {
-                        Debug.LogWarning($"[DialogBox] Missing font on TMP_Text: {tmpText.name}. Applying fallback font.");
-                        tmpText.font = fallbackFont;
+                        if (tmpText != null && tmpText.font == null)
+                        {
+                            Debug.LogWarning($"[DialogBox] Missing font on TMP_Text: {tmpText.name}. Applying fallback font.");
+                            tmpText.font = fallbackFont;
+                        }
                     }
                 }
             }
 
+            // ✅ 현재 Dialog 활성화
             gameObject.SetActive(true);
 
             if (appearInstantly)
@@ -69,6 +85,18 @@ namespace Vampire
         {
             nextDialog?.Open();
             Close();
+        }
+
+        private void CloseAllOtherDialogs()
+        {
+            var allDialogs = FindObjectsOfType<DialogBox>(true); // 비활성화된 것도 포함
+            foreach (var dialog in allDialogs)
+            {
+                if (dialog != this && dialog.gameObject.activeSelf)
+                {
+                    dialog.Close();
+                }
+            }
         }
 
         private IEnumerator OpenAnimation()
