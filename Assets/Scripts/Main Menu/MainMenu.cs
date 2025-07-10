@@ -17,12 +17,11 @@ namespace Vampire
         }
         public void OnClickGoToFarm()
         {
-            SceneManager.LoadScene(2); // ÀÌ¸§À¸·Î ·Îµå
+            SceneManager.LoadScene(2); // ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         }
 
         void Start()
         {
-            shop.Init();
             upgrade.Init();
         }
     }
