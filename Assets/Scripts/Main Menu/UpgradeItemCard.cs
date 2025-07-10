@@ -9,9 +9,7 @@ namespace Vampire
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image itemImage;
         [SerializeField] private RectTransform itemImageRect;
-        // [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private TextMeshProUGUI costText;
-        [SerializeField] private Image buttonImage;
         [SerializeField] private Button buyButton;
 
         private Upgrade upgrade;
@@ -22,57 +20,97 @@ namespace Vampire
         {
             this.upgrade = upgrade;
             this.itemBlueprint = blueprint;
-            this.coinDisplay = coinDisplay;
+
+            if (coinDisplay == null)
+            {
+                this.coinDisplay = FindObjectOfType<CoinDisplay>();
+            }
+            else
+            {
+                this.coinDisplay = coinDisplay;
+            }
 
             nameText.text = blueprint.upgradeName;
-            itemImage.sprite = blueprint.upgradeSprite;
-            costText.text = $"BUY ${blueprint.cost} (Lv. {blueprint.level}/{blueprint.maxLevel})";
 
-            buyButton.interactable = blueprint.level < blueprint.maxLevel;
+            // ✅ Sprite가 null일 때만 설정
+            if (blueprint.upgradeSprite != null)
+            {
+                itemImage.sprite = blueprint.upgradeSprite;
+            }
+            else
+            {
+                Debug.LogWarning($"[UpgradeItemCard] {blueprint.upgradeName} has no sprite assigned!");
+            }
+
+            Refresh();
+            buyButton.onClick.RemoveAllListeners();
             buyButton.onClick.AddListener(BuyUpgrade);
         }
 
         private void BuyUpgrade()
         {
-            Debug.Log("Attempting to buy upgrade...");
             int coins = PlayerPrefs.GetInt("Coins", 0);
 
             if (coins >= itemBlueprint.cost && itemBlueprint.level < itemBlueprint.maxLevel)
             {
-                Debug.Log("Upgrade purchase successful.");
+                // ✅ 돈 차감
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
-                itemBlueprint.level++;
 
-                // ✅ 실제 업그레이드 효과 누적 적용
+                // ✅ 업그레이드 상태 갱신
+                itemBlueprint.level++;
+                Debug.Log($"[UpgradeItemCard] Purchased upgrade: {itemBlueprint.upgradeName} (Level {itemBlueprint.level})");
+
+                // ✅ 업그레이드 효과 적용
                 switch (itemBlueprint.type)
                 {
-                    case UpgradeType.ProjectileUpgrade:
-                        CrossSceneData.BonusProjectile++;
-                        break;
-                    case UpgradeType.DamageUpgrade:
-                        CrossSceneData.BonusDamage++;
-                        break;
-                    case UpgradeType.HPUpgrade:
-                        CrossSceneData.BonusHP++;
-                        break;
-                    case UpgradeType.SpeedUpgrade:
-                        CrossSceneData.BonusSpeed++;
-                        break;
+                    case UpgradeType.ProjectileUpgrade: CrossSceneData.BonusProjectile++; break;
+                    case UpgradeType.DamageUpgrade: CrossSceneData.BonusDamage++; break;
+                    case UpgradeType.HPUpgrade: CrossSceneData.BonusHP++; break;
+                    case UpgradeType.SpeedUpgrade: CrossSceneData.BonusSpeed++; break;
                 }
 
-                // ✅ UI 업데이트
-                costText.text = $"BUY ${itemBlueprint.cost} (Lv. {itemBlueprint.level}/{itemBlueprint.maxLevel})";
+                // ✅ SaveGame 호출
+                var gameStateManager = FindObjectOfType<GameStateManager>();
+                if (gameStateManager != null)
+                {
+                    gameStateManager.SaveGame();
+                    Debug.Log($"[UpgradeItemCard] Saved game after upgrading {itemBlueprint.upgradeName}.");
+                }
+                else
+                {
+                    Debug.LogWarning("[UpgradeItemCard] GameStateManager not found! SaveGame skipped.");
+                }
 
-                // ✅ 더 이상 못 사면 비활성화
-                buyButton.interactable = itemBlueprint.level < itemBlueprint.maxLevel;
+                // ✅ Upgrade UI 전체 리프레시
+                if (upgrade != null)
+                {
+                    upgrade.RefreshUpgradeUI();
+                    Debug.Log("[UpgradeItemCard] Upgrade UI refreshed.");
+                }
+                else
+                {
+                    Debug.LogWarning("[UpgradeItemCard] Upgrade reference missing. Refresh skipped.");
+                }
 
-                coinDisplay.UpdateDisplay();
+                // ✅ 코인 UI 강제 갱신 (업그레이드 외부 포함)
+                var allCoinDisplays = FindObjectsOfType<CoinDisplay>();
+                foreach (var display in allCoinDisplays)
+                {
+                    display.UpdateDisplay();
+                }
             }
             else
             {
-                Debug.Log("Not enough coins or already max level.");
+                Debug.LogWarning("[UpgradeItemCard] Not enough coins or already at max level.");
             }
         }
+
+        public void Refresh()
+        {
+            costText.text = $"BUY ${itemBlueprint.cost} (Lv. {itemBlueprint.level}/{itemBlueprint.maxLevel})";
+            buyButton.interactable = itemBlueprint.level < itemBlueprint.maxLevel;
+        }
+
         public void UpdateLayout()
         {
             float yHeight = Mathf.Abs(itemImageRect.sizeDelta.y);

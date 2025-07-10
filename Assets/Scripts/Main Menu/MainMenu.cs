@@ -19,10 +19,5 @@ namespace Vampire
         {
             SceneManager.LoadScene(2); // �̸����� �ε�
         }
-
-        void Start()
-        {
-            upgrade.Init();
-        }
     }
 }

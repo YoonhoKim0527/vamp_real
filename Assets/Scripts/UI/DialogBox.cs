@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 namespace Vampire
 {
@@ -9,9 +10,38 @@ namespace Vampire
         [SerializeField] private float animationSpeed;
         [SerializeField] private DialogBox previousDialog, nextDialog;
 
+        // ✅ TMP fallback 폰트 (Inspector에서 지정)
+        [SerializeField] private TMP_FontAsset fallbackFont;
+
         public virtual void Open()
         {
+            // ✅ LocalizeFontEvent 방어: 폰트 없으면 fallback 적용
+            var localizeFontEvent = GetComponentInChildren<LocalizeFontEvent>(true);
+            if (localizeFontEvent != null)
+            {
+                // _tmpUITexts 배열 점검
+                foreach (var tmpText in localizeFontEvent.GetType().GetField("_tmpUITexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(localizeFontEvent) as TextMeshProUGUI[])
+                {
+                    if (tmpText != null && tmpText.font == null)
+                    {
+                        Debug.LogWarning($"[DialogBox] Missing font on TMP_UI_Text: {tmpText.name}. Applying fallback font.");
+                        tmpText.font = fallbackFont;
+                    }
+                }
+
+                // _tmpTexts 배열 점검
+                foreach (var tmpText in localizeFontEvent.GetType().GetField("_tmpTexts", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(localizeFontEvent) as TextMeshPro[])
+                {
+                    if (tmpText != null && tmpText.font == null)
+                    {
+                        Debug.LogWarning($"[DialogBox] Missing font on TMP_Text: {tmpText.name}. Applying fallback font.");
+                        tmpText.font = fallbackFont;
+                    }
+                }
+            }
+
             gameObject.SetActive(true);
+
             if (appearInstantly)
             {
                 transform.localScale = Vector3.one;
@@ -27,8 +57,6 @@ namespace Vampire
         {
             transform.localScale = Vector3.zero;
             gameObject.SetActive(false);
-            // StopAllCoroutines();
-            // StartCoroutine(CloseAnimation());
         }
 
         public void Return()

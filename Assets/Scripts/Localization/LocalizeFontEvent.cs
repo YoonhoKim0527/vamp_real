@@ -19,14 +19,47 @@ namespace Vampire
         protected override void UpdateAsset(TMP_FontAsset font)
         {
             base.UpdateAsset(font);
-            foreach (var tmp in _tmpUITexts)
+
+            if (font == null)
             {
-                tmp.font = font;
+                Debug.LogWarning("[LocalizeFontEvent] Font asset is null. Skipping font update.");
+                return;
             }
-            foreach (var tmp in _tmpTexts)
+
+            // ✅ 자동 스캔: 등록 안 된 TextMeshProUGUI도 찾아서 폰트 적용
+            var allTMPUIs = GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var tmp in allTMPUIs)
             {
-                tmp.font = font;
+                if (tmp != null)
+                {
+                    tmp.font = font;
+                }
+            }
+
+            // ✅ 기존 배열 처리
+            if (_tmpUITexts != null && _tmpUITexts.Length > 0)
+            {
+                foreach (var tmp in _tmpUITexts)
+                {
+                    if (tmp != null)
+                    {
+                        tmp.font = font;
+                    }
+                }
+            }
+
+            if (_tmpTexts != null && _tmpTexts.Length > 0)
+            {
+                foreach (var tmp in _tmpTexts)
+                {
+                    if (tmp != null)
+                    {
+                        tmp.font = font;
+                    }
+                }
             }
         }
+
+
     }
 }

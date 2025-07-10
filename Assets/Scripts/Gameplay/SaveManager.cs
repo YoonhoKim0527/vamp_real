@@ -25,7 +25,6 @@ namespace Vampire
         public int level;
     }
 
-
     public class SaveManager : MonoBehaviour
     {
         private string savePath;
@@ -40,17 +39,10 @@ namespace Vampire
         {
             SaveData data = new SaveData();
 
+            // ✅ Shop Items 저장
             data.ownedItems = new List<ItemSaveData>();
-
-            Debug.Log($"[SaveGame] Saving {items.Count} items.");
             foreach (var item in items)
             {
-                Debug.Log($"[SaveGame] Item in list: {item.itemName} | owned = {item.owned}");
-            }
-
-            foreach (var item in items)
-            {
-                Debug.Log($"[SaveManager] Saving Item: '{item.itemName}' Owned: {item.owned}");
                 data.ownedItems.Add(new ItemSaveData
                 {
                     itemName = item.itemName,
@@ -58,10 +50,10 @@ namespace Vampire
                 });
             }
 
+            // ✅ Upgrade Levels 저장
             data.upgradeLevels = new List<UpgradeSaveData>();
             foreach (var upgrade in upgrades)
             {
-                Debug.Log($"[SaveManager] Saving Upgrade: '{upgrade.upgradeName}' Level: {upgrade.level}");
                 data.upgradeLevels.Add(new UpgradeSaveData
                 {
                     upgradeName = upgrade.upgradeName,
@@ -72,17 +64,15 @@ namespace Vampire
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(savePath, json);
             Debug.Log($"[SaveManager] Game saved at: {savePath}");
-            Debug.Log($"[SaveManager] JSON Content:\n{json}");
         }
 
         public SaveData LoadGame()
         {
-            Debug.Log($"[SaveManager] Save path at load: {savePath}");
             if (File.Exists(savePath))
             {
                 string json = File.ReadAllText(savePath);
                 SaveData data = JsonUtility.FromJson<SaveData>(json);
-                Debug.Log($"[SaveManager] Game loaded.");
+                Debug.Log($"[SaveManager] Game loaded from {savePath}");
                 return data;
             }
             else
