@@ -15,7 +15,7 @@ MonoBehaviour:
   upgradeName: asd
   description: asdasda
   upgradeSprite: {fileID: -994979890, guid: 3488b902bd1f9fc4daa50ee7aac2789a, type: 3}
-  cost: 1
+  cost: 2
   level: 0
   maxLevel: 5
   type: 4

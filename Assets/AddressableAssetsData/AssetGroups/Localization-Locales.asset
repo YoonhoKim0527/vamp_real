@@ -23,12 +23,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale
   - m_GUID: 677cd69ec1c10480b8cd1add654088c7
-    m_Address: "\u7B80\u4F53\u4E2D\u6587"
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale
-  - m_GUID: 5cf45578333304148a1605145796a0d5
-    m_Address: "\u7E41\u9AD4\u4E2D\u6587"
+    m_Address: Korean
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale

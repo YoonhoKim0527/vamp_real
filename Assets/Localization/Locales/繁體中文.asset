@@ -17,6 +17,7 @@ MonoBehaviour:
   m_Metadata:
     m_Items:
     - rid: 7941200140158369816
+    - rid: 6426232277758115842
   m_LocaleName: "\u7E41\u9AD4\u4E2D\u6587"
   m_CustomFormatCultureCode: 
   m_UseCustomFormatter: 0
@@ -24,6 +25,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 6426232277758115842
+      type: {class: FallbackLocale, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Locale: {fileID: 11400000, guid: ca7faa5da7bb52a43a4941077d1b4488, type: 2}
     - rid: 7941200140158369816
       type: {class: FallbackLocale, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:

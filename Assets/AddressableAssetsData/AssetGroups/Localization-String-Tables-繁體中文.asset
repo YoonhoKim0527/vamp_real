@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e9cfa19ddc5564e779c1b8bcb6feea2a
   m_SerializeEntries:
-  - m_GUID: 137b9bfad94de48b1ae4f51981d8fbf1
-    m_Address: UI Text_zh-Hant
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-zh-Hant
-    - Preload
   - m_GUID: 534dbcca0bdd1481caea2641500f4987
     m_Address: Character Text_zh-Hant
     m_ReadOnly: 1
