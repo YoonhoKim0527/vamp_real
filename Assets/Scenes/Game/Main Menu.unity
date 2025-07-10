@@ -688,7 +688,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u89D2\u8272\u9078\u64C7\n"
+  m_text: upgrade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
   m_sharedMaterial: {fileID: 2173995649330076938, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
@@ -784,6 +784,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: fallbackFont
+      value: 
+      objectReference: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
     - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: animationSpeed
       value: 3
@@ -1065,6 +1069,9 @@ MonoBehaviour:
   - {fileID: 424676273}
   - {fileID: 791656275}
   - {fileID: 1425740483}
+  - {fileID: 1377413900}
+  - {fileID: 192752461}
+  - {fileID: 2017914165}
   _tmpTexts: []
 --- !u!4 &240838773
 Transform:
@@ -1806,7 +1813,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &667823179
@@ -3544,7 +3551,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u89D2\u8272\u9078\u64C7\n"
+  m_text: character selection
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
   m_sharedMaterial: {fileID: 2173995649330076938, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
@@ -3814,6 +3821,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: fallbackFont
+      value: 
+      objectReference: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
     - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: animationSpeed
       value: 3
@@ -4630,6 +4641,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: fallbackFont
+      value: 
+      objectReference: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
+    - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: animationSpeed
       value: 3
       objectReference: {fileID: 0}
@@ -5081,7 +5096,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1766795251
@@ -5230,7 +5245,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1774598569
@@ -5880,7 +5895,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u89D2\u8272\u9078\u64C7\n"
+  m_text: map selection
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
   m_sharedMaterial: {fileID: 2173995649330076938, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
@@ -6273,7 +6288,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2072349787
@@ -6303,6 +6318,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: fallbackFont
+      value: 
+      objectReference: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
     - target: {fileID: 2391678180519886385, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: animationSpeed
       value: 3

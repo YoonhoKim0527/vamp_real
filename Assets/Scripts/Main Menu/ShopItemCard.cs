@@ -22,11 +22,18 @@ namespace Vampire
         {
             this.shop = shop;
             this.itemBlueprint = blueprint;
-            this.coinDisplay = coinDisplay;
+
+            // ✅ CoinDisplay 연결: 인자로 전달 못 받으면 자동 탐색
+            this.coinDisplay = coinDisplay != null ? coinDisplay : FindObjectOfType<CoinDisplay>();
+            if (this.coinDisplay == null)
+            {
+                Debug.LogWarning("[ShopItemCard] CoinDisplay not found! UI may not update coins.");
+            }
 
             Debug.Log($"Init ShopItemCard: {blueprint.itemName}, {blueprint.cost}, {blueprint.itemSprite}");
 
             Refresh(); // ✅ 상태를 UI에 반영
+            buyButton.onClick.RemoveAllListeners();
             buyButton.onClick.AddListener(BuyItem);
         }
 
@@ -35,32 +42,32 @@ namespace Vampire
             int coins = PlayerPrefs.GetInt("Coins", 0);
             if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
             {
-                // ✅ 돈 차감
                 PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
-
-                // ✅ 아이템 구매 상태 갱신
                 itemBlueprint.owned = true;
                 Debug.Log($"[ShopItemCard] Purchased {itemBlueprint.itemName}");
 
-                // ✅ 구매 직후 게임 상태 저장
+                // ✅ 게임 상태 저장
                 var gameStateManager = FindObjectOfType<GameStateManager>();
                 if (gameStateManager != null)
                 {
                     gameStateManager.SaveGame();
-                    Debug.Log("[ShopItemCard] Saved game after purchase.");
                 }
-                else
+
+                // ✅ Shop 전체 리프레시 (코인 포함)
+                if (shop != null)
                 {
-                    Debug.LogWarning("[ShopItemCard] GameStateManager not found! SaveGame skipped.");
+                    shop.RefreshShopUI();
                 }
 
-                // ✅ UI 갱신
-                Refresh();
-
-                // ✅ 코인 UI 갱신
-                coinDisplay.UpdateDisplay();
+                // ✅ 메인 UI의 CoinDisplay도 갱신
+                var mainCoinDisplay = FindObjectOfType<CoinDisplay>();
+                if (mainCoinDisplay != null)
+                {
+                    mainCoinDisplay.UpdateDisplay();
+                }
             }
         }
+
 
         public void Refresh()
         {

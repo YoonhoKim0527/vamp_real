@@ -26,14 +26,12 @@ namespace Vampire
             Debug.Log("[GameStateManager] SaveManager found. Loading game data.");
             LoadGame();
 
-            // ✅ Shop Init 호출 (세이브 데이터 로드 후에)
+            // ✅ Shop Init 호출
             var shop = FindObjectsOfType<Shop>(true).FirstOrDefault();
             if (shop != null)
             {
                 if (!shop.gameObject.activeSelf)
-                {
-                    shop.gameObject.SetActive(true); // 비활성 상태면 활성화
-                }
+                    shop.gameObject.SetActive(true);
 
                 if (!shop.IsInitialized)
                 {
@@ -45,6 +43,25 @@ namespace Vampire
             else
             {
                 Debug.LogWarning("[GameStateManager] Shop not found in scene.");
+            }
+
+            // ✅ Upgrade Init 호출
+            var upgrade = FindObjectsOfType<Upgrade>(true).FirstOrDefault();
+            if (upgrade != null)
+            {
+                if (!upgrade.gameObject.activeSelf)
+                    upgrade.gameObject.SetActive(true);
+
+                if (!upgrade.IsInitialized)
+                {
+                    upgrade.Init();
+                }
+
+                upgrade.RefreshUpgradeUI();
+            }
+            else
+            {
+                Debug.LogWarning("[GameStateManager] Upgrade not found in scene.");
             }
         }
 

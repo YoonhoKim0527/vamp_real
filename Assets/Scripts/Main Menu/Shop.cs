@@ -23,7 +23,7 @@ namespace Vampire
                 return;
             }
 
-            // ✅ 기존 카드가 있으면 전부 제거 (중복 방지)
+            // ✅ 기존 카드 제거 (중복 방지)
             foreach (Transform child in transform)
             {
                 Destroy(child.gameObject);
@@ -45,18 +45,31 @@ namespace Vampire
                 shopItemCards[i].UpdateLayout();
             }
 
-            // ✅ 이제 초기화 완료 상태로 표시
+            // ✅ 초기화 완료
             IsInitialized = true;
         }
 
         public void RefreshShopUI()
         {
             Debug.Log("[Shop] Refreshing Shop UI...");
-            if (shopItemCards == null) return;
 
-            foreach (var card in shopItemCards)
+            // ✅ 코인 UI 갱신
+            if (coinDisplay != null)
             {
-                card.Refresh();
+                coinDisplay.UpdateDisplay();
+            }
+            else
+            {
+                Debug.LogWarning("[Shop] CoinDisplay not assigned. Skipping coin update.");
+            }
+
+            // ✅ 아이템 카드들 갱신
+            if (shopItemCards != null)
+            {
+                foreach (var card in shopItemCards)
+                {
+                    card.Refresh();
+                }
             }
         }
     }

@@ -46,9 +46,9 @@ MonoBehaviour:
     m_Address: asdafadsfasdfasdfasdfadfsadf
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-en
     - Locale-zh
     - Locale-zh-Hant
+    - Locale-en
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 7e3d66dc8cb9f42809017db168ce4406, type: 2}
   m_SchemaSet:

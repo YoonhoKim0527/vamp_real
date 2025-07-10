@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce97dce9ca235b4cb0a32a557bf8115, type: 3}
   m_Name: UpgradeItem 2
   m_EditorClassIdentifier: 
-  upgradeName: asd
+  upgradeName: a
   description: asdasda
   upgradeSprite: {fileID: 1484808113, guid: 565e633b662f1ce4bb0f892efa69ec9b, type: 3}
   cost: 3

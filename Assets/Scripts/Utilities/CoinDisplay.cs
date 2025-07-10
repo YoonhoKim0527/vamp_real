@@ -11,12 +11,25 @@ namespace Vampire
         void Start()
         {
             coinText = GetComponent<TextMeshProUGUI>();
-            coinText.text = PlayerPrefs.GetInt("Coins").ToString();
+            if (coinText == null)
+            {
+                Debug.LogError("[CoinDisplay] Missing TextMeshProUGUI on this GameObject!");
+                return;
+            }
+
+            coinText.text = PlayerPrefs.GetInt("Coins", 0).ToString();
         }
 
         public void UpdateDisplay()
         {
-            coinText.text = PlayerPrefs.GetInt("Coins").ToString();
+            coinText = GetComponent<TextMeshProUGUI>();
+            if (coinText == null)
+            {
+                Debug.LogError("[CoinDisplay] Missing TextMeshProUGUI. Cannot update display.");
+                return;
+            }
+
+            coinText.text = PlayerPrefs.GetInt("Coins", 0).ToString();
         }
     }
 }
