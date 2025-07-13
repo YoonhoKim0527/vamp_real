@@ -328,10 +328,10 @@ RectTransform:
   m_Father: {fileID: 1387286565}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 0, y: -40}
+  m_AnchorMin: {x: 0.1, y: 0}
+  m_AnchorMax: {x: 0.9, y: 0.8}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 0, y: -150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &92308474
 MonoBehaviour:
@@ -353,8 +353,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 384, y: 424}
-  m_Spacing: {x: 16, y: 16}
+  m_CellSize: {x: 400, y: 500}
+  m_Spacing: {x: 0, y: 16}
   m_Constraint: 0
   m_ConstraintCount: 4
 --- !u!114 &92308475
@@ -374,7 +374,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d62709c449e72b4d838d7ef55f7b9fc, type: 2}
   - {fileID: 11400000, guid: f8e0cdcf9a304ed44a2016a9ba2a1005, type: 2}
   - {fileID: 11400000, guid: 6fc5740a16279684aa1c6cadfa564c25, type: 2}
-  upgradeItemCardPrefab: {fileID: 979783560240380161, guid: 39d1c65a34ed5ae4bba806fb39ae691d, type: 3}
+  upgradeItemCardPrefab: {fileID: 979783560240380161, guid: 3f73a4e0cae86a04db69739dfa4536e4, type: 3}
   coinDisplay: {fileID: 1774598567}
 --- !u!1 &104680519
 GameObject:
@@ -2299,10 +2299,10 @@ RectTransform:
   m_Father: {fileID: 1781687280}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 0, y: -40}
+  m_AnchorMin: {x: 0.1, y: 0}
+  m_AnchorMax: {x: 0.9, y: 0.8}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &853634826
 MonoBehaviour:
@@ -2324,7 +2324,7 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 384, y: 424}
+  m_CellSize: {x: 384, y: 509}
   m_Spacing: {x: 16, y: 16}
   m_Constraint: 0
   m_ConstraintCount: 4
@@ -3216,7 +3216,7 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:38da8409a015b47cdb8b217717c1c92c
     m_TableEntryReference:
-      m_KeyId: 334637481058304
+      m_KeyId: 5889980358656
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -3366,7 +3366,7 @@ RectTransform:
   m_GameObject: {fileID: 1387286564}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 92308472}
@@ -3375,8 +3375,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -58}
-  m_SizeDelta: {x: -48, y: -164}
+  m_AnchoredPosition: {x: 0, y: 60.001343}
+  m_SizeDelta: {x: 0, y: -119.997314}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1387286566
 CanvasRenderer:
@@ -3399,14 +3399,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1bb0c8aae1ccc8241902944023620b9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3953,6 +3953,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c835c27d7978d145a43d86fe51c5db9, type: 3}
     - target: {fileID: 8902017675851470149, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: m_Name
       value: Dialog Box (Shop)
@@ -4772,6 +4780,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c835c27d7978d145a43d86fe51c5db9, type: 3}
     - target: {fileID: 8902017675851470149, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: m_Name
       value: 'Dialog Box (Upgrade) '
@@ -5283,7 +5299,7 @@ RectTransform:
   m_GameObject: {fileID: 1781687279}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0245312, y: 1.05, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 853634824}
@@ -5292,8 +5308,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -58}
-  m_SizeDelta: {x: -48, y: -164}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1781687281
 CanvasRenderer:
@@ -5316,14 +5332,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: c0dd818e40a451b45ad5eef20dbe29e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6450,6 +6466,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7551727207719634533, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c835c27d7978d145a43d86fe51c5db9, type: 3}
     - target: {fileID: 8902017675851470149, guid: a40f5fc193e064471aec9d5d24f92174, type: 3}
       propertyPath: m_Name
       value: Dialog Box (Character Selection)

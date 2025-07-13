@@ -34,7 +34,7 @@ namespace Vampire
 
         public void Start()
         {
-            volcanoSpawner = StartCoroutine(SpawnVolcanoTilesRoutine());
+            //volcanoSpawner = StartCoroutine(SpawnVolcanoTilesRoutine());
         }
 
         private IEnumerator SpawnVolcanoTilesRoutine()
