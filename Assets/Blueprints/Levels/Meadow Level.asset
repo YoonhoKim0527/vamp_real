@@ -15,9 +15,7 @@ MonoBehaviour:
   levelTime: 600
   backgroundTexture: {fileID: 2800000, guid: 42b11be826072496a9d57814c0ca6576, type: 3}
   backgroundTiles:
-  - {fileID: 11400000, guid: a9522c406bf6c4c4daf2bee2df6977fe, type: 2}
-  - {fileID: 11400000, guid: 6a4bfb4f6bf655549802449ed9ecf2db, type: 2}
-  - {fileID: 11400000, guid: 75459fd558062494bab83bf82c007e79, type: 2}
+  - {fileID: 11400000, guid: fa94ec808f958044d956530e30b0bd79, type: 2}
   abilityPrefabs:
   - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
   - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
