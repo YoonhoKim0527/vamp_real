@@ -14,20 +14,26 @@ namespace Vampire
         [SerializeField] protected Vector2 hoverOffset;
         [SerializeField] protected float targetRadius = 5;
 
-        protected Vector2 currHoverOffset;
-        protected Vector3 gunDirection = Vector2.right;
-        protected float theta = 0;
+        [Header("Water Beam Settings")]
+        [SerializeField] private GameObject elephantLeftSprite;
+        [SerializeField] private GameObject elephantRightSprite;
+        [SerializeField] private GameObject waterBeamSprite;
+        [SerializeField] private float beamDuration = 2f;
+        [SerializeField] private float beamDamagePerSecond = 500f;
+        [SerializeField] private LayerMask monsterLayer;
+
+        private Vector2 currHoverOffset;
+        private float theta = 0;
+        private bool isEvolved = false;
 
         protected override void Update()
         {
             base.Update();
 
-            // Rotate the gun if it is reloading
-            float reloadRotation = 0;
-            float t = timeSinceLastAttack / cooldown.Value;
-            if (t > 0 && t < 1)
+            if (isEvolved)
             {
-                reloadRotation = t * 360;
+                bazookaGun.SetActive(false);
+                return;
             }
 
             currHoverOffset = hoverOffset + Vector2.up * Mathf.Sin(Time.time * 5) * 0.1f;
@@ -36,10 +42,95 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            StartCoroutine(LaunchProjecileAnimation());
+            if (level >= 1 && !isEvolved)
+            {
+                isEvolved = true;
+                StartCoroutine(WaterBeamAttackLoop());
+            }
+            else
+            {
+                StartCoroutine(LaunchProjectileAnimation());
+            }
         }
 
-        protected IEnumerator LaunchProjecileAnimation()
+        private IEnumerator WaterBeamAttackLoop()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(10f); // 10초마다 발동
+                StartCoroutine(FireWaterBeam());
+            }
+        }
+
+        private IEnumerator FireWaterBeam()
+        {
+            Debug.Log("[BazookaGun] 🐘 코끼리 물대포 발사!");
+
+            // 🐘 1. 양쪽 코끼리 생성
+            Vector3 leftPosition = playerCharacter.CenterTransform.position + Vector3.left * 4f;
+            Vector3 rightPosition = playerCharacter.CenterTransform.position + Vector3.right * 4f;
+
+            GameObject leftElephant = Instantiate(elephantLeftSprite, leftPosition, Quaternion.identity);
+            GameObject rightElephant = Instantiate(elephantRightSprite, rightPosition, Quaternion.identity);
+
+            // SpriteRenderer 가져오기
+            SpriteRenderer leftSR = leftElephant.GetComponent<SpriteRenderer>();
+            SpriteRenderer rightSR = rightElephant.GetComponent<SpriteRenderer>();
+
+            yield return new WaitForSeconds(1f); // 코끼리 등장 후 1초 대기
+
+            // 💧 2. 물대포 생성
+            Vector3 beamStart = new Vector3(leftSR.bounds.max.x, leftPosition.y, 0f);  // 왼쪽 코끼리 오른쪽 끝
+            Vector3 beamEnd = new Vector3(rightSR.bounds.min.x, rightPosition.y, 0f); // 오른쪽 코끼리 왼쪽 끝
+
+            Vector3 beamCenter = (beamStart + beamEnd) / 2f;
+            float beamWidth = Vector3.Distance(beamStart, beamEnd);
+            float beamHeight = waterBeamSprite.transform.localScale.y * 3f; // 두께 3배
+
+            GameObject waterBeam = Instantiate(waterBeamSprite, beamCenter, Quaternion.identity);
+            waterBeam.transform.localScale = new Vector3(
+                beamWidth,
+                beamHeight,
+                1f
+            );
+
+            // 💥 3. 물대포 범위 내 몬스터 데미지
+            float elapsed = 0f;
+            while (elapsed < beamDuration)
+            {
+                Collider2D[] hitMonsters = Physics2D.OverlapBoxAll(
+                    beamCenter,
+                    new Vector2(beamWidth, beamHeight),
+                    0f,
+                    monsterLayer
+                );
+
+                Debug.Log($"[BazookaGun] 🌊 감지 몬스터 수: {hitMonsters.Length}");
+
+                foreach (Collider2D collider in hitMonsters)
+                {
+                    Monster monster = collider.GetComponent<Monster>();
+                    if (monster != null)
+                    {
+                        float damageThisFrame = beamDamagePerSecond * Time.deltaTime;
+                        monster.TakeDamage(damageThisFrame, Vector2.zero);
+                        Debug.Log($"[BazookaGun] 🐘 {monster.name}에게 {damageThisFrame:F1} 데미지 적용");
+                    }
+                }
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            Destroy(leftElephant);
+            Destroy(rightElephant);
+            Destroy(waterBeam);
+
+            Debug.Log("[BazookaGun] 🐘 물대포 종료");
+        }
+
+        
+        private IEnumerator LaunchProjectileAnimation()
         {
             ISpatialHashGridClient targetEntity = entityManager.Grid.FindClosestInRadius(bazookaGun.transform.position, targetRadius);
 
@@ -48,7 +139,7 @@ namespace Vampire
                 : (targetEntity.Position - (Vector2)bazookaGun.transform.position).normalized;
 
             float targetTheta = Vector2.SignedAngle(Vector2.right, launchDirection);
-            float initialTheta = theta;
+            float initialTheta = bazookaGun.transform.eulerAngles.z;
 
             float t = 0;
             float tMax = 1 / firerate.Value * 0.45f;
@@ -60,74 +151,30 @@ namespace Vampire
                     launchDirection = (targetEntity.Position - (Vector2)bazookaGun.transform.position).normalized;
                     targetTheta = Vector2.SignedAngle(Vector2.right, launchDirection);
                 }
-                theta = Mathf.Lerp(initialTheta, targetTheta, EasingUtils.EaseOutBack(t));
-                bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta);
+                bazookaGun.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(initialTheta, targetTheta, tScaled));
                 t += Time.deltaTime;
                 yield return null;
             }
-            if (targetEntity != null)
-            {
-                t = 0;
-                while (t < tMax)
-                {
-                    float tScaled = t / tMax;
-                    launchDirection = (targetEntity.Position - (Vector2)bazookaGun.transform.position).normalized;
-                    targetTheta = Vector2.SignedAngle(Vector2.right, launchDirection);
-                    bazookaGun.transform.rotation = Quaternion.Euler(0, 0, targetTheta);
-                    t += Time.deltaTime;
-                    yield return null;
-                }
-            }
-            else
-            {
-                yield return new WaitForSeconds(tMax);
-            }
-            theta = targetTheta;
-            bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta);
+
+            bazookaGun.transform.rotation = Quaternion.Euler(0, 0, targetTheta);
 
             // ✅ 발사체 생성
             ExplosiveProjectile projectile = (ExplosiveProjectile)entityManager.SpawnProjectile(
-                projectileIndex, 
-                launchTransform.position, 
-                damage.Value, 
-                knockback.Value, 
-                speed.Value, 
+                projectileIndex,
+                launchTransform.position,
+                damage.Value,
+                knockback.Value,
+                speed.Value,
                 monsterLayer
             );
             projectile.SetupExplosion(damage.Value, explosionAOE.Value, knockback.Value);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
 
-            // ✅ 발사체 Sprite를 방향에 맞춰 회전 처리
-            RotateProjectileSprite(projectile.gameObject, launchDirection);
-
-            // ✅ 발사체 날리기
-            projectile.Launch(launchDirection);
-
             launchParticles.Play();
+
+            // 발사체 날리기
+            projectile.Launch(launchDirection);
         }
 
-        /// <summary>
-        /// 발사체의 Sprite를 발사 방향으로 회전
-        /// </summary>
-        private void RotateProjectileSprite(GameObject projectileObj, Vector2 launchDirection)
-        {
-            // ✅ SpriteRenderer가 자식에 있으면 가져오기
-            SpriteRenderer spriteRenderer = projectileObj.GetComponentInChildren<SpriteRenderer>();
-
-            if (spriteRenderer != null)
-            {
-                float angle = Mathf.Atan2(launchDirection.y, launchDirection.x) * Mathf.Rad2Deg;
-
-                // 부모가 아니라 SpriteRenderer가 붙은 오브젝트만 회전
-                spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-                // 왼쪽 발사 시 위아래 반전
-                spriteRenderer.flipY = (launchDirection.x < 0);
-            }
-            else
-            {
-                Debug.LogWarning($"[BazookaGunAbility] SpriteRenderer를 {projectileObj.name}에서 찾을 수 없음");
-            }
-        }
     }
 }

@@ -5038,7 +5038,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7669521032070789568, guid: 75c29a02cf4c02543b0ee3821377cdba, type: 3}
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1216
   damage:
     value: 20
     upgrades:
@@ -5082,6 +5082,14 @@ MonoBehaviour:
     - 0.2
   hoverOffset: {x: 0.5, y: 0.5}
   targetRadius: 5
+  elephantLeftSprite: {fileID: 5775373695718928129, guid: 3c80e57b98e80324698ab81dd18095cd, type: 3}
+  elephantRightSprite: {fileID: 7016856652907684525, guid: 194f3a3239c595c4fb44822b85fb1683, type: 3}
+  waterBeamSprite: {fileID: 1374816093725034334, guid: 307dbb9be7c231c4eb34b521fe5e058b, type: 3}
+  beamDuration: 2
+  beamDamagePerSecond: 500
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 1088
   references:
     version: 2
     RefIds: []
