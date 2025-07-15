@@ -10,6 +10,7 @@ namespace Vampire
         public float levelTime = 600;
         [Header("Background")]
         public Texture2D backgroundTexture;
+        public UnityEngine.Tilemaps.TileBase[] backgroundTiles;
         [Header("Abilities")]
         public GameObject[] abilityPrefabs;
         [Header("Monster Settings")]
