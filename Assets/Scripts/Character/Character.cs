@@ -15,13 +15,14 @@ namespace Vampire
         [SerializeField] protected float lookIndicatorRadius;
         [SerializeField] protected TextMeshProUGUI levelText;
         [SerializeField] protected AbilitySelectionDialog abilitySelectionDialog;
-        [SerializeField] protected PointBar healthBar;  // 血量條
-        [SerializeField] protected PointBar expBar;  // 經驗條
+        [SerializeField] protected PointBar healthBar;
+        [SerializeField] protected PointBar expBar;
         [SerializeField] protected Collider2D collectableCollider;
         [SerializeField] protected Collider2D meleeHitboxCollider;
         [SerializeField] protected ParticleSystem dustParticles;
         [SerializeField] protected Material defaultMaterial, hitMaterial, deathMaterial;
         [SerializeField] protected ParticleSystem deathParticles;
+
         protected CharacterBlueprint characterBlueprint;
         protected UpgradeableMovementSpeed movementSpeed;
         protected UpgradeableArmor armor;
@@ -42,29 +43,28 @@ namespace Vampire
         protected CoroutineQueue coroutineQueue;
         protected Coroutine hitAnimationCoroutine = null;
         protected Vector2 moveDirection;
-        public Vector2 LookDirection 
-        { 
-            get { return lookDirection; } 
-            set 
-            {
-                if (value != Vector2.zero)
-                    lookDirection = value; 
-            }
+
+        public Vector2 LookDirection
+        {
+            get { return lookDirection; }
+            set { if (value != Vector2.zero) lookDirection = value; }
         }
-        public Transform CenterTransform { get => centerTransform; }
-        public Collider2D CollectableCollider { get => collectableCollider; }
-        public float Luck { get => characterBlueprint.luck; }
-        public int CurrentLevel { get => currentLevel; }
+        public Transform CenterTransform => centerTransform;
+        public Collider2D CollectableCollider => collectableCollider;
+        public float Luck => characterBlueprint.luck;
+        public int CurrentLevel => currentLevel;
         public UnityEvent<float> OnDealDamage { get; } = new UnityEvent<float>();
         public UnityEvent OnDeath { get; } = new UnityEvent();
-        public CharacterBlueprint Blueprint { get => characterBlueprint; }
-        public Vector2 Velocity { get => rb.velocity; }
+        public CharacterBlueprint Blueprint => characterBlueprint;
+        public Vector2 Velocity => rb.velocity;
+
         // Spatial Hash Grid Client Interface
         public Vector2 Position => transform.position;
         public Vector2 Size => meleeHitboxCollider.bounds.size;
         public Dictionary<int, int> ListIndexByCellIndex { get; set; }
         public int QueryID { get; set; } = -1;
-        CharacterStats stats;  
+
+        private CharacterStats stats;
         public CharacterStats Stats => stats;
 
         void Awake()
@@ -73,7 +73,25 @@ namespace Vampire
             zPositioner = gameObject.AddComponent<ZPositioner>();
             spriteAnimator = GetComponentInChildren<SpriteAnimator>();
             spriteRenderer = spriteAnimator.GetComponent<SpriteRenderer>();
-            characterBlueprint = CrossSceneData.CharacterBlueprint;
+        }
+
+        void Start()
+        {
+            characterBlueprint = CrossSceneData.CharacterBlueprint; // 캐릭터 블루프린트는 CrossSceneData 유지
+
+            // ✅ SaveManager로부터 SaveData 불러오기
+            var saveManager = FindObjectOfType<SaveManager>();
+            if (saveManager != null)
+            {
+                SaveData saveData = saveManager.LoadGame();
+                stats = new CharacterStats(characterBlueprint); // 🔥 SaveFile 기반으로 스탯 생성
+                Debug.Log($"[Character] Stats loaded from SaveFile: Damage {stats.GetTotalDamage()}, HP {stats.GetTotalHP()}, Speed {stats.GetTotalSpeed()}");
+            }           
+            else
+            {
+                Debug.LogWarning("[Character] SaveManager not found! Using base stats only.");
+                stats = new CharacterStats(characterBlueprint); // fallback
+            }
         }
 
         public virtual void Init(EntityManager entityManager, AbilityManager abilityManager, StatsManager statsManager)
@@ -83,12 +101,11 @@ namespace Vampire
             this.statsManager = statsManager;
 
             OnDealDamage.AddListener(statsManager.IncreaseDamageDealt);
-            
+
             coroutineQueue = new CoroutineQueue(this);
             coroutineQueue.StartLoop();
 
-            stats = new CharacterStats(characterBlueprint); // 🔸 Stats 먼저 초기화
-
+            // ✅ 체력 및 업그레이드 초기화
             currentHealth = stats.GetTotalHP();
             healthBar.Setup(currentHealth, 0, stats.GetTotalHP());
 
@@ -99,7 +116,7 @@ namespace Vampire
             spriteAnimator.Init(characterBlueprint.walkSpriteSequence, characterBlueprint.walkFrameTime, false);
 
             movementSpeed = new UpgradeableMovementSpeed();
-            movementSpeed.Value = stats.GetTotalSpeed(); // 🔸 Stats 연동
+            movementSpeed.Value = stats.GetTotalSpeed();
             abilityManager.RegisterUpgradeableValue(movementSpeed, true);
             UpdateMoveSpeed();
 
@@ -108,13 +125,30 @@ namespace Vampire
             abilityManager.RegisterUpgradeableValue(armor, true);
 
             zPositioner.Init(transform);
-}
+        }
 
+        public void RecalculateStats()
+        {
+            var saveManager = FindObjectOfType<SaveManager>();
+            if (saveManager != null)
+            {
+                SaveData saveData = saveManager.LoadGame();
+                stats.RecalculateFromSave();
+                currentHealth = stats.GetTotalHP();
+                healthBar.Setup(currentHealth, 0, stats.GetTotalHP());
+                movementSpeed.Value = stats.GetTotalSpeed();
+                UpdateMoveSpeed();
 
+                Debug.Log($"[Character] Stats recalculated: Damage {stats.GetTotalDamage()}, HP {stats.GetTotalHP()}, Speed {stats.GetTotalSpeed()}");
+            }
+            else
+            {
+                Debug.LogWarning("[Character] SaveManager not found during recalculation.");
+            }
+        }
 
         protected virtual void Update()
         {
-            // Look in movement direction
             lookIndicator.transform.localPosition = lookDirection * lookIndicatorRadius;
             spriteRenderer.flipX = lookDirection.x < 0;
         }
@@ -125,6 +159,7 @@ namespace Vampire
                 lookDirection = moveDirection;
             else
                 StopWalkAnimation();
+
             if (alive)
                 rb.velocity += moveDirection * characterBlueprint.acceleration * Time.deltaTime;
         }
@@ -139,23 +174,18 @@ namespace Vampire
         {
             if (alive)
             {
-                // Level up as many times as possible with the exp given
                 while (currentExp + exp >= nextLevelExp)
                 {
-                    // Use only as much exp as brings us up to the next level
                     float expDiff = nextLevelExp - currentExp;
                     currentExp += expDiff;
                     exp -= expDiff;
-                    expBar.Setup(currentExp, 0, nextLevelExp);  // Temp make the exp bar appear to be full
-                    // Wait until the player has finished leveling up
+                    expBar.Setup(currentExp, 0, nextLevelExp);
                     yield return LevelUpCoroutine();
-                    // Update the exp bar to show the progress to the next level
                     float prevLevelExp = nextLevelExp;
                     expToNextLevel += characterBlueprint.LevelToExpIncrease(currentLevel);
                     nextLevelExp += expToNextLevel;
                     expBar.Setup(currentExp, prevLevelExp, nextLevelExp);
                 }
-                // Add remaining exp
                 currentExp += exp;
                 expBar.AddPoints(exp);
             }
@@ -165,12 +195,9 @@ namespace Vampire
         {
             if (alive)
             {
-                // Level up
                 currentLevel++;
                 UpdateLevelDisplay();
-                // Open the level up dialog menu
                 abilitySelectionDialog.Open();
-                // Wait for the menu to be closed
                 while (abilitySelectionDialog.MenuOpen)
                 {
                     yield return null;
@@ -192,17 +219,16 @@ namespace Vampire
         {
             if (alive)
             {
-                // Apply armor
                 if (armor.Value >= damage)
                     damage = damage < 1 ? damage : 1;
                 else
                     damage -= armor.Value;
-                // Decrease health
+
                 healthBar.SubtractPoints(damage);
                 currentHealth -= damage;
-                // Knockback
                 rb.velocity += knockback * Mathf.Sqrt(rb.drag);
                 statsManager.IncreaseDamageTaken(damage);
+
                 if (currentHealth <= 0)
                 {
                     StartCoroutine(DeathAnimation());
@@ -235,7 +261,7 @@ namespace Vampire
             while (t < 1)
             {
                 spriteRenderer.sharedMaterial = deathMaterial;
-                deathParticles.transform.position = transform.position + Vector3.up * height * (1-t);
+                deathParticles.transform.position = transform.position + Vector3.up * height * (1 - t);
                 deathMaterial.SetFloat("_Wipe", t);
                 t += Time.deltaTime;
                 yield return null;
@@ -252,8 +278,8 @@ namespace Vampire
         {
             healthBar.AddPoints(health);
             currentHealth += health;
-            if (currentHealth > characterBlueprint.hp)
-                currentHealth = characterBlueprint.hp;
+            if (currentHealth > stats.GetTotalHP())
+                currentHealth = stats.GetTotalHP();
         }
 
         public void SetLookDirecton(InputAction.CallbackContext context)
@@ -275,13 +301,11 @@ namespace Vampire
         {
             if (alive)
                 spriteAnimator.StartAnimating();
-            //dustParticles.Play();
         }
 
         public void StopWalkAnimation()
         {
             spriteAnimator.StopAnimating(true);
-            //dustParticles.Stop();
         }
 
         public void SetMoveDirection(InputAction.CallbackContext context)

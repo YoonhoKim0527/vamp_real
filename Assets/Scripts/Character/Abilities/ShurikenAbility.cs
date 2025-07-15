@@ -3,47 +3,72 @@ using UnityEngine;
 
 namespace Vampire
 {
-    public class ShurikenAbility : ProjectileAbility
+    public class ShurikenAbility : Ability
     {
         [Header("Shuriken Stats")]
-        [SerializeField] protected UpgradeableProjectileCount projectileCount;
-        [SerializeField] protected float shurikenDelay;
+        [SerializeField] private GameObject shurikenPrefab;
+        [SerializeField] private LayerMask monsterLayer;
+        [SerializeField] private float throwRadius = 5f;
+        [SerializeField] private float throwTime = 0.15f;
+        [SerializeField] private UpgradeableDamage damage;
+        [SerializeField] private UpgradeableKnockback knockback;
+        [SerializeField] private UpgradeableWeaponCooldown cooldown;
+        [SerializeField] private float chainRange = 2f; // 연쇄 범위
+
+        private int shurikenIndex;
+        private float timeSinceLastAttack;
+        private bool isShurikenActive = false; // ✅ 현재 슈리켄 운용 여부
 
         protected override void Use()
         {
             base.Use();
-            if (CrossSceneData.ExtraProjectile && projectileCount != null)
-            {
-                projectileCount.ForceAdd(1);
-            }
-            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
-            {
-                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);
-            }
-        }
-        protected override void Attack()
-        {
-            StartCoroutine(LuanchShurikens());
+            gameObject.SetActive(true);
+            timeSinceLastAttack = cooldown.Value;
+
+            shurikenIndex = entityManager.AddPoolForProjectile(shurikenPrefab);
         }
 
-        protected IEnumerator LuanchShurikens()
+        void Update()
         {
-            timeSinceLastAttack -= projectileCount.Value * shurikenDelay;
-            for (int i = 0; i < projectileCount.Value; i++)
+            timeSinceLastAttack += Time.deltaTime;
+
+            if (!isShurikenActive && timeSinceLastAttack >= cooldown.Value)
             {
-                LaunchProjectile(playerCharacter.LookDirection);
-                yield return new WaitForSeconds(shurikenDelay);
+                timeSinceLastAttack = 0f;
+                LaunchShuriken();
             }
         }
 
-        protected void LaunchProjectile(Vector2 direction)
+        private void LaunchShuriken()
         {
-            Debug.Log("shuriken");
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, playerCharacter.CenterTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
-            projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
-            projectile.Launch(direction);
+            Debug.Log("[ShurikenAbility] 슈리켄 발사");
+
+            ShurikenProjectile shuriken = entityManager.SpawnProjectile(
+                shurikenIndex,
+                playerCharacter.CenterTransform.position,
+                playerCharacter.Stats.GetTotalDamage() * damage.Value,
+                knockback.Value,
+                throwRadius / throwTime,
+                monsterLayer
+            ).GetComponent<ShurikenProjectile>();
+
+            if (shuriken != null)
+            {
+                isShurikenActive = true; // ✅ 운용 중 표시
+                shuriken.Init(playerCharacter, throwRadius, throwTime, chainRange, OnShurikenReturn);
+                shuriken.StartAttackSequence();
+            }
+            else
+            {
+                Debug.LogError("[ShurikenAbility] SpawnProjectile 실패");
+            }
+        }
+
+        // ✅ 슈리켄이 완전히 돌아왔을 때 호출
+        private void OnShurikenReturn()
+        {
+            Debug.Log("[ShurikenAbility] 슈리켄 귀환 완료");
+            isShurikenActive = false;
         }
     }
 }
-
