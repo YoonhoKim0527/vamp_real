@@ -15,6 +15,7 @@ namespace Vampire
         [SerializeField] private StatsManager statsManager;
         [SerializeField] private GameOverDialog gameOverDialog;
         [SerializeField] private GameTimer gameTimer;
+        [SerializeField] private TilemapBackgroundGenerator tilemapBackgroundGenerator;
         private float levelTime = 0;
         private float timeSinceLastMonsterSpawned;
         private float timeSinceLastChestSpawned;
@@ -41,6 +42,7 @@ namespace Vampire
             // Initialize the infinite background
             infiniteBackground.Init(this.levelBlueprint.backgroundTexture, playerCharacter.transform);
             // Initialize inventory
+            tilemapBackgroundGenerator.Init(levelBlueprint.backgroundTiles, playerCharacter.transform);
             inventory.Init();
         }
 
