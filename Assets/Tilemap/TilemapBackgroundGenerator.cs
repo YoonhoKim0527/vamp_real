@@ -16,6 +16,7 @@ using UnityEngine.Tilemaps;
         [SerializeField] int loadRadius = 10;
         [SerializeField] RockSpawner rockSpawner;
         [SerializeField] VolcanoSpawner volcanoSpawner;
+        [SerializeField] BlackHoleSpawner blackHoleSpawner;
 
         Dictionary<Vector3Int, TileBase> placedTiles = new();
         Vector3Int lastPlayerCell;
@@ -62,6 +63,7 @@ using UnityEngine.Tilemaps;
                         placedTiles[pos] = tile;
                         rockSpawner.SpawnRocksAtTile(pos);
                         volcanoSpawner.SpawnVolcanoAtTile(pos);
+                        blackHoleSpawner.SpawnBlackHoleAtTile(pos);
                     }
                 }
         }
