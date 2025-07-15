@@ -214,6 +214,14 @@ MonoBehaviour:
     m_Localized: a
     m_Metadata:
       m_Items: []
+  - m_Id: 162429512984293376
+    m_Localized: zzz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 162429550447816704
+    m_Localized: zzz
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
