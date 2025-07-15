@@ -8640,6 +8640,7 @@ MonoBehaviour:
   animationSpeed: 5
   previousDialog: {fileID: 0}
   nextDialog: {fileID: 0}
+  fallbackFont: {fileID: 0}
   abilityCardsParent: {fileID: 2124109318}
   abilityCardPrefab: {fileID: 5629613628450112857, guid: 688559ce033df48cbb7d76a6941bfe37, type: 3}
   pauseMenu: {fileID: 499037435}

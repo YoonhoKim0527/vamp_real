@@ -56,7 +56,6 @@ namespace Vampire
         public virtual void Launch(Vector2 direction)
         {
             this.direction = direction.normalized;
-            //transform.rotation = Quaternion.LookRotation(direction, Vector3.back);
             moveCoroutine = StartCoroutine(Move());
         }
 
@@ -68,13 +67,11 @@ namespace Vampire
             {
                 float step = speed * Time.deltaTime;
                 transform.position += step * (Vector3)direction;
+                transform.RotateAround(transform.position, Vector3.back, Time.deltaTime * 100 * rotationSpeed);
+
                 distanceTravelled += step;
-                transform.RotateAround(transform.position, Vector3.back, Time.deltaTime*100*rotationSpeed);
-                // if (entityManager.TransformOnScreen(transform, Vector2.one))
-                //     timeOffScreen = 0;
-                // else
-                //     timeOffScreen += Time.deltaTime;
                 speed -= airResistance * Time.deltaTime;
+
                 yield return null;
             }
             HitNothing();
@@ -94,6 +91,13 @@ namespace Vampire
 
         protected virtual void DestroyProjectile()
         {
+            // ✅ moveCoroutine 안전하게 정리
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
+
             StartCoroutine(DestroyProjectileAnimation());
         }
 
@@ -111,10 +115,17 @@ namespace Vampire
             if ((targetLayer & (1 << collider.gameObject.layer)) != 0)
             {
                 col.enabled = false;
-                StopCoroutine(moveCoroutine);
+
+                // ✅ moveCoroutine null-safe 처리
+                if (moveCoroutine != null)
+                {
+                    StopCoroutine(moveCoroutine);
+                    moveCoroutine = null;
+                }
+
                 if (collider.transform.parent.TryGetComponent<IDamageable>(out IDamageable damageable))
                 {
-                    HitDamageable(collider.gameObject.GetComponentInParent<IDamageable>());
+                    HitDamageable(damageable);
                 }
                 else
                 {
@@ -127,10 +138,5 @@ namespace Vampire
         {
             CollisionCheck(collider);
         }
-
-        // void OnColliderEnter2D(Collider2D collider)
-        // {
-        //     CollisionCheck(collider);
-        // }
     }
 }

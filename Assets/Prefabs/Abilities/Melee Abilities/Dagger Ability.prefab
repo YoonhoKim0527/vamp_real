@@ -186,6 +186,23 @@ MonoBehaviour:
     - 0.2
     - 0.2
     - 0.2
+  punchPrefab: {fileID: 7134505743336703535, guid: ee01336f40ed57443894efdd51779bd8, type: 3}
+  punchRadius: 2
+  attackDuration: 3
+  idleDuration: 3
+  punchesPerSecond: 10
+  punchDamage: 3
+  punchKnockback: 2
+  punchImpactRadius: 1
+  dangerSprite: {fileID: 21300000, guid: da09fc2aaab7ffc4784b08d206284831, type: 3}
+  warningDuration: 3
+  warningBlinkInterval: 0.2
+  dustSprite: {fileID: 21300000, guid: 739b4fc85b1419c4bad6f6b5626b6dfe, type: 3}
+  dustScale: 0.1
+  dustDuration: 1
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 192
   references:
     version: 2
     RefIds: []

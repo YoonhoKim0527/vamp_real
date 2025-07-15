@@ -18,30 +18,63 @@ namespace Vampire
             baseHP = blueprint.hp;
             baseSpeed = blueprint.movespeed;
 
-            // 🔹 상점 아이템 효과 반영
-            if (CrossSceneData.ExtraDamage)
-                damageMultiplier += 0.2f;
-            if (CrossSceneData.ExtraHP)
-                hpMultiplier += 0.2f;  // 예: 체력 30% 증가
-            if (CrossSceneData.ExtraSpeed)
-                speedMultiplier += 0.5f;
+            // 🔥 savefile.json에서 업그레이드 데이터 로드
+            ApplySavedUpgrades();
 
-            // 🔹 업그레이드 누적 적용
-            ApplyUpgradeMultiplier();
+            Debug.Log($"[CharacterStats] Damage Multiplier: {damageMultiplier}");
+            Debug.Log($"[CharacterStats] HP Multiplier: {hpMultiplier}");
+            Debug.Log($"[CharacterStats] Speed Multiplier: {speedMultiplier}");
         }
 
-        public void ApplyUpgradeMultiplier()
+        private void ApplySavedUpgrades()
         {
-            damageMultiplier += 0.1f * CrossSceneData.BonusDamage;
-            hpMultiplier += 0.5f * CrossSceneData.BonusHP;
-            speedMultiplier += 0.5f * CrossSceneData.BonusSpeed;
-            Debug.Log($"[Upgrade] Damage x{damageMultiplier}, HP x{hpMultiplier}, Speed x{speedMultiplier}");
+            var saveManager = Object.FindObjectOfType<SaveManager>();
+            if (saveManager == null)
+            {
+                Debug.LogError("[CharacterStats] SaveManager not found in scene! Cannot load upgrades.");
+                return;
+            }
+
+            SaveData data = saveManager.LoadGame();
+            if (data == null)
+            {
+                Debug.LogWarning("[CharacterStats] No SaveData found. Using base stats.");
+                return;
+            }
+
+            foreach (var upgrade in data.upgradeLevels)
+            {
+                Debug.Log($"[CharacterStats] Applying Upgrade: {upgrade.upgradeName} Lv.{upgrade.level}");
+
+                switch (upgrade.upgradeName)
+                {
+                    case "strong":
+                        damageMultiplier += 0.1f * upgrade.level;
+                        break;
+
+                    case "a":
+                        hpMultiplier += 0.5f * upgrade.level;
+                        break;
+
+                    case "c":
+                        speedMultiplier += 0.2f * upgrade.level;
+                        break;
+
+                    case "b":
+                        CrossSceneData.BonusProjectile = upgrade.level;
+                        break;
+
+                    default:
+                        Debug.LogWarning($"[CharacterStats] Unknown upgrade: {upgrade.upgradeName}");
+                        break;
+                }
+            }
         }
 
         // 🔹 데미지 계산
         public float GetTotalDamage()
         {
-            return baseDamage * (damageMultiplier);
+            return baseDamage * damageMultiplier;
         }
 
         // 🔹 체력 계산
@@ -55,5 +88,20 @@ namespace Vampire
         {
             return baseSpeed * speedMultiplier;
         }
+
+        public void RecalculateFromSave()
+        {
+            // 기존 multiplier 초기화
+            damageMultiplier = 1f;
+            hpMultiplier = 1f;
+            speedMultiplier = 1f;
+            CrossSceneData.BonusProjectile = 0;
+
+            // 다시 savefile.json 로드 후 재계산
+            ApplySavedUpgrades();
+
+            Debug.Log("[CharacterStats] Stats recalculated.");
+        }
+
     }
 }

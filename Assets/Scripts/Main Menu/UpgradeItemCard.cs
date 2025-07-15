@@ -60,7 +60,7 @@ namespace Vampire
                 itemBlueprint.level++;
                 Debug.Log($"[UpgradeItemCard] Purchased upgrade: {itemBlueprint.upgradeName} (Level {itemBlueprint.level})");
 
-                // ✅ 업그레이드 효과 적용
+                // ✅ 업그레이드 효과 적용 (CrossSceneData 갱신)
                 switch (itemBlueprint.type)
                 {
                     case UpgradeType.ProjectileUpgrade: CrossSceneData.BonusProjectile++; break;
@@ -81,23 +81,20 @@ namespace Vampire
                     Debug.LogWarning("[UpgradeItemCard] GameStateManager not found! SaveGame skipped.");
                 }
 
-                // ✅ Upgrade UI 전체 리프레시
+                // ✅ UI 전체 리프레시
                 if (upgrade != null)
                 {
                     upgrade.RefreshUpgradeUI();
-                    Debug.Log("[UpgradeItemCard] Upgrade UI refreshed.");
-                }
-                else
-                {
-                    Debug.LogWarning("[UpgradeItemCard] Upgrade reference missing. Refresh skipped.");
                 }
 
-                // ✅ 코인 UI 강제 갱신 (업그레이드 외부 포함)
+                // ✅ 코인 UI 강제 갱신
                 var allCoinDisplays = FindObjectsOfType<CoinDisplay>();
                 foreach (var display in allCoinDisplays)
                 {
                     display.UpdateDisplay();
                 }
+
+                Debug.Log("[UpgradeItemCard] Upgrade applied. Stats will update on next scene load.");
             }
             else
             {
