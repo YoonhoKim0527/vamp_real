@@ -42,13 +42,13 @@ MonoBehaviour:
       Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
-  - m_GUID: 4774615783447484ebed8fb5822a06bf
-    m_Address: asdafadsfasdfasdfasdfadfsadf
+  - m_GUID: 886e117ce5c9be34695553e86b640352
+    m_Address: NotoSansKR-ExtraBold SDF
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh
-    - Locale-zh-Hant
     - Locale-en
+    - Locale-zh-Hant
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 7e3d66dc8cb9f42809017db168ce4406, type: 2}
   m_SchemaSet:

@@ -202,8 +202,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u56DE"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
-  m_sharedMaterial: {fileID: 2173995649330076938, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -337,8 +337,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: X
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
-  m_sharedMaterial: {fileID: 2173995649330076938, guid: 4774615783447484ebed8fb5822a06bf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -648,3 +648,4 @@ MonoBehaviour:
   animationSpeed: 0
   previousDialog: {fileID: 0}
   nextDialog: {fileID: 0}
+  fallbackFont: {fileID: 0}
