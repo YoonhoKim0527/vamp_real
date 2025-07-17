@@ -25,7 +25,7 @@ namespace Vampire
             throwableIndex = entityManager.AddPoolForThrowable(throwablePrefab);
         }
 
-        void Update()
+        protected virtual void Update()
         {
             timeSinceLastAttack += Time.deltaTime;
             if (timeSinceLastAttack >= cooldown.Value)

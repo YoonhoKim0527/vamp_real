@@ -18,8 +18,14 @@ namespace Vampire
 
         void LateUpdate()
         {
+            if (playerTransform == null)
+            {
+                // 아직 Init 안 됐으면 z 변경 스킵
+                return;
+            }
+
             Vector3 temp = transform.position;
-            temp.z = scale*((manuallySetZ ? manualY : temp.y)-playerTransform.position.y);
+            temp.z = scale * ((manuallySetZ ? manualY : temp.y) - playerTransform.position.y);
             transform.position = temp;
         }
 

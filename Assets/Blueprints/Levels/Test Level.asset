@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelTime: 600
   backgroundTexture: {fileID: 2800000, guid: ef38aa5dbbc5a456591de268af081efc, type: 3}
+  backgroundTiles: []
   abilityPrefabs:
   - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
   - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
@@ -34,6 +35,7 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 5ef555eded0e44e25a78b4f84fb661bd, type: 3}
   - {fileID: 7378740072262091319, guid: 1f4699d7a46c44170930119aed6fe806, type: 3}
   - {fileID: 7378740072262091319, guid: 39204614fc67b40eaa117e59ba519b20, type: 3}
+  - {fileID: 7378740072262091319, guid: 8e3dd1e271a61ce408e7d68b9a3f9af4, type: 3}
   monsters:
   - monstersPrefab: {fileID: 8960830493049914446, guid: 12adb3a92ed404612906d2c1fe4b586e, type: 3}
     monsterBlueprints:

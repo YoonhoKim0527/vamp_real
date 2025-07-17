@@ -179,5 +179,31 @@ namespace Vampire
             if (monsterBlueprint.coinLootTable.TryDropLoot(out CoinType coinType))
                 entityManager.SpawnCoin((Vector2)transform.position, coinType);
         }
+
+        public void RunAwayFrom(Vector2 playerPosition, float duration, float speedMultiplier)
+        {
+            Vector2 runDirection = (transform.position - (Vector3)playerPosition).normalized;
+            StartCoroutine(RunAwayRoutine(runDirection, duration, speedMultiplier));
+        }
+
+        private IEnumerator RunAwayRoutine(Vector2 direction, float duration, float speedMultiplier)
+        {
+            float timer = 0f;
+            float originalDrag = rb.drag;
+            float originalSpeed = rb.velocity.magnitude;
+
+            rb.drag = 0f; // 도망칠 때 저항 제거
+            Vector2 fleeVelocity = direction * originalSpeed * speedMultiplier;
+            rb.velocity = fleeVelocity;
+
+            while (timer < duration)
+            {
+                rb.velocity = fleeVelocity; // 일정 속도로 도망
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            rb.drag = originalDrag; // 저항 복구
+        }
     }
 }

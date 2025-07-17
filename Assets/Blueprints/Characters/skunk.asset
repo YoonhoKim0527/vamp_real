@@ -29,4 +29,4 @@ MonoBehaviour:
   - {fileID: -770645946, guid: d88383adb1d000f42a868c3652ab2726, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
+  - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
