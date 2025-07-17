@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Garlic
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
-  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -205,8 +205,8 @@ MonoBehaviour:
 
     if I do it like this will it work?'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
-  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -598,8 +598,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u9078\u64C7"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
-  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1158,8 +1158,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 12
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 886e117ce5c9be34695553e86b640352, type: 2}
-  m_sharedMaterial: {fileID: 5046693323440874984, guid: 886e117ce5c9be34695553e86b640352, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -7,9 +7,11 @@ namespace Vampire
     {
         [SerializeField] ObjectPool rockPool;
         [SerializeField] Tilemap groundTilemap;
+        [SerializeField] bool spawnEnabled = true;
 
         public void SpawnRocksAtTile(Vector3Int tileCell)
         {
+            if (!spawnEnabled) return;
             Vector3 tileWorldPos = groundTilemap.GetCellCenterWorld(tileCell);
             int count = Random.Range(1, 4);
 

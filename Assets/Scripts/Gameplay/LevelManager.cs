@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vampire
 {
@@ -26,7 +29,7 @@ namespace Vampire
         {
             this.levelBlueprint = levelBlueprint;
             levelTime = 0;
-            
+
             // Initialize the entity manager
             entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
             // Initialize the ability manager
@@ -67,11 +70,11 @@ namespace Vampire
             if (levelTime < levelBlueprint.levelTime)
             {
                 timeSinceLastMonsterSpawned += Time.deltaTime;
-                float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime/levelBlueprint.levelTime);
-                float monsterSpawnDelay = spawnRate > 0 ? 1.0f/spawnRate : float.PositiveInfinity;
+                float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime / levelBlueprint.levelTime);
+                float monsterSpawnDelay = spawnRate > 0 ? 1.0f / spawnRate : float.PositiveInfinity;
                 if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
                 {
-                    (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime/levelBlueprint.levelTime);
+                    (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime / levelBlueprint.levelTime);
                     (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
                     MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
                     entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
@@ -147,7 +150,7 @@ namespace Vampire
 
             gameOverDialog.Open(true, statsManager);
         }
-        
+
         public void Restart()
         {
             Time.timeScale = 1;

@@ -2643,7 +2643,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 99999
+  m_Mass: 3
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -8133,6 +8133,7 @@ MonoBehaviour:
   volcanoPool: {fileID: 1121008068}
   groundTilemap: {fileID: 1801345491}
   volcanoSpawnChance: 1
+  spawnEnabled: 0
 --- !u!4 &1051880183
 Transform:
   m_ObjectHideFlags: 0
@@ -8806,6 +8807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rockPool: {fileID: 1299429604}
   groundTilemap: {fileID: 1801345491}
+  spawnEnabled: 0
 --- !u!4 &1295707894
 Transform:
   m_ObjectHideFlags: 0
@@ -14330,6 +14332,7 @@ MonoBehaviour:
   blackHolePool: {fileID: 117978225}
   groundTilemap: {fileID: 1801345491}
   spawnChance: 1
+  spawnEnabled: 1
 --- !u!4 &1592882691
 Transform:
   m_ObjectHideFlags: 0

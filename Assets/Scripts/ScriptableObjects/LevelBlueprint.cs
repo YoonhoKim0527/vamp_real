@@ -13,6 +13,7 @@ namespace Vampire
         public UnityEngine.Tilemaps.TileBase[] backgroundTiles;
         [Header("Abilities")]
         public GameObject[] abilityPrefabs;
+
         [Header("Monster Settings")]
         public MonstersContainer[] monsters;
         public MiniBossContainer[] miniBosses;

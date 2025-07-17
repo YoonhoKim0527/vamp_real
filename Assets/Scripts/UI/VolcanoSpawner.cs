@@ -10,9 +10,11 @@ namespace Vampire
         [SerializeField] ObjectPool volcanoPool;
         [SerializeField] Tilemap groundTilemap;
         [SerializeField, Range(0f, 1f)] float volcanoSpawnChance = 0.05f;
+        [SerializeField] bool spawnEnabled = true;
 
         public void SpawnVolcanoAtTile(Vector3Int tileCell)
         {
+            if (!spawnEnabled) return;
             if (Random.value > volcanoSpawnChance) return;
             Vector2 offset = Random.insideUnitCircle * 3f;
             Vector3 tileWorldPos = groundTilemap.GetCellCenterWorld(tileCell);

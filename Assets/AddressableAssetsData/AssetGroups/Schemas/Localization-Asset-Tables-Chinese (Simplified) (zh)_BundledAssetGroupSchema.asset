@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: Localization-Asset-Tables-Korean_BundledAssetGroupSchema
+  m_Name: Localization-Asset-Tables-Chinese (Simplified) (zh)_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: db240ac2db9833b41b492aba518fb08d, type: 2}
+  m_Group: {fileID: 11400000, guid: be54f8d21e8892043a4d683803484619, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1

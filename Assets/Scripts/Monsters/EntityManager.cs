@@ -66,6 +66,7 @@ namespace Vampire
         public Inventory Inventory { get => inventory; }
         public AbilitySelectionDialog AbilitySelectionDialog { get; private set; }
         public SpatialHashGrid Grid { get => grid; }
+        public int MonsterPoolsCount => monsterPools.Length;
 
         public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
         {
