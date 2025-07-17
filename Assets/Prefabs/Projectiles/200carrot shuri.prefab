@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1961317459387710786}
   - component: {fileID: 1876110707025596369}
-  - component: {fileID: 7822634639757199850}
   - component: {fileID: 4915996707842535573}
+  - component: {fileID: 626639159910441611}
   m_Layer: 0
   m_Name: 200carrot shuri
   m_TagString: Untagged
@@ -53,23 +53,6 @@ CircleCollider2D:
   m_Offset: {x: 0.022561654, y: -0.01968427}
   serializedVersion: 2
   m_Radius: 0.11596045
---- !u!114 &7822634639757199850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7669521032070789568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed3433aa194444a658c9ce2afbf52af0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectileSpriteRenderer: {fileID: 9111367580527349101}
-  maxDistance: 10
-  rotationSpeed: 4
-  airResistance: 0
-  destructionParticleSystem: {fileID: 1480910369272600104}
 --- !u!96 &4915996707842535573
 TrailRenderer:
   serializedVersion: 2
@@ -178,6 +161,23 @@ TrailRenderer:
   m_MinVertexDistance: 0.02
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &626639159910441611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669521032070789568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1424a4032fbd1ab4ea352dd03e986b5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileSpriteRenderer: {fileID: 9111367580527349101}
+  maxDistance: 15
+  rotationSpeed: 0
+  airResistance: 0
+  destructionParticleSystem: {fileID: 1480910369272600104}
 --- !u!1 &7721683133008659187
 GameObject:
   m_ObjectHideFlags: 0

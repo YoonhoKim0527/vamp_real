@@ -40,7 +40,6 @@ namespace Vampire
 
         protected virtual void LaunchProjectile()
         {
-            Debug.Log("project");
             float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
             Projectile projectile = entityManager.SpawnProjectile(projectileIndex, playerCharacter.CenterTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);

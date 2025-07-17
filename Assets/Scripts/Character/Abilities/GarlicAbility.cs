@@ -11,15 +11,17 @@ namespace Vampire
         [SerializeField] protected UpgradeableAOE radius;
         [SerializeField] protected UpgradeableDamageRate damageRate;
         [SerializeField] protected UpgradeableKnockback knockback;
+
         private float timeSinceLastAttack;
-        private FastList<GameObject> hitMonsters;
         private CircleCollider2D damageCollider;
-        private SpriteRenderer spriteRenderer;
+        private SpriteRenderer garlicRenderer;
+
+        private float lastRadius; // ✅ 마지막 반영된 반경 기록
 
         void Awake()
         {
             damageCollider = GetComponent<CircleCollider2D>();
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            garlicRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         public override void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
@@ -33,53 +35,65 @@ namespace Vampire
         {
             base.Use();
             gameObject.SetActive(true);
-            hitMonsters = new FastList<GameObject>();
-            damageCollider.radius = radius.Value;
-            spriteRenderer.transform.localScale = Vector3.one * radius.Value * 2;
+
+            // ✅ 처음 실행 시 반경 적용
+            UpdateVisuals();
+            lastRadius = radius.Value;
         }
 
         protected override void Upgrade()
         {
             base.Upgrade();
-            damageCollider.radius = radius.Value;
-            spriteRenderer.transform.localScale = Vector3.one * radius.Value * 2;
+            // ✅ 업그레이드 시 반경 적용
+            UpdateVisuals();
+            lastRadius = radius.Value;
         }
 
         void Update()
         {
-            timeSinceLastAttack += Time.deltaTime;
-            if (timeSinceLastAttack >= 1/damageRate.Value)
+            // ✅ 게임 중 AOE 값이 변경되면 스프라이트와 콜라이더 동기화
+            if (Mathf.Abs(radius.Value - lastRadius) > 0.01f)
             {
-                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius.Value, monsterLayer);
-                foreach (Collider2D collider in hitColliders)
-                {
-                    Damage(collider.GetComponentInParent<IDamageable>());
-                }
-                timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1/damageRate.Value);
+                UpdateVisuals();
+                lastRadius = radius.Value;
+            }
+
+            // ✅ 데미지 주기 처리
+            timeSinceLastAttack += Time.deltaTime;
+            if (timeSinceLastAttack >= 1f / damageRate.Value)
+            {
+                DealDamageInRadius();
+                timeSinceLastAttack = 0f;
             }
         }
 
-        private void Damage(IDamageable damageable)
+        private void UpdateVisuals()
         {
-            Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-            damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
-            playerCharacter.OnDealDamage.Invoke(totalDamage);
-        }
+            if (damageCollider != null)
+                damageCollider.radius = radius.Value;
 
-        private void DeregisterMonster(Monster monster)
-        {
-            hitMonsters.Remove(monster.gameObject);
-        }
-
-        void OnTriggerEnter2D(Collider2D collider)
-        {
-            if (!hitMonsters.Contains(collider.gameObject) && (monsterLayer & (1 << collider.gameObject.layer)) != 0)
+            if (garlicRenderer != null && garlicRenderer.sprite != null)
             {
-                hitMonsters.Add(collider.gameObject);
-                Monster monster = collider.gameObject.GetComponentInParent<Monster>();
-                monster.OnKilled.AddListener(DeregisterMonster);
-                Damage(monster);
+                float spriteWidth = garlicRenderer.sprite.bounds.size.x;
+                float scale = (radius.Value * 2f) / spriteWidth; // ✅ 반지름 기준으로 스프라이트 스케일 계산
+                garlicRenderer.transform.localScale = Vector3.one * scale;
+            }
+        }
+
+        private void DealDamageInRadius()
+        {
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius.Value, monsterLayer);
+
+            foreach (Collider2D collider in hitColliders)
+            {
+                IDamageable damageable = collider.GetComponentInParent<IDamageable>();
+                if (damageable != null)
+                {
+                    Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;
+                    float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+                    damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+                    playerCharacter.OnDealDamage.Invoke(totalDamage);
+                }
             }
         }
     }

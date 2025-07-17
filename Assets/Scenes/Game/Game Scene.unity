@@ -1041,6 +1041,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 8188805818370081222, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2328,6 +2336,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 8188805818370081222, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2444,6 +2460,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4488135101578520986, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 8188805818370081222, guid: cb898dd879eac436cabcd5ae25a3a4bd, type: 3}
       propertyPath: m_Sprite
       value: 

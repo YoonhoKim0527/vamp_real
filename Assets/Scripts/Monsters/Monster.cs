@@ -205,5 +205,14 @@ namespace Vampire
 
             rb.drag = originalDrag; // 저항 복구
         }
+
+        public void Freeze(bool freeze)
+        {
+            if (freeze)
+            {
+                rb.velocity = Vector2.zero; // 움직임 멈춤
+            }
+        }
+
     }
 }

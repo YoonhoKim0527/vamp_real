@@ -91,6 +91,9 @@ MonoBehaviour:
   firerate:
     value: 4
     upgrades: []
+  evolvedSpeedMultiplier: 7
+  evolvedLifetime: 3
+  piercingEffectPrefab: {fileID: 1770232080523536904, guid: 934d8aa71b8db064b9be047add15aa05, type: 3}
   references:
     version: 2
     RefIds: []

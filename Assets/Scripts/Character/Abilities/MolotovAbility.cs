@@ -97,7 +97,7 @@ namespace Vampire
             sr.sprite = inkSplashSprite;
             sr.sortingOrder = 1000;
             inkZone.transform.position = playerCharacter.CenterTransform.position;
-            inkZone.transform.localScale = Vector3.one * (inkRadius * 2);
+            inkZone.transform.localScale = Vector3.one * (inkRadius);
 
             Destroy(inkZone, inkDisplayTime);
 
