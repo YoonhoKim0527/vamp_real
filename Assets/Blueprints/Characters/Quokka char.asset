@@ -16,7 +16,7 @@ MonoBehaviour:
   owned: 1
   cost: 999
   baseDamage: 6
-  hp: 1000
+  hp: 30
   recovery: 0
   armor: 100
   movespeed: 2
