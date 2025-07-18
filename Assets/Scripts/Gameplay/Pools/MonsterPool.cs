@@ -44,5 +44,11 @@ namespace Vampire
         {
             Destroy(monster.gameObject);
         }
+
+        public SwarmMonster GetSwarmMonster()
+        {
+            return (SwarmMonster)pool.Get();
+        }
+
     }
 }

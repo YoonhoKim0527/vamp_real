@@ -44,12 +44,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c54a6635d5ec3734597c9de9fcd58185, type: 2}
     - {fileID: 11400000, guid: 1d1547b98475241e798c26597f6553a5, type: 2}
     - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
-  - monstersPrefab: {fileID: 8960830493049914446, guid: 32acffa87c5128f47bf52716a872bbad, type: 3}
-    monsterBlueprints:
-    - {fileID: 11400000, guid: c54a6635d5ec3734597c9de9fcd58185, type: 2}
-  - monstersPrefab: {fileID: 8960830493049914446, guid: dfcf798c11f284752815ead20a8dbaeb, type: 3}
-    monsterBlueprints:
-    - {fileID: 11400000, guid: 38f13c65830f840f99434d21ce75baef, type: 2}
   - monstersPrefab: {fileID: 8960830493049914446, guid: b21d49c07805e4c2c8cab56371c5aad6, type: 3}
     monsterBlueprints:
     - {fileID: 11400000, guid: 0c81abe360d964c53b7e90be45a30ca5, type: 2}
