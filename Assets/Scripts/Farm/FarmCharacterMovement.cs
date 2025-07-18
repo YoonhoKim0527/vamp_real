@@ -37,7 +37,7 @@ namespace Vampire
             pos.x = Mathf.Clamp(pos.x, moveBoundsMin.x, moveBoundsMax.x);
             pos.y = Mathf.Clamp(pos.y, moveBoundsMin.y, moveBoundsMax.y);
             transform.position = pos;
-            // ¹æÇâ ÀüÈ¯
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             timer += Time.deltaTime;
             if (timer >= directionChangeInterval)
             {
@@ -45,7 +45,7 @@ namespace Vampire
                 timer = 0f;
             }
 
-            // °È±â ¾Ö´Ï¸ÞÀÌ¼Ç
+            // ï¿½È±ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
             AnimateWalk();
         }
 
@@ -53,7 +53,7 @@ namespace Vampire
         {
             moveDirection = Random.insideUnitCircle.normalized;
 
-            // ÁÂ¿ì ¹ÝÀü
+            // ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (moveDirection.x != 0)
                 spriteRenderer.flipX = moveDirection.x < 0;
         }

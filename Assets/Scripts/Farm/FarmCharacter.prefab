@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 8902636986499892702}
-  moveBoundsMin: {x: -5, y: -3}
-  moveBoundsMax: {x: 5, y: 3}
+  moveBoundsMin: {x: -3, y: -5}
+  moveBoundsMax: {x: 3, y: 5}
 --- !u!212 &8902636986499892702
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -48,13 +48,17 @@ namespace Vampire
             //      rb.velocity = rb.velocity.normalized * monsterBlueprint.movespeed;
         }
 
-        void OnCollisionStay2D(Collision2D col)
+        void OnTriggerStay2D(Collider2D col)
         {
-            if (alive && ((monsterBlueprint.meleeLayer & (1 << col.collider.gameObject.layer)) != 0) && timeSinceLastAttack >= 1.0f/monsterBlueprint.atkspeed)
+            if (!alive) return;
+
+            if (((monsterBlueprint.meleeLayer & (1 << col.gameObject.layer)) != 0) &&
+                timeSinceLastAttack >= 1.0f / monsterBlueprint.atkspeed)
             {
                 playerCharacter.TakeDamage(monsterBlueprint.atk);
-                timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f/monsterBlueprint.atkspeed);
+                timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f / monsterBlueprint.atkspeed);
             }
         }
+
     }
 }

@@ -5,7 +5,7 @@ namespace Vampire
     public class FarmManager : MonoBehaviour
     {
         [SerializeField] CharacterBlueprint[] allBlueprints;
-        [SerializeField] GameObject farmCharacterPrefab; // °øÅë ÇÁ¸®ÆÕ (SpriteRenderer + Animator)
+        [SerializeField] GameObject farmCharacterPrefab; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (SpriteRenderer + Animator)
         [SerializeField] Transform farmArea;
 
         void Start()
