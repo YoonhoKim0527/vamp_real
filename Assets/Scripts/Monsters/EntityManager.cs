@@ -68,6 +68,22 @@ namespace Vampire
         public SpatialHashGrid Grid { get => grid; }
         public int MonsterPoolsCount => monsterPools.Length;
 
+        [Header("Swarm Spawning Settings")]
+        [SerializeField] private GameObject swarmMonsterPrefab;
+        [SerializeField] private GameObject swarmSpawnerParent;
+        private SwarmSpawner swarmSpawner;
+
+        // 🦇 추가: swarmMonster가 몬스터 풀 배열에서 몇 번째인지 저장
+        private int swarmMonsterPoolIndex;
+        [SerializeField] private MonsterBlueprint swarmMonsterBlueprint;
+
+        [SerializeField] private GameObject flowerSpawnerParent;
+        private FlowerSpawner flowerSpawner;
+
+        [SerializeField] private GameObject flowerMonsterPrefab; // 꽃 몬스터 Prefab
+        private int flowerMonsterPoolIndex;
+        [SerializeField] private MonsterBlueprint flowerMonsterBlueprint;
+
         public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
         {
             this.playerCharacter = character;
@@ -95,6 +111,14 @@ namespace Vampire
             }
             monsterPools[monsterPools.Length - 1] = monsterPoolParent.AddComponent<MonsterPool>();
             monsterPools[monsterPools.Length - 1].Init(this, playerCharacter, levelBlueprint.finalBoss.bossPrefab);
+
+            // 🦇 SwarmSpawner 초기화
+            swarmSpawner = swarmSpawnerParent.AddComponent<SwarmSpawner>();
+            swarmSpawner.Init(this, playerCharacter, swarmMonsterPrefab, swarmMonsterBlueprint);
+
+            // FlowerSpawner 초기화
+            flowerSpawner = flowerSpawnerParent.AddComponent<FlowerSpawner>();
+            flowerSpawner.Init(this, playerCharacter, flowerMonsterPrefab,  flowerMonsterBlueprint);
 
             projectileIndexByPrefab = new Dictionary<GameObject, int>();
             projectilePools = new List<ProjectilePool>();
@@ -146,6 +170,9 @@ namespace Vampire
             {
                 grid.Rebuild(playerCharacter.transform.position);
             }
+
+            swarmSpawner.Tick(); // SwarmSpawner가 자체적으로 타이머 관리
+            flowerSpawner.Tick();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
