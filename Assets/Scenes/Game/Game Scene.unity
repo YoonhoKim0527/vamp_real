@@ -14426,7 +14426,7 @@ MonoBehaviour:
   blackHolePool: {fileID: 117978225}
   groundTilemap: {fileID: 1801345491}
   spawnChance: 1
-  spawnEnabled: 1
+  spawnEnabled: 0
 --- !u!4 &1592882691
 Transform:
   m_ObjectHideFlags: 0

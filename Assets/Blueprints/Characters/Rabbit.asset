@@ -31,3 +31,4 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 8e3dd1e271a61ce408e7d68b9a3f9af4, type: 3}
   - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
+  farmProductionPerSecond: 0

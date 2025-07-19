@@ -18,7 +18,7 @@ namespace Vampire
         public Sprite[] walkSpriteSequence;
         public float walkFrameTime;
         public GameObject[] startingAbilities;
-        public float farmProductionPerSecond;
+        public float farmProductionPerSecond = 2f;
 
         public float LevelToExpIncrease(int level)
         {
