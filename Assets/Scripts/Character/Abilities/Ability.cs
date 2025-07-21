@@ -26,14 +26,20 @@ namespace Vampire
         public Sprite Image { get => image; }
         public string Name { get => localizedName.GetLocalizedString(); }
         public float DropWeight { get => (float)rarity; }
-        public virtual string Description 
-        { 
-            get { 
+        protected Transform target;
+        public virtual void SetTarget(Transform target)
+        {
+            this.target = target;
+        }
+        public virtual string Description
+        {
+            get
+            {
                 if (!owned)
                     return localizedDescription.GetLocalizedString();
                 else
                     return GetUpgradeDescriptions();
-            } 
+            }
         }
 
         public virtual void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
@@ -50,6 +56,7 @@ namespace Vampire
             upgradeableValues.ForEach(x => abilityManager.RegisterUpgradeableValue(x));
             if (upgradeableValues.Count > 0)
                 maxLevel = upgradeableValues.Max(x => x.UpgradeCount) + 1;  // max level = total number upgrades + 1 for starting level
+
         }
         
         public virtual void Select()

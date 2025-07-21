@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+
 namespace Vampire
 {
     public static class CrossSceneData
     {
         public static LevelBlueprint LevelBlueprint { get; set; }
         public static CharacterBlueprint CharacterBlueprint { get; set; }
+        public static List<CharacterBlueprint> ExpeditionCharacters = new();
         public static bool ExtraProjectile = false;
         public static bool ExtraDamage = false;
         public static bool ExtraHP = false;

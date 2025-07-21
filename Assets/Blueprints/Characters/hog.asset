@@ -29,4 +29,5 @@ MonoBehaviour:
   - {fileID: 1373220165, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
+  - {fileID: 7378740072262091319, guid: ad7ae2010ff3f409aae00371b1f7d578, type: 3}
+  farmProductionPerSecond: 0

@@ -235,6 +235,14 @@ MonoBehaviour:
     m_Key: New Entry 3
     m_Metadata:
       m_Items: []
+  - m_Id: 164242446300536832
+    m_Key: Flame Piercing Ability
+    m_Metadata:
+      m_Items: []
+  - m_Id: 164243723231223808
+    m_Key: flame
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

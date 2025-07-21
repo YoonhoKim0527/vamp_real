@@ -66,7 +66,7 @@ namespace Vampire
 
         private CharacterStats stats;
         public CharacterStats Stats => stats;
-
+        
         void Awake()
         {
             rb = GetComponent<Rigidbody2D>();

@@ -30,3 +30,4 @@ MonoBehaviour:
   walkFrameTime: 0.1
   startingAbilities:
   - {fileID: 8208614024823823667, guid: 3336ff37de27dbb4198158029e13c031, type: 3}
+  farmProductionPerSecond: 0

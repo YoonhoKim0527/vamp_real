@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -12,14 +13,14 @@ namespace Vampire
 
         CharacterCard[] characterCards;
 
-        void OnEnable() // UI가 켜질 때마다 호출됨
+        void OnEnable() // UI               호   
         {
             Init();
         }
 
         public void Init()
         {
-            // 이전에 생성된 카드 제거 (중복 방지)
+            //               카        ( 揷      )
             if (characterCards != null)
             {
                 foreach (var card in characterCards)
@@ -43,11 +44,12 @@ namespace Vampire
 
             if (CrossSceneData.LevelBlueprint == null)
             {
-                Debug.LogError("LevelBlueprint is null! 맵이 선택되지 않았습니다.");
+                Debug.LogError("LevelBlueprint is null!         천     刻努  求 .");
                 return;
             }
 
-            SceneManager.LoadScene(1); // 게임 씬으로 이동
+            SceneManager.LoadScene(1); //              絹 
         }
+
     }
 }

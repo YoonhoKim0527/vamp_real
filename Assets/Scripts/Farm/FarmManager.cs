@@ -66,7 +66,11 @@ namespace Vampire
             RefreshUI();
         }
 
-        void OnApplicationQuit() => PlayerPrefs.SetFloat("LAST_QUIT", Time.realtimeSinceStartup);
+        void OnApplicationQuit()
+        {
+            long now = DateTime.UtcNow.Ticks;
+            PlayerPrefs.SetString("LAST_QUIT", now.ToString());
+        }
 
         // ---------- 생산 ----------
         void TickRealtime()
@@ -95,15 +99,24 @@ namespace Vampire
         }
 
         // ---------- 오프라인 ----------
+
         void HandleOfflineReward()
         {
-            double capSec = maxOfflineHours * 3600;
-            double saved  = PlayerPrefs.GetFloat("LAST_QUIT", 0);
-            if (saved == 0) return;
+            if (!PlayerPrefs.HasKey("LAST_QUIT")) return;
 
-            double elapsed = Math.Min(Time.realtimeSinceStartup - saved, capSec);
-            double earn    = 0;
-            foreach (var s in slots) earn += elapsed * s.bp.farmProductionPerSecond;
+            long savedTicks;
+            if (!long.TryParse(PlayerPrefs.GetString("LAST_QUIT"), out savedTicks)) return;
+
+            DateTime lastQuit = new DateTime(savedTicks);
+            TimeSpan elapsed = DateTime.UtcNow - lastQuit;
+
+            double capSec = maxOfflineHours * 3600;
+            double seconds = Math.Min(elapsed.TotalSeconds, capSec);
+
+            double earn = 0;
+            foreach (var s in slots)
+                earn += seconds * s.bp.farmProductionPerSecond;
+
             int currentCoins = PlayerPrefs.GetInt("Coins", 0);
             PlayerPrefs.SetInt("Coins", currentCoins + Mathf.FloorToInt((float)earn));
         }

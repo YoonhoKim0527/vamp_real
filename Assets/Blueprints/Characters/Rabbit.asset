@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
   m_Name: Rabbit
   m_EditorClassIdentifier: 
-  name: Penguin
+  name: Rabbit
   owned: 1
   cost: 999
   baseDamage: 5
@@ -29,6 +29,5 @@ MonoBehaviour:
   - {fileID: -1668147796, guid: 3488b902bd1f9fc4daa50ee7aac2789a, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 8e3dd1e271a61ce408e7d68b9a3f9af4, type: 3}
-  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
+  - {fileID: 7378740072262091319, guid: 54bc67e1508814be78d516b6fe8d264e, type: 3}
   farmProductionPerSecond: 0

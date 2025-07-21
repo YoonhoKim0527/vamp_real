@@ -238,6 +238,14 @@ MonoBehaviour:
     m_Localized: aa
     m_Metadata:
       m_Items: []
+  - m_Id: 164242446300536832
+    m_Localized: Flame Piercing Ability
+    m_Metadata:
+      m_Items: []
+  - m_Id: 164243723231223808
+    m_Localized: flame
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

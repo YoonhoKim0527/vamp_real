@@ -62,7 +62,26 @@ namespace Vampire
             for (int i = 0; i < characterBlueprint.startingAbilities.Length; i++)
             {
                 startingAbilityContainers[i] = Instantiate(startingAbilityContainerPrefab, startingAbilitiesParent).GetComponent<StartingAbilityContainer>();
-                startingAbilityContainers[i].AbilityImage.sprite = characterBlueprint.startingAbilities[i].GetComponent<Ability>().Image;
+                var abilityGO = characterBlueprint.startingAbilities[i];
+                if (abilityGO == null)
+                {
+                    Debug.LogError($"[CharacterCard] {characterBlueprint.name}의 Starting Ability {i}가 null입니다.");
+                    continue;
+                }
+
+                var ability = abilityGO.GetComponent<Ability>();
+                if (ability == null)
+                {
+                    Debug.LogError($"[CharacterCard] {abilityGO.name}에는 Ability 컴포넌트가 없습니다.");
+                    continue;
+                }
+
+                if (ability.Image == null)
+                {
+                    Debug.LogWarning($"[CharacterCard] {abilityGO.name}의 Ability Image가 null입니다.");
+                }
+
+                startingAbilityContainers[i].AbilityImage.sprite = ability.Image;
             }
 
             initialized = true;

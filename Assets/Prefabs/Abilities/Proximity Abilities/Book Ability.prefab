@@ -100,6 +100,13 @@ MonoBehaviour:
     - 0.1
     - 0.1
     - 0.1
+  bonusProjectile: 0
+  isAwakened: 0
+  expandInterval: 5
+  expandDuration: 2
+  expandMultiplier: 2
+  knockbackRadius: 3
+  awakenedPushForce: 10
   references:
     version: 2
     RefIds: []

@@ -23,20 +23,11 @@ MonoBehaviour:
   luck: 1
   acceleration: 50
   walkSpriteSequence:
-  - {fileID: 21300000, guid: 93ae7c54820f44b46aadb26e237de53d, type: 3}
-  - {fileID: 21300000, guid: e2efc1c0d3e62a344b74bdf63739d652, type: 3}
-  - {fileID: 21300000, guid: 9f3f35e56be129c43aff4cbb891a1f84, type: 3}
-  - {fileID: 21300000, guid: 86edcfe978e92e34bb2f531b032828ca, type: 3}
-  - {fileID: 21300000, guid: 545f609b6e6a0054b94606ecaf338ec9, type: 3}
-  - {fileID: 21300000, guid: 67454620103c4244ca0b98338f7435ad, type: 3}
-  - {fileID: 21300000, guid: 0dd5dc86b95dee941af0742fe14c5560, type: 3}
-  - {fileID: 21300000, guid: 67454620103c4244ca0b98338f7435ad, type: 3}
-  - {fileID: 21300000, guid: 545f609b6e6a0054b94606ecaf338ec9, type: 3}
-  - {fileID: 21300000, guid: 86edcfe978e92e34bb2f531b032828ca, type: 3}
-  - {fileID: 21300000, guid: 9f3f35e56be129c43aff4cbb891a1f84, type: 3}
-  - {fileID: 21300000, guid: e2efc1c0d3e62a344b74bdf63739d652, type: 3}
-  - {fileID: 21300000, guid: 93ae7c54820f44b46aadb26e237de53d, type: 3}
+  - {fileID: 708233302, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: 1274901905, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: 1713860565, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: -979130772, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
   walkFrameTime: 0.05
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
+  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
   farmProductionPerSecond: 1
