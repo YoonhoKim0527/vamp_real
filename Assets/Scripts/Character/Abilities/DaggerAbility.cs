@@ -17,8 +17,8 @@ namespace Vampire
         [SerializeField] private float attackDuration = 3f;           // ✅ 주먹 폭우 지속시간
         [SerializeField] private float idleDuration = 3f;             // ✅ 대기시간
         [SerializeField] private float punchesPerSecond = 25f;        // ✅ 초당 주먹 개수
-        [SerializeField] private float punchDamage = 30f;             // ✅ 강화된 주먹 데미지
-        [SerializeField] private float punchKnockback = 2f;           // ✅ 주먹 넉백 세기
+        [SerializeField] private float punchDamage = 30f;             // ✅ 기본 주먹 데미지
+        [SerializeField] private float punchKnockback = 2f;           // ✅ 기본 넉백 세기
         [SerializeField] private float punchImpactRadius = 1f;        // ✅ 주먹 충격 범위
 
         [Header("Warning Settings")]
@@ -49,7 +49,7 @@ namespace Vampire
 
         private void CheckActivation()
         {
-            if (!isActive && level >=0)
+            if (!isActive && level >= 0)
             {
                 isActive = true;
                 StartCoroutine(PunchAttackRoutine());
@@ -98,17 +98,16 @@ namespace Vampire
                 haze.transform.position = position;
                 haze.transform.localScale = Vector3.one * scaleMultiplier * 1.2f;
 
-                // 🌫️ 부드러운 깜박임 효과
+                // 🌫️ 부드러운 깜빡임 효과
                 StartCoroutine(FadeHazeAlpha(hazeSR, 0.3f, 0.5f, 1.5f));
 
-                // 황사를 Danger Zone의 자식으로 설정해서 같이 움직이고 Destroy되게
+                // 황사를 Danger Zone의 자식으로 설정
                 haze.transform.parent = warning.transform;
             }
 
             return warning;
         }
 
-        // 🌫️ 황사 스프라이트의 알파값을 천천히 깜빡이게
         private IEnumerator FadeHazeAlpha(SpriteRenderer hazeSR, float minAlpha, float maxAlpha, float cycleTime)
         {
             float t = 0f;
@@ -131,7 +130,6 @@ namespace Vampire
                 yield return null;
             }
         }
-
 
         private IEnumerator WarningAndPunchRainRoutine(GameObject warning, Vector2 centerPosition, float exactAreaRadius)
         {
@@ -190,6 +188,17 @@ namespace Vampire
 
             punch.transform.position = targetPosition;
 
+            // ✅ CharacterStatBlueprint 기반 데미지 계산
+            float totalDamage = playerStats.attackPower * punchDamage;
+            float totalKnockback = punchKnockback * (1 + playerStats.defense * 0.1f);
+
+            // ✅ 치명타 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("🥊 DaggerAbility: Critical Punch!");
+            }
+
             // ✅ 몬스터 데미지 처리
             Collider2D[] hitMonsters = Physics2D.OverlapCircleAll(targetPosition, impactRadius, monsterLayer);
             foreach (Collider2D collider in hitMonsters)
@@ -197,14 +206,11 @@ namespace Vampire
                 Monster monster = collider.GetComponent<Monster>();
                 if (monster != null)
                 {
-                    float totalDamage = playerCharacter.Stats.GetTotalDamage() * punchDamage;
                     Vector2 monsterPos = (Vector2)monster.transform.position;
                     Vector2 knockbackDir = (monsterPos - targetPosition).normalized;
-                    DamageMonster(monster, totalDamage, knockbackDir * punchKnockback);
+                    DamageMonster(monster, totalDamage, knockbackDir * totalKnockback);
                 }
             }
-
-            // ⚡️ 주먹 위치에 흙먼지 생성 코드 제거됨
         }
     }
 }

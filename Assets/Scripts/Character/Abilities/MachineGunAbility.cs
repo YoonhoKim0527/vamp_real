@@ -16,15 +16,16 @@ namespace Vampire
         {
             base.Update();
 
-            // Rotate the gun if it is reloading
+            // ✅ 재장전 중일 때 총 회전
             float reloadRotation = 0;
-            float t = timeSinceLastAttack/cooldown.Value;
+            float t = timeSinceLastAttack / cooldown.Value;
             if (t > 0 && t < 1)
             {
                 reloadRotation = t * 360;
             }
 
-            float theta = Time.time*rotationSpeed.Value;
+            // ✅ 총기 회전 처리
+            float theta = Time.time * rotationSpeed.Value;
             gunDirection = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);
             machineGun.transform.position = playerCharacter.CenterTransform.position + gunDirection * gunRadius;
             machineGun.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * theta - reloadRotation);
@@ -32,8 +33,27 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, launchTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
+            // ✅ CharacterStatBlueprint 기반 데미지/넉백 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("💥 [MachineGunAbility] Critical hit!");
+            }
+
+            float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            // ✅ 발사체 생성
+            Projectile projectile = entityManager.SpawnProjectile(
+                projectileIndex,
+                launchTransform.position,
+                totalDamage,
+                effectiveKnockback,
+                speed.Value,
+                monsterLayer
+            );
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             projectile.Launch(gunDirection);
         }

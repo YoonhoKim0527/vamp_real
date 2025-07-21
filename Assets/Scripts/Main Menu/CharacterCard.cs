@@ -100,14 +100,21 @@ namespace Vampire
         {
             if (!characterBlueprint.owned)
             {
-                int coinCount = PlayerPrefs.GetInt("Coins");
+                int coinCount = CoinManager.Instance.GetCoins(); // ✅ GetCoins() 사용
                 if (coinCount >= characterBlueprint.cost)
                 {
-                    PlayerPrefs.SetInt("Coins", coinCount - characterBlueprint.cost);
-                    characterBlueprint.owned = true;
-                    UpdateButtonText();
-                    buttonImage.color = selectColor;
-                    coinDisplay.UpdateDisplay();
+                    bool success = CoinManager.Instance.SpendCoins(characterBlueprint.cost); // ✅ 차감
+
+                    if (success)
+                    {
+                        characterBlueprint.owned = true;
+                        UpdateButtonText();
+                        buttonImage.color = selectColor;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("코인이 부족합니다.");
                 }
             }
             else

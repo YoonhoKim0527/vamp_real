@@ -24,9 +24,9 @@ namespace Vampire
             garlicRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
-        public override void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
+        public override void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter, CharacterStatBlueprint playerStats)
         {
-            base.Init(abilityManager, entityManager, playerCharacter);
+            base.Init(abilityManager, entityManager, playerCharacter, playerStats);
             transform.SetParent(playerCharacter.transform);
             transform.localPosition = Vector3.zero;
         }
@@ -89,9 +89,20 @@ namespace Vampire
                 IDamageable damageable = collider.GetComponentInParent<IDamageable>();
                 if (damageable != null)
                 {
+                    // ✅ CharacterStatBlueprint 기반 데미지 계산
+                    float totalDamage = playerStats.attackPower * damage.Value;
+
+                    // ✅ 치명타 확률 적용
+                    if (Random.value < playerStats.criticalChance)
+                    {
+                        totalDamage *= (1 + playerStats.criticalDamage);
+                        Debug.Log("[GarlicAbility] Critical hit!");
+                    }
+
                     Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;
-                    float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-                    damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+                    float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+                    damageable.TakeDamage(totalDamage, effectiveKnockback * knockbackDirection);
                     playerCharacter.OnDealDamage.Invoke(totalDamage);
                 }
             }

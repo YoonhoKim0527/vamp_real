@@ -34,17 +34,24 @@ namespace Vampire
             float t = 0;
             weaponSpriteRenderer.enabled = true;
             Vector2 initialDir = playerCharacter.LookDirection;
+
             while (t < slashTime)
             {
                 float scaleMultiplier = GetScaleMultiplier(t);
-                float theta = slashAngle * (slashTime/2 - t) / slashTime;
+                float theta = slashAngle * (slashTime / 2 - t) / slashTime;
                 Vector2 dir = new Vector2(
                     initialDir.x * Mathf.Cos(Mathf.Deg2Rad * theta) - initialDir.y * Mathf.Sin(Mathf.Deg2Rad * theta),
                     initialDir.x * Mathf.Sin(Mathf.Deg2Rad * theta) + initialDir.y * Mathf.Cos(Mathf.Deg2Rad * theta)
                 );
-                Vector2 attackBoxPosition = (Vector2)playerCharacter.CenterTransform.position + dir * (scaleMultiplier*weaponSize.x/2 + slashOffset);
-                Collider2D[] hitColliders = Physics2D.OverlapBoxAll(attackBoxPosition, scaleMultiplier*weaponSize, Vector2.SignedAngle(Vector2.right, dir), targetLayer);
-                
+
+                Vector2 attackBoxPosition = (Vector2)playerCharacter.CenterTransform.position + dir * (scaleMultiplier * weaponSize.x / 2 + slashOffset);
+                Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
+                    attackBoxPosition,
+                    scaleMultiplier * weaponSize,
+                    Vector2.SignedAngle(Vector2.right, dir),
+                    targetLayer
+                );
+
                 weaponSpriteRenderer.transform.position = attackBoxPosition;
                 weaponSpriteRenderer.transform.localRotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir));
                 weaponSpriteRenderer.transform.localScale = initialWeaponScale * scaleMultiplier;
@@ -55,15 +62,31 @@ namespace Vampire
                     {
                         hitMonsters.Add(collider.gameObject);
                         Monster monster = collider.gameObject.GetComponentInParent<Monster>();
-                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-                        monster.TakeDamage(totalDamage, dir * knockback.Value);
-                        playerCharacter.OnDealDamage.Invoke(totalDamage);
+                        if (monster != null)
+                        {
+                            // ✅ CharacterStatBlueprint 기반 데미지 계산
+                            float totalDamage = playerStats.attackPower * damage.Value;
+
+                            // ✅ 치명타 확률 적용
+                            if (Random.value < playerStats.criticalChance)
+                            {
+                                totalDamage *= (1 + playerStats.criticalDamage);
+                                Debug.Log("💥 [SlashAbility] Critical hit!");
+                            }
+
+                            // ✅ 넉백 방어력 반영
+                            Vector2 knockbackForce = dir * knockback.Value * (1 + playerStats.defense * 0.1f);
+
+                            monster.TakeDamage(totalDamage, knockbackForce);
+                            playerCharacter.OnDealDamage.Invoke(totalDamage);
+                        }
                     }
                 }
 
                 t += Time.deltaTime;
                 yield return null;
             }
+
             weaponSpriteRenderer.enabled = false;
         }
 
@@ -76,15 +99,15 @@ namespace Vampire
         {
             if (t < scaleInTime)
             {
-                return EasingUtils.EaseOutQuad(t/scaleInTime);
+                return EasingUtils.EaseOutQuad(t / scaleInTime);
             }
             else if (t > slashTime - scaleInTime)
             {
-                return EasingUtils.EaseOutQuad((slashTime-t)/scaleInTime);
+                return EasingUtils.EaseOutQuad((slashTime - t) / scaleInTime);
             }
             else
             {
-                return 1;
+                return 1f;
             }
         }
     }

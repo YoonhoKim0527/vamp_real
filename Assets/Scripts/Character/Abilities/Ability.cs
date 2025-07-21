@@ -17,41 +17,51 @@ namespace Vampire
         protected AbilityManager abilityManager;
         protected EntityManager entityManager;
         protected Character playerCharacter;
+        protected CharacterStatBlueprint playerStats; // ✅ CharacterStatBlueprint 추가
         protected List<IUpgradeableValue> upgradeableValues;
         protected int level = 0;
         protected int maxLevel;
         protected bool owned = false;
-        public int Level { get => level; }
-        public bool Owned { get => owned; }
-        public Sprite Image { get => image; }
-        public string Name { get => localizedName.GetLocalizedString(); }
-        public float DropWeight { get => (float)rarity; }
-        public virtual string Description 
-        { 
-            get { 
+
+        public int Level => level;
+        public bool Owned => owned;
+        public Sprite Image => image;
+        public string Name => localizedName.GetLocalizedString();
+        public float DropWeight => (float)rarity;
+        public virtual string Description
+        {
+            get
+            {
                 if (!owned)
                     return localizedDescription.GetLocalizedString();
                 else
                     return GetUpgradeDescriptions();
-            } 
+            }
         }
 
-        public virtual void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
+        public virtual void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter, CharacterStatBlueprint playerStats)
         {
             this.abilityManager = abilityManager;
             this.entityManager = entityManager;
             this.playerCharacter = playerCharacter;
-            // Register any upgradeable fields attached to this object
+            this.playerStats = playerStats; // ✅ 주입
+            Debug.Log($"[Ability] {this.GetType().Name} initialized with PlayerStats: Attack={playerStats.attackPower}, Projectiles={playerStats.extraProjectiles}");
+
+
+            Debug.Log($"[Ability] Initialized with PlayerStats: Attack={playerStats.attackPower}, ExtraProjectiles={playerStats.extraProjectiles}");
+
+            // Register upgradeable fields
             upgradeableValues = this.GetType()
                 .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
                 .Where(fi => typeof(IUpgradeableValue).IsAssignableFrom(fi.FieldType))
                 .Select(fi => fi.GetValue(this) as IUpgradeableValue)
                 .ToList();
             upgradeableValues.ForEach(x => abilityManager.RegisterUpgradeableValue(x));
+
             if (upgradeableValues.Count > 0)
-                maxLevel = upgradeableValues.Max(x => x.UpgradeCount) + 1;  // max level = total number upgrades + 1 for starting level
+                maxLevel = upgradeableValues.Max(x => x.UpgradeCount) + 1;
         }
-        
+
         public virtual void Select()
         {
             if (!owned)
@@ -61,7 +71,7 @@ namespace Vampire
             }
             else
             {
-                Upgrade(); 
+                Upgrade();
             }
             level++;
         }

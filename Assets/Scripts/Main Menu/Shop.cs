@@ -35,7 +35,7 @@ namespace Vampire
             for (int i = 0; i < itemBlueprints.Length; i++)
             {
                 shopItemCards[i] = Instantiate(shopItemCardPrefab, this.transform).GetComponent<ShopItemCard>();
-                shopItemCards[i].Init(this, itemBlueprints[i], coinDisplay);
+                shopItemCards[i].Init(this, itemBlueprints[i]);
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
@@ -52,16 +52,6 @@ namespace Vampire
         public void RefreshShopUI()
         {
             Debug.Log("[Shop] Refreshing Shop UI...");
-
-            // ✅ 코인 UI 갱신
-            if (coinDisplay != null)
-            {
-                coinDisplay.UpdateDisplay();
-            }
-            else
-            {
-                Debug.LogWarning("[Shop] CoinDisplay not assigned. Skipping coin update.");
-            }
 
             // ✅ 아이템 카드들 갱신
             if (shopItemCards != null)

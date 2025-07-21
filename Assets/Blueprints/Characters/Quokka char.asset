@@ -16,7 +16,7 @@ MonoBehaviour:
   owned: 1
   cost: 999
   baseDamage: 6
-  hp: 30
+  hp: 1000
   recovery: 0
   armor: 100
   movespeed: 2
@@ -30,3 +30,4 @@ MonoBehaviour:
   walkFrameTime: 0.1
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 54bc67e1508814be78d516b6fe8d264e, type: 3}
+  farmProductionPerSecond: 2

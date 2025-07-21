@@ -12,6 +12,7 @@ namespace Vampire
         private WeightedAbilities newAbilities;
         private WeightedAbilities ownedAbilities;
         private FastList<IUpgradeableValue> registeredUpgradeableValues;
+
         public int DamageUpgradeablesCount { get; set; } = 0;
         public int KnockbackUpgradeablesCount { get; set; } = 0;
         public int WeaponCooldownUpgradeablesCount { get; set; } = 0;
@@ -30,30 +31,38 @@ namespace Vampire
         public int DurationUpgradeablesCount { get; set; } = 0;
         public int RotationSpeedUpgradeablesCount { get; set; } = 0;
 
-        public void Init(LevelBlueprint levelBlueprint, EntityManager entityManager, Character playerCharacter, AbilityManager abilityManager)
+        [SerializeField] private CharacterStatBlueprint playerStats; // ✅ 추가
+
+        public void Init(LevelBlueprint levelBlueprint, EntityManager entityManager, Character playerCharacter, CharacterStatBlueprint playerStats)
         {
             this.levelBlueprint = levelBlueprint;
             this.playerCharacter = playerCharacter;
+            this.playerStats = playerStats; // ✅ 주입 후 저장
+
+            Debug.Log($"[AbilityManager] Initialized with PlayerStats: Attack={playerStats.attackPower}, Projectiles={playerStats.extraProjectiles}");
 
             registeredUpgradeableValues = new FastList<IUpgradeableValue>();
-
             ownedAbilities = new WeightedAbilities();
+
             foreach (GameObject abilityPrefab in playerCharacter.Blueprint.startingAbilities)
             {
                 Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
-                ability.Init(abilityManager, entityManager, playerCharacter);
+                // ✅ Ability에도 PlayerStats 전달
+                ability.Init(this, entityManager, playerCharacter, this.playerStats);
+                Debug.Log($"[AbilityManager] Injected PlayerStats into {ability.name}");
                 ability.Select();
                 ownedAbilities.Add(ability);
             }
-            
+
             newAbilities = new WeightedAbilities();
             foreach (GameObject abilityPrefab in levelBlueprint.abilityPrefabs)
             {
-                // Skip any abilities we already own
                 if (playerCharacter.Blueprint.startingAbilities.Contains(abilityPrefab)) continue;
-                
+
                 Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
-                ability.Init(abilityManager, entityManager, playerCharacter);
+                // ✅ Ability에도 PlayerStats 전달
+                ability.Init(this, entityManager, playerCharacter, this.playerStats);
+                Debug.Log($"[AbilityManager] Injected PlayerStats into {ability.name}");
                 newAbilities.Add(ability);
             }
         }

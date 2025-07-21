@@ -35,6 +35,16 @@ namespace Vampire
 
         private void Setup()
         {
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = GetComponent<SpriteRenderer>();
+                if (spriteRenderer == null)
+                {
+                    Debug.LogError("[SpriteAnimator] SpriteRenderer not found!");
+                    return;
+                }
+            }
+            
             animationTime = useGlobalTime ? Time.time : 0;
             currSequenceFrame = Mathf.FloorToInt(animationTime / frameTime) % spriteSequence.Length;
             spriteRenderer.sprite = spriteSequence[currSequenceFrame];
