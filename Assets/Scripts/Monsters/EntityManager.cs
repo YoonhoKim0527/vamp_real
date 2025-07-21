@@ -86,6 +86,9 @@ namespace Vampire
 
         private LevelBlueprint levelBlueprint; // ✅ 추가
 
+        private MonsterPool swarmMonsterPool;  // 🦇 Swarm 전용 풀
+        private MonsterPool flowerMonsterPool; // 🌸 Flower 전용 풀
+
         public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
         {
             this.levelBlueprint = levelBlueprint; // ✅ LevelBlueprint 저장
@@ -122,6 +125,14 @@ namespace Vampire
             // FlowerSpawner 초기화
             flowerSpawner = flowerSpawnerParent.AddComponent<FlowerSpawner>();
             flowerSpawner.Init(this, playerCharacter, flowerMonsterPrefab,  flowerMonsterBlueprint);
+
+            // SwarmMonster 풀 생성
+            swarmMonsterPool = monsterPoolParent.AddComponent<MonsterPool>();
+            swarmMonsterPool.Init(this, playerCharacter, swarmMonsterPrefab);
+
+            // FlowerMonster 풀 생성
+            flowerMonsterPool = monsterPoolParent.AddComponent<MonsterPool>();
+            flowerMonsterPool.Init(this, playerCharacter, flowerMonsterPrefab);
 
             projectileIndexByPrefab = new Dictionary<GameObject, int>();
             projectilePools = new List<ProjectilePool>();
@@ -421,10 +432,10 @@ namespace Vampire
         ////////////////////////////////////////////////////////////////////////////////
         /// Text Spawning
         ////////////////////////////////////////////////////////////////////////////////
-        public DamageText SpawnDamageText(Vector2 position, float damage)
+        public DamageText SpawnDamageText(Vector2 position, float damage, bool isCritical = false)
         {
             DamageText newText = textPool.Get();
-            newText.Setup(position, damage);
+            newText.Setup(position, damage, isCritical);
             return newText;
         }
 
@@ -515,6 +526,24 @@ namespace Vampire
                 return boomerangPools.Count - 1;
             }
             return boomerangIndexByPrefab[boomerangPrefab];
+        }
+
+        public void DespawnSwarmMonster(Monster monster, bool killedByPlayer = true)
+        {
+            if (killedByPlayer)
+                statsManager.IncrementMonstersKilled();
+
+            grid.RemoveClient(monster);
+            swarmMonsterPool.Release(monster); // 🦇 Swarm 전용 풀로 반환
+        }
+
+        public void DespawnFlowerMonster(Monster monster, bool killedByPlayer = true)
+        {
+            if (killedByPlayer)
+                statsManager.IncrementMonstersKilled();
+
+            grid.RemoveClient(monster);
+            flowerMonsterPool.Release(monster); // 🌸 Flower 전용 풀로 반환
         }
     }
 }

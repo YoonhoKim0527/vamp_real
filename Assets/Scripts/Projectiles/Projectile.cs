@@ -24,6 +24,7 @@ namespace Vampire
         protected int projectileIndex;
         protected Vector2 direction;
         protected TrailRenderer trailRenderer = null;
+        protected bool isCritical = false; // ✅ 치명타 여부 저장
         public UnityEvent<float> OnHitDamageable { get; private set; }
 
         protected virtual void Awake()
@@ -39,7 +40,7 @@ namespace Vampire
             this.playerCharacter = playerCharacter;
             zPositioner.Init(playerCharacter.transform);
         }
-        
+
         public virtual void Setup(int projectileIndex, Vector2 position, float damage, float knockback, float speed, LayerMask targetLayer)
         {
             transform.position = position;
@@ -53,9 +54,11 @@ namespace Vampire
             OnHitDamageable = new UnityEvent<float>();
         }
 
-        public virtual void Launch(Vector2 direction)
+        // 🟥 치명타 정보를 추가로 받음
+        public virtual void Launch(Vector2 direction, bool isCritical = false)
         {
             this.direction = direction.normalized;
+            this.isCritical = isCritical; // ✅ 치명타 여부 저장
             moveCoroutine = StartCoroutine(Move());
         }
 
@@ -79,7 +82,8 @@ namespace Vampire
 
         protected virtual void HitDamageable(IDamageable damageable)
         {
-            damageable.TakeDamage(damage, knockback * direction);
+            // 🟥 치명타 정보도 같이 전달
+            damageable.TakeDamage(damage, knockback * direction, isCritical);
             OnHitDamageable.Invoke(damage);
             DestroyProjectile();
         }
@@ -91,7 +95,6 @@ namespace Vampire
 
         protected virtual void DestroyProjectile()
         {
-            // ✅ moveCoroutine 안전하게 정리
             if (moveCoroutine != null)
             {
                 StopCoroutine(moveCoroutine);
@@ -115,8 +118,6 @@ namespace Vampire
             if ((targetLayer & (1 << collider.gameObject.layer)) != 0)
             {
                 col.enabled = false;
-
-                // ✅ moveCoroutine null-safe 처리
                 if (moveCoroutine != null)
                 {
                     StopCoroutine(moveCoroutine);

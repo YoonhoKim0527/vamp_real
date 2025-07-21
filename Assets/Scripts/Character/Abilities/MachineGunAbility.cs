@@ -37,9 +37,11 @@ namespace Vampire
             float totalDamage = playerStats.attackPower * damage.Value;
 
             // ✅ 치명타 확률 적용
+            bool isCritical = false;
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("💥 [MachineGunAbility] Critical hit!");
             }
 
@@ -55,7 +57,9 @@ namespace Vampire
                 monsterLayer
             );
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
-            projectile.Launch(gunDirection);
+
+            // 🟥 크리티컬 여부 전달
+            projectile.Launch(gunDirection, isCritical);
         }
     }
 }

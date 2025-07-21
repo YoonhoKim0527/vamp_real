@@ -69,11 +69,6 @@ namespace Vampire
             long now = DateTime.UtcNow.Ticks;
             PlayerPrefs.SetString("LAST_QUIT", now.ToString());
         }
-        void OnApplicationQuit()
-        {
-            long now = DateTime.UtcNow.Ticks;
-            PlayerPrefs.SetString("LAST_QUIT", now.ToString());
-        }
 
         // ---------- 생산 ----------
         void TickRealtime()
@@ -102,14 +97,6 @@ namespace Vampire
 
         void HandleOfflineReward()
         {
-            if (!PlayerPrefs.HasKey("LAST_QUIT")) return;
-
-            long savedTicks;
-            if (!long.TryParse(PlayerPrefs.GetString("LAST_QUIT"), out savedTicks)) return;
-
-            DateTime lastQuit = new DateTime(savedTicks);
-            TimeSpan elapsed = DateTime.UtcNow - lastQuit;
-
             if (!PlayerPrefs.HasKey("LAST_QUIT")) return;
 
             long savedTicks;

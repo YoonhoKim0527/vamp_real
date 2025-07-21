@@ -66,7 +66,7 @@ namespace Vampire
 
         private CharacterStats stats;
         public CharacterStats Stats => stats;
-        
+
         void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -215,7 +215,7 @@ namespace Vampire
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2))
+        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), bool isCritical = false)
         {
             if (alive)
             {

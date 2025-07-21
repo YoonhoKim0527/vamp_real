@@ -14,6 +14,7 @@ namespace Vampire
         [SerializeField] protected UpgradeableKnockback knockback;
         [SerializeField] protected UpgradeableWeaponCooldown cooldown;
         [SerializeField] protected UpgradeableProjectileCount throwableCount;
+
         protected float timeSinceLastAttack;
         protected int throwableIndex;
 
@@ -50,10 +51,12 @@ namespace Vampire
             // ✅ CharacterStatBlueprint 기반 데미지 계산
             float totalDamage = playerStats.attackPower * damage.Value;
 
-            // ✅ 치명타 확률 적용
+            // ✅ 치명타 여부 계산
+            bool isCritical = false;
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("💥 [ThrowableAbility] Critical hit!");
             }
 
@@ -69,6 +72,9 @@ namespace Vampire
                 0,
                 monsterLayer
             );
+
+            // ✅ isCritical 전달
+            throwable.SetCritical(isCritical);
 
             throwable.Throw((Vector2)playerCharacter.transform.position + Random.insideUnitCircle * throwRadius);
             throwable.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);

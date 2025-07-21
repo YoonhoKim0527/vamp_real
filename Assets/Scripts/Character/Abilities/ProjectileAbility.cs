@@ -28,12 +28,6 @@ namespace Vampire
 
         protected virtual void Update()
         {
-            if (target != null)
-            {
-                Vector3 dir = (target.position - transform.position).normalized;
-                transform.position += dir * speed.Value * Time.deltaTime;
-            }
-            
             timeSinceLastAttack += Time.deltaTime;
             if (timeSinceLastAttack >= cooldown.Value)
             {
@@ -52,10 +46,12 @@ namespace Vampire
             // ✅ CharacterStatBlueprint 기반 데미지 계산
             float totalDamage = playerStats.attackPower * damage.Value;
 
-            // ✅ 치명타 확률 적용
+            // ✅ 치명타 확률 판정
+            bool isCritical = false;
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("🎯 [ProjectileAbility] Critical hit!");
             }
 
@@ -73,7 +69,9 @@ namespace Vampire
             );
 
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
-            projectile.Launch(playerCharacter.LookDirection);
+
+            // 🟥 isCritical 정보 전달
+            projectile.Launch(playerCharacter.LookDirection, isCritical);
         }
     }
 }

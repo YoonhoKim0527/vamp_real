@@ -87,10 +87,12 @@ namespace Vampire
                 float totalDamage = playerStats.attackPower * damage.Value;
 
                 // ✅ 치명타 확률 적용
+                bool isCritical = false;
                 if (Random.value < playerStats.criticalChance)
                 {
                     totalDamage *= (1 + playerStats.criticalDamage);
                     Debug.Log("💥 [RadialBlastAbility] Critical hit!");
+                    isCritical = true;
                 }
 
                 float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
@@ -113,7 +115,9 @@ namespace Vampire
                 }
 
                 p.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
-                p.Launch(dir);
+
+                // 🟥 치명타 여부도 같이 전달
+                p.Launch(dir, isCritical);
             }
         }
     }

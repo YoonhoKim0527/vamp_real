@@ -49,6 +49,16 @@ namespace Vampire
             {
                 // 기존 Molotov
                 float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+
+                // ✅ 치명타 확률 적용
+                bool isCritical = false;
+                if (Random.value < playerStats.criticalChance)
+                {
+                    totalDamage *= (1 + playerStats.criticalDamage);
+                    isCritical = true;
+                    Debug.Log("🔥 [MolotovAbility] Critical hit!");
+                }
+
                 MolotovThrowable throwable = (MolotovThrowable)entityManager.SpawnThrowable(
                     throwableIndex,
                     playerCharacter.CenterTransform.position,
@@ -65,7 +75,10 @@ namespace Vampire
                     ? nearbyEnemies[Random.Range(0, nearbyEnemies.Count)].Position
                     : (Vector2)playerCharacter.transform.position + Random.insideUnitCircle * throwRadius;
 
-                throwable.Throw(throwPosition);
+                // 🟥 critical 정보도 넘김
+                throwable.Throw(throwPosition, isCritical); 
+
+                // 기존 데미지 이벤트
                 throwable.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             }
             else

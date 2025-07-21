@@ -39,7 +39,7 @@ namespace Vampire
             alive = true;
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback)
+        public override void TakeDamage(float damage, Vector2 knockback, bool isCritical = false)
         {
             if (!alive) return;
 

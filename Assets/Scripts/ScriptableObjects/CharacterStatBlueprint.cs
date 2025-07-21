@@ -29,7 +29,7 @@ namespace Vampire
             defense = 5f;
             healthRegen = 1f;
             criticalChance = 0f;      // 0%
-            criticalDamage = 0f;      // 1배
+            criticalDamage = 1f;      // 기본 2배
             extraProjectiles = 0;
         }
 

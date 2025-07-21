@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Vampire
@@ -53,17 +52,22 @@ namespace Vampire
                         // ✅ CharacterStatBlueprint 기반 데미지 계산
                         float totalDamage = playerStats.attackPower * damage.Value;
 
-                        // ✅ 치명타 확률 적용
+                        // ✅ 치명타 여부 계산
+                        bool isCritical = false;
                         if (Random.value < playerStats.criticalChance)
                         {
                             totalDamage *= (1 + playerStats.criticalDamage);
+                            isCritical = true;
                             Debug.Log("💥 [StabAbility] Critical hit!");
                         }
 
-                        // ✅ 넉백 방어력 반영
+                        // ✅ 넉백 계산
                         Vector2 knockbackForce = dir * knockback.Value * (1 + playerStats.defense * 0.1f);
 
-                        DamageMonster(monster, totalDamage, knockbackForce);
+                        // ✅ 데미지 처리 (치명타 포함)
+                        DamageMonster(monster, totalDamage, knockbackForce, isCritical);
+
+                        // ✅ 플레이어의 총 데미지 이벤트 호출
                         playerCharacter.OnDealDamage.Invoke(totalDamage);
                     }
                 }
@@ -87,11 +91,12 @@ namespace Vampire
             weaponSpriteRenderer.enabled = false;
         }
 
-        protected virtual void DamageMonster(Monster monster, float damage, Vector2 knockback)
+        protected virtual void DamageMonster(Monster monster, float damage, Vector2 knockback, bool isCritical)
         {
             if (monster != null)
             {
-                monster.TakeDamage(damage, knockback);
+                monster.TakeDamage(damage, knockback, isCritical);
+                entityManager.SpawnDamageText(monster.CenterTransform.position, damage, isCritical);
             }
         }
     }

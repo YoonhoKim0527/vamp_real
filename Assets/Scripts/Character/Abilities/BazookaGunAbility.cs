@@ -25,6 +25,7 @@ namespace Vampire
         private Vector2 currHoverOffset;
         private float theta = 0;
         private bool isEvolved = false;
+        private bool isCritical = false;
 
         protected override void Update()
         {
@@ -120,9 +121,10 @@ namespace Vampire
                         {
                             damageThisFrame *= (1 + playerStats.criticalDamage);
                             Debug.Log("[BazookaGun] 💥 Critical Hit!");
+                            isCritical = true;
                         }
 
-                        monster.TakeDamage(damageThisFrame, Vector2.zero);
+                        monster.TakeDamage(damageThisFrame, Vector2.zero, isCritical);
                         Debug.Log($"[BazookaGun] 🐘 {monster.name}에게 {damageThisFrame:F1} 데미지 적용");
                     }
                 }

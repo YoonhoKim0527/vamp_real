@@ -14,15 +14,24 @@ namespace Vampire
 
         private bool isReturning = false;
         private Monster currentTarget;
+        private bool isCritical; // ✅ 치명타 여부 저장
 
-        public void Init(Character playerCharacter, CharacterStatBlueprint stats, float throwRadius, float throwTime, float chainRange, System.Action onReturnCallback)
+        public void Init(
+            Character playerCharacter,
+            CharacterStatBlueprint stats,
+            float throwRadius,
+            float throwTime,
+            float chainRange,
+            System.Action onReturnCallback,
+            bool isCritical) // ✅ 치명타 여부 추가
         {
             this.player = playerCharacter;
-            this.playerStats = stats; // ✅ 스탯 주입
+            this.playerStats = stats;
             this.throwRadius = throwRadius;
             this.throwTime = throwTime;
             this.chainRange = chainRange;
             this.onReturnCallback = onReturnCallback;
+            this.isCritical = isCritical; // ✅ 저장
             isReturning = false;
             currentTarget = null;
         }
@@ -55,20 +64,29 @@ namespace Vampire
                 // ✅ 도착 후 데미지 처리
                 if (currentTarget != null && !isReturning)
                 {
-                    float totalDamage = playerStats.attackPower * damage;
+                    float totalDamage = damage; // ✅ 이미 Ability 쪽에서 계산된 값 사용
 
-                    // ✅ 치명타 확률 적용
-                    if (Random.value < playerStats.criticalChance)
+                    if (isCritical)
                     {
-                        totalDamage *= (1 + playerStats.criticalDamage);
-                        Debug.Log("💥 [ShurikenProjectile] Critical hit!");
+                        Debug.Log("💥 [ShurikenProjectile] Critical hit (from Ability)!");
                     }
 
                     Vector2 knockbackDir = (currentTarget.transform.position - player.CenterTransform.position).normalized;
                     float effectiveKnockback = knockback * (1 + playerStats.defense * 0.1f);
 
-                    currentTarget.TakeDamage(totalDamage, knockbackDir * effectiveKnockback);
+                    currentTarget.TakeDamage(totalDamage, knockbackDir * effectiveKnockback, isCritical); // ✅ 치명타 여부 전달
                     Debug.Log($"[ShurikenProjectile] {currentTarget.name} 타격 {totalDamage:F1} damage");
+
+                    // DamageText 색상 적용
+                    if (isCritical)
+                    {
+                        entityManager.SpawnDamageText(currentTarget.CenterTransform.position, totalDamage, true);
+                    }
+                    else
+                    {
+                        entityManager.SpawnDamageText(currentTarget.CenterTransform.position, totalDamage, false);
+                    }
+
                     OnHitDamageable.Invoke(totalDamage);
                 }
 
@@ -147,7 +165,6 @@ namespace Vampire
 
         protected override void DestroyProjectile()
         {
-            // ✅ 슈리켄은 절대 스스로 파괴 금지
             Debug.LogWarning("[ShurikenProjectile] DestroyProjectile 차단됨");
         }
 

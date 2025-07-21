@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace Vampire
 {
@@ -27,6 +28,36 @@ namespace Vampire
                     player.TakeDamage(20, Vector2.zero); // ✅ Knockback 제거
                 }
             }
+        }
+
+        /// ✅ 플레이어 공격으로 죽었을 때 호출
+        public override IEnumerator Killed(bool killedByPlayer = true)
+        {
+            alive = false;
+            monsterHitbox.enabled = false;
+            entityManager.LivingMonsters.Remove(this);
+
+            if (deathParticles != null)
+            {
+                deathParticles.Play();
+            }
+
+            yield return HitAnimation();
+
+            if (deathParticles != null)
+            {
+                monsterSpriteRenderer.enabled = false;
+                shadow.SetActive(false);
+                yield return new WaitForSeconds(deathParticles.main.duration - 0.15f);
+                monsterSpriteRenderer.enabled = true;
+                shadow.SetActive(true);
+            }
+
+            OnKilled.Invoke(this);
+            OnKilled.RemoveAllListeners();
+
+            // 🌸 Flower 전용 풀로 반환
+            entityManager.DespawnFlowerMonster(this, killedByPlayer);
         }
     }
 }
