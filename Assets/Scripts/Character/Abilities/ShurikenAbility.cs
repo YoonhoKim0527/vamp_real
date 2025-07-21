@@ -43,11 +43,23 @@ namespace Vampire
         {
             Debug.Log("[ShurikenAbility] 슈리켄 발사");
 
+            // ✅ CharacterStatBlueprint 기반 데미지/넉백 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("💥 [ShurikenAbility] Critical hit!");
+            }
+
+            float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
             ShurikenProjectile shuriken = entityManager.SpawnProjectile(
                 shurikenIndex,
                 playerCharacter.CenterTransform.position,
-                playerCharacter.Stats.GetTotalDamage() * damage.Value,
-                knockback.Value,
+                totalDamage,
+                effectiveKnockback,
                 throwRadius / throwTime,
                 monsterLayer
             ).GetComponent<ShurikenProjectile>();
@@ -55,7 +67,7 @@ namespace Vampire
             if (shuriken != null)
             {
                 isShurikenActive = true; // ✅ 운용 중 표시
-                shuriken.Init(playerCharacter, throwRadius, throwTime, chainRange, OnShurikenReturn);
+                shuriken.Init(playerCharacter, playerStats, throwRadius, throwTime, chainRange, OnShurikenReturn);
                 shuriken.StartAttackSequence();
             }
             else

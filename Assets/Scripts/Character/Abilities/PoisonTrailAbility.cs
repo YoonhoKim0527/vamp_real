@@ -21,7 +21,7 @@ namespace Vampire
             timeSinceLastDrop = dropInterval;
             gameObject.SetActive(true);
 
-            // 기존의 AddPoolForProjectile은 ❌
+            // ✅ 풀링 시스템에 PoisonCloud 등록
             cloudPoolIndex = entityManager.AddPoolForPoisonCloud(poisonCloudPrefab);
         }
 
@@ -29,9 +29,16 @@ namespace Vampire
         {
             Vector3 pos = playerCharacter.CenterTransform.position;
 
-            // Projectile 사용 ❌
+            // ✅ PoisonCloud 생성 및 CharacterStatBlueprint 주입
             PoisonCloud pc = entityManager.SpawnPoisonCloud(cloudPoolIndex, pos);
-            pc.Init(damage.Value, radius.Value, duration.Value, monsterLayer, playerCharacter, playerCharacter);
+            pc.Init(
+                damage.Value,
+                radius.Value,
+                duration.Value,
+                monsterLayer,
+                playerCharacter,   // Owner
+                playerStats         // ✅ CharacterStatBlueprint 전달
+            );
         }
 
         void Update()

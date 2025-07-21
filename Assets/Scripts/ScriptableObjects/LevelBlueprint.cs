@@ -46,6 +46,15 @@ namespace Vampire
             }
         }
 
+        public bool isInitialized = false; // ✅ 새 필드 추가
+
+        // 예시 초기화 메서드
+        public void Initialize()
+        {
+            // 초기화 로직
+            isInitialized = true;
+        }
+
         [System.Serializable]
         public class MonstersContainer
         {

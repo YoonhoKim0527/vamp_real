@@ -18,11 +18,11 @@ namespace Vampire
 
         [Header("Awakening Settings")]
         [SerializeField] private bool isAwakened = false;
-        [SerializeField] private float expandInterval = 5f; // 몇 초마다 확장
-        [SerializeField] private float expandDuration = 2f; // 확장 유지 시간
-        [SerializeField] private float expandMultiplier = 2f; // 궤도 확장 배율
-        [SerializeField] private float knockbackRadius = 3f;  // 확장 시 밀어내기 반경
-        [SerializeField] private float awakenedPushForce = 10f; // ✅ 각성 스킬 사용 시 밀어내기 힘
+        [SerializeField] private float expandInterval = 5f;
+        [SerializeField] private float expandDuration = 2f;
+        [SerializeField] private float expandMultiplier = 2f;
+        [SerializeField] private float knockbackRadius = 3f;
+        [SerializeField] private float awakenedPushForce = 10f;
 
         private float awakenTimer = 0f;
         private bool isExpanded = false;
@@ -33,24 +33,16 @@ namespace Vampire
         {
             base.Use();
 
-            bonusProjectile = 0;
-            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
-            {
-                bonusProjectile = CrossSceneData.BonusProjectile;
-            }
-            if (CrossSceneData.ExtraProjectile && projectileCount != null)
-            {
-                bonusProjectile += 1;
-            }
+            // ✅ CharacterStatBlueprint 기반 bonusProjectile 계산
+            bonusProjectile = playerStats.extraProjectiles;
+            Debug.Log($"[BookAbility] Blueprint Stats -> ExtraProjectiles: {playerStats.extraProjectiles}, Attack: {playerStats.attackPower}");
 
             gameObject.SetActive(true);
             projectileCount.OnChanged.AddListener(RefreshBooks);
             RefreshBooks();
 
-            // ✅ 초기 각성 여부 체크
             CheckAwakening();
 
-            // ✅ 각성 상태라면 radius 범위 내 적들 밀어내기
             if (isAwakened)
             {
                 PushEnemiesOutsideRadius();
@@ -61,8 +53,6 @@ namespace Vampire
         {
             base.Upgrade();
             RefreshBooks();
-
-            // ✅ 레벨업 시 각성 체크
             CheckAwakening();
         }
 
@@ -72,12 +62,10 @@ namespace Vampire
 
             if (isAwakened)
             {
-                // 각성 패턴 로직
                 awakenTimer += Time.deltaTime;
 
                 if (isExpanded)
                 {
-                    // ✅ 확장 상태일 때만 속도 3배
                     currentSpeed *= 3f;
                 }
 
@@ -105,67 +93,73 @@ namespace Vampire
             }
         }
 
-
         private void CheckAwakening()
         {
             if (!isAwakened && level >= 1)
             {
                 isAwakened = true;
-                Debug.Log("📘 BookAbility: Awakened skill activated!");
+                Debug.Log("[BookAbility] Awakened!");
             }
         }
 
         private IEnumerator ExpandAndContract()
         {
             isExpanded = true;
-            Debug.Log("📘 BookAbility: Expanding orbit!");
+            Debug.Log("[BookAbility] Expanding orbit!");
 
-            // ✅ 확장 시 주변 적 밀어내기
+            // ✅ CharacterStatBlueprint의 defense 사용
+            float effectiveKnockback = awakenedPushForce * (1 + playerStats.defense * 0.1f);
+
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(playerCharacter.transform.position, knockbackRadius, monsterLayer);
             foreach (var enemy in hitEnemies)
             {
                 Vector2 direction = (enemy.transform.position - playerCharacter.transform.position).normalized;
                 if (enemy.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(0, knockback.Value * direction); // 데미지 0, 넉백만
+                    damageable.TakeDamage(0, effectiveKnockback * direction); // 데미지 없이 넉백만
                 }
             }
 
             yield return new WaitForSeconds(expandDuration);
             isExpanded = false;
-            Debug.Log("📘 BookAbility: Contracting orbit!");
+            Debug.Log("[BookAbility] Contracting orbit!");
         }
 
         private void PushEnemiesOutsideRadius()
         {
-            // ✅ 플레이어 중심으로부터 radius.Value 안의 적 탐색
             Collider2D[] enemies = Physics2D.OverlapCircleAll(playerCharacter.transform.position, radius.Value, monsterLayer);
             foreach (var enemy in enemies)
             {
                 Vector2 playerPos = playerCharacter.transform.position;
                 Vector2 enemyPos = enemy.transform.position;
                 Vector2 direction = (enemyPos - playerPos).normalized;
-
-                // ✅ 목표 위치 계산: 플레이어로부터 radius.Value 거리의 지점
                 Vector2 targetPos = playerPos + direction * radius.Value;
 
-                // ✅ 적을 radius 바깥으로 강제로 이동시킴
                 enemy.transform.position = targetPos;
 
-                // ✅ 강한 넉백 적용
                 if (enemy.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(0, awakenedPushForce * direction); // 데미지 없이 넉백만
+                    damageable.TakeDamage(0, awakenedPushForce * direction); // 넉백
                 }
             }
-            Debug.Log("📘 BookAbility: Forced enemies outside radius!");
+            Debug.Log("[BookAbility] Forced enemies outside radius!");
         }
 
         public void Damage(IDamageable damageable)
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+            // ✅ CharacterStatBlueprint 기반 데미지 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("[BookAbility] Critical hit!");
+            }
+
             Vector2 knockbackDirection = (damageable.transform.position - playerCharacter.transform.position).normalized;
             damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+
             playerCharacter.OnDealDamage.Invoke(totalDamage);
         }
 
@@ -203,11 +197,10 @@ namespace Vampire
 
         private void OnDrawGizmosSelected()
         {
-            // 🔵 넉백 반경 디버그 표시
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(transform.position, radius.Value); // ✅ radius 디버그
+            Gizmos.DrawWireSphere(transform.position, radius.Value);
             Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, knockbackRadius); // ✅ 확장 반경 디버그
+            Gizmos.DrawWireSphere(transform.position, knockbackRadius);
         }
     }
 }

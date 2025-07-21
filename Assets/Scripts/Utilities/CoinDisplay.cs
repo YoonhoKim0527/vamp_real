@@ -8,28 +8,27 @@ namespace Vampire
     {
         private TextMeshProUGUI coinText;
 
-        void Start()
+        private void Awake()
         {
             coinText = GetComponent<TextMeshProUGUI>();
-            if (coinText == null)
-            {
-                Debug.LogError("[CoinDisplay] Missing TextMeshProUGUI on this GameObject!");
-                return;
-            }
-
-            coinText.text = PlayerPrefs.GetInt("Coins", 0).ToString();
         }
 
-        public void UpdateDisplay()
+        private void OnEnable()
         {
-            coinText = GetComponent<TextMeshProUGUI>();
-            if (coinText == null)
-            {
-                Debug.LogError("[CoinDisplay] Missing TextMeshProUGUI. Cannot update display.");
-                return;
-            }
+            // ✅ 코인 값이 변경될 때마다 UpdateDisplay 실행
+            CoinManager.Instance.OnCoinsChanged += UpdateDisplay;
+            UpdateDisplay(CoinManager.Instance.GetCoins()); // 초기화
+        }
 
-            coinText.text = PlayerPrefs.GetInt("Coins", 0).ToString();
+        private void OnDisable()
+        {
+            if (CoinManager.Instance != null)
+                CoinManager.Instance.OnCoinsChanged -= UpdateDisplay;
+        }
+
+        private void UpdateDisplay(int coins)
+        {
+            coinText.text = coins.ToString();
         }
     }
 }

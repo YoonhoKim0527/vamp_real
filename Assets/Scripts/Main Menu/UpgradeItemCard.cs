@@ -49,12 +49,11 @@ namespace Vampire
 
         private void BuyUpgrade()
         {
-            int coins = PlayerPrefs.GetInt("Coins", 0);
-
-            if (coins >= itemBlueprint.cost && itemBlueprint.level < itemBlueprint.maxLevel)
+            // ✅ CoinManager 사용
+            if (CoinManager.Instance.GetCoins() >= itemBlueprint.cost && itemBlueprint.level < itemBlueprint.maxLevel)
             {
                 // ✅ 돈 차감
-                PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
+                CoinManager.Instance.SpendCoins(itemBlueprint.cost);
 
                 // ✅ 업그레이드 상태 갱신
                 itemBlueprint.level++;
@@ -82,17 +81,7 @@ namespace Vampire
                 }
 
                 // ✅ UI 전체 리프레시
-                if (upgrade != null)
-                {
-                    upgrade.RefreshUpgradeUI();
-                }
-
-                // ✅ 코인 UI 강제 갱신
-                var allCoinDisplays = FindObjectsOfType<CoinDisplay>();
-                foreach (var display in allCoinDisplays)
-                {
-                    display.UpdateDisplay();
-                }
+                upgrade?.RefreshUpgradeUI();
 
                 Debug.Log("[UpgradeItemCard] Upgrade applied. Stats will update on next scene load.");
             }

@@ -5,11 +5,11 @@ namespace Vampire
 {
     public class RadialBlastAbility : ProjectileAbility
     {
-        [SerializeField] private Sprite effectSprite; // 큰 이펙트 이미지
-        [SerializeField] private Sprite redEyeEffectSprite;         // 3레벨 이상 효과 이미지
+        [SerializeField] private Sprite effectSprite;                 // 큰 이펙트 이미지
+        [SerializeField] private Sprite redEyeEffectSprite;           // 3레벨 이상 효과 이미지
 
         [SerializeField] private UpgradeableProjectileCount projectileCount;
-        [SerializeField] private Sprite redEyeProjectileSprite;     // 3레벨 이상 시 발사체
+        [SerializeField] private Sprite redEyeProjectileSprite;       // 3레벨 이상 시 발사체
 
         [SerializeField] private AudioClip normalClip;
         [SerializeField] private AudioClip evolvedClip;
@@ -32,12 +32,11 @@ namespace Vampire
             }
 
             if (audioSource == null)
-                {
-                    audioSource = gameObject.AddComponent<AudioSource>();
-                    audioSource.playOnAwake = false;
-                }
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+                audioSource.playOnAwake = false;
+            }
         }
-
 
         protected override void Update()
         {
@@ -59,15 +58,15 @@ namespace Vampire
         {
             Sprite spriteToUse = level >= 3 ? redEyeEffectSprite : effectSprite;
 
-            // 1. 이펙트 이미지 표시 (잠시 후 제거)
+            // ✅ 1. 이펙트 이미지 표시 (잠시 후 제거)
             GameObject effect = new GameObject("RadialBlastEffect");
             SpriteRenderer sr = effect.AddComponent<SpriteRenderer>();
             sr.sprite = spriteToUse;
             sr.sortingOrder = 1000;
             effect.transform.position = playerCharacter.CenterTransform.position;
-            effect.transform.localScale = Vector3.one * 2f; // 크게
+            effect.transform.localScale = Vector3.one * 2f;
 
-            // 🔊 AudioSource 생성 및 blastSound 재생
+            // 🔊 오디오 재생
             if (audioSource != null)
             {
                 audioSource.volume = 1f; // 조정 가능
@@ -78,22 +77,34 @@ namespace Vampire
             yield return new WaitForSeconds(1.5f);
             Destroy(effect);
 
-            // 2. 투사체 12방향 발사
+            // ✅ 2. 투사체 발사
             for (int i = 0; i < projectileCount.Value; i++)
             {
                 float angle = 360f / projectileCount.Value * i;
                 Vector2 dir = Quaternion.Euler(0, 0, angle) * Vector2.right;
-                float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+
+                // ✅ CharacterStatBlueprint 기반 총 데미지 계산
+                float totalDamage = playerStats.attackPower * damage.Value;
+
+                // ✅ 치명타 확률 적용
+                if (Random.value < playerStats.criticalChance)
+                {
+                    totalDamage *= (1 + playerStats.criticalDamage);
+                    Debug.Log("💥 [RadialBlastAbility] Critical hit!");
+                }
+
+                float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
                 Projectile p = entityManager.SpawnProjectile(
                     projectileIndex,
                     playerCharacter.CenterTransform.position,
                     totalDamage,
-                    knockback.Value,
+                    effectiveKnockback,
                     speed.Value,
                     monsterLayer
                 );
 
-                // 🔴 3레벨 이상이면 발사체 스프라이트 바꾸기
+                // 🔴 3레벨 이상이면 발사체 스프라이트 교체
                 if (level >= 3 && redEyeProjectileSprite != null)
                 {
                     var srProj = p.GetComponentInChildren<SpriteRenderer>();

@@ -84,8 +84,11 @@ namespace Vampire
         private int flowerMonsterPoolIndex;
         [SerializeField] private MonsterBlueprint flowerMonsterBlueprint;
 
+        private LevelBlueprint levelBlueprint; // ✅ 추가
+
         public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
         {
+            this.levelBlueprint = levelBlueprint; // ✅ LevelBlueprint 저장
             this.playerCharacter = character;
             this.inventory = inventory;
             this.infiniteBackground = infiniteBackground;
@@ -165,6 +168,8 @@ namespace Vampire
 
         void Update()
         {
+            if (levelBlueprint == null || !levelBlueprint.isInitialized) return;
+
             // Rebuild the grid if the player gets close to the edge
             if (grid.CloseToEdge(playerCharacter))
             {

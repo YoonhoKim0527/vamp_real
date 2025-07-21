@@ -6,6 +6,7 @@ namespace Vampire
     public class ShurikenProjectile : Projectile
     {
         private Character player;
+        private CharacterStatBlueprint playerStats; // ✅ 플레이어 스탯
         private float throwRadius;
         private float throwTime;
         private float chainRange;
@@ -14,9 +15,10 @@ namespace Vampire
         private bool isReturning = false;
         private Monster currentTarget;
 
-        public void Init(Character playerCharacter, float throwRadius, float throwTime, float chainRange, System.Action onReturnCallback)
+        public void Init(Character playerCharacter, CharacterStatBlueprint stats, float throwRadius, float throwTime, float chainRange, System.Action onReturnCallback)
         {
             this.player = playerCharacter;
+            this.playerStats = stats; // ✅ 스탯 주입
             this.throwRadius = throwRadius;
             this.throwTime = throwTime;
             this.chainRange = chainRange;
@@ -53,9 +55,21 @@ namespace Vampire
                 // ✅ 도착 후 데미지 처리
                 if (currentTarget != null && !isReturning)
                 {
-                    currentTarget.TakeDamage(damage, Vector2.zero);
-                    Debug.Log($"[ShurikenProjectile] {currentTarget.name} 타격");
-                    OnHitDamageable.Invoke(damage);
+                    float totalDamage = playerStats.attackPower * damage;
+
+                    // ✅ 치명타 확률 적용
+                    if (Random.value < playerStats.criticalChance)
+                    {
+                        totalDamage *= (1 + playerStats.criticalDamage);
+                        Debug.Log("💥 [ShurikenProjectile] Critical hit!");
+                    }
+
+                    Vector2 knockbackDir = (currentTarget.transform.position - player.CenterTransform.position).normalized;
+                    float effectiveKnockback = knockback * (1 + playerStats.defense * 0.1f);
+
+                    currentTarget.TakeDamage(totalDamage, knockbackDir * effectiveKnockback);
+                    Debug.Log($"[ShurikenProjectile] {currentTarget.name} 타격 {totalDamage:F1} damage");
+                    OnHitDamageable.Invoke(totalDamage);
                 }
 
                 // ✅ 다음 타겟 탐색

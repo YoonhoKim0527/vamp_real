@@ -16,13 +16,13 @@ namespace Vampire
         {
             if (level >= 2)
             {
-                Debug.Log("hi2");
+                Debug.Log("💣 [Grenade] Evolved mode attack triggered");
                 // ✅ 진화 모드: 부모 Attack 무시하고 custom 패턴 사용
                 yield return FireEvolvedGrenadesRepeatedly();
             }
             else
             {
-                Debug.Log("hi");
+                Debug.Log("💣 [Grenade] Normal attack triggered");
                 // ✅ 기존 방식
                 yield return base.Attack();
             }
@@ -30,24 +30,35 @@ namespace Vampire
 
         private IEnumerator FireEvolvedGrenadesRepeatedly()
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-
             for (int repeat = 0; repeat < evolvedRepeatCount; repeat++)
             {
                 Vector2 origin = playerCharacter.CenterTransform.position;
 
-                Debug.Log($"[Grenade] Evolved 발사 {repeat + 1}/{evolvedRepeatCount}");
+                Debug.Log($"💣 [Grenade] Evolved burst {repeat + 1}/{evolvedRepeatCount}");
 
                 for (int i = 0; i < evolvedProjectileCount; i++)
                 {
                     float angle = i * evolvedAngleStep;
                     Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
 
+                    // ✅ CharacterStatBlueprint 기반 데미지 계산
+                    float totalDamage = playerStats.attackPower * damage.Value;
+
+                    // ✅ 치명타 확률 적용
+                    if (Random.value < playerStats.criticalChance)
+                    {
+                        totalDamage *= (1 + playerStats.criticalDamage);
+                        Debug.Log("💥 [Grenade] Critical hit!");
+                    }
+
+                    // ✅ 넉백 계산에 플레이어 방어력 반영
+                    float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
                     GrenadeThrowable throwable = (GrenadeThrowable)entityManager.SpawnThrowable(
                         throwableIndex,
                         origin,
                         totalDamage,
-                        knockback.Value,
+                        effectiveKnockback,
                         0,
                         monsterLayer
                     );

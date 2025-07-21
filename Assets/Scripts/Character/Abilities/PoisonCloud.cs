@@ -12,16 +12,16 @@ namespace Vampire
 
         LayerMask monsterLayer;
         Character owner;
-        protected Character playerCharacter;
+        protected CharacterStatBlueprint playerStats; // ✅ 스탯 블루프린트로 교체
 
-        public void Init(float damage, float radius, float duration, LayerMask layer, Character owner, Character playerCharacter)
+        public void Init(float damage, float radius, float duration, LayerMask layer, Character owner, CharacterStatBlueprint playerStats)
         {
             this.damagePerTick = damage;
             this.radius = radius;
             this.duration = duration;
             this.monsterLayer = layer;
             this.owner = owner;
-            this.playerCharacter = playerCharacter;
+            this.playerStats = playerStats; // ✅ 플레이어 스탯 주입
             transform.localScale = Vector3.one * radius * 0.2f;
             StartCoroutine(ApplyEffect());
         }
@@ -37,7 +37,16 @@ namespace Vampire
                     IDamageable d = hit.GetComponentInParent<IDamageable>();
                     if (d != null)
                     {
-                        float totalDamage = playerCharacter.Stats.GetTotalDamage() * damagePerTick;
+                        // ✅ 플레이어 스탯 기반 데미지 계산
+                        float totalDamage = playerStats.attackPower * damagePerTick;
+
+                        // ✅ 치명타 적용
+                        if (Random.value < playerStats.criticalChance)
+                        {
+                            totalDamage *= (1 + playerStats.criticalDamage);
+                            Debug.Log("☠️ [PoisonCloud] Critical hit!");
+                        }
+
                         d.TakeDamage(totalDamage, Vector2.zero);
                         owner.OnDealDamage.Invoke(totalDamage);
                     }

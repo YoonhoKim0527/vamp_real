@@ -12,6 +12,7 @@ namespace Vampire
         [SerializeField] protected UpgradeableProjectileSpeed speed;
         [SerializeField] protected UpgradeableKnockback knockback;
         [SerializeField] protected UpgradeableWeaponCooldown cooldown;
+
         protected float timeSinceLastAttack;
         protected int projectileIndex;
 
@@ -20,6 +21,8 @@ namespace Vampire
             base.Use();
             gameObject.SetActive(true);
             timeSinceLastAttack = cooldown.Value;
+
+            // ✅ Projectile 풀링 등록
             projectileIndex = entityManager.AddPoolForProjectile(projectilePrefab);
         }
 
@@ -46,8 +49,29 @@ namespace Vampire
 
         protected virtual void LaunchProjectile()
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
-            Projectile projectile = entityManager.SpawnProjectile(projectileIndex, playerCharacter.CenterTransform.position, totalDamage, knockback.Value, speed.Value, monsterLayer);
+            // ✅ CharacterStatBlueprint 기반 데미지 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("🎯 [ProjectileAbility] Critical hit!");
+            }
+
+            // ✅ 넉백에 defense 보정
+            float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            // ✅ 발사체 생성 및 발사
+            Projectile projectile = entityManager.SpawnProjectile(
+                projectileIndex,
+                playerCharacter.CenterTransform.position,
+                totalDamage,
+                effectiveKnockback,
+                speed.Value,
+                monsterLayer
+            );
+
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             projectile.Launch(playerCharacter.LookDirection);
         }

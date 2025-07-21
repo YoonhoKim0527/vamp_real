@@ -14,23 +14,21 @@ namespace Vampire
         [SerializeField] private float evolvedLifetime = 3f;        // ✅ 관통 지속 시간
         [SerializeField] private GameObject piercingEffectPrefab;   // ✅ 관통 시 이펙트
 
-        protected override void Attack()
-        {
-            StartCoroutine(FireClip());
-        }
-
         protected override void Use()
         {
             base.Use();
 
-            if (CrossSceneData.ExtraProjectile && projectileCount != null)
+            // ✅ CrossSceneData 대신 CharacterStatBlueprint를 사용
+            if (playerStats.extraProjectiles > 0 && projectileCount != null)
             {
-                projectileCount.ForceAdd(1);
+                projectileCount.ForceAdd(playerStats.extraProjectiles);
+                Debug.Log($"[GunAbility] Added {playerStats.extraProjectiles} extra projectiles from PlayerStats.");
             }
-            if (CrossSceneData.BonusProjectile > 0 && projectileCount != null)
-            {
-                projectileCount.ForceAdd(CrossSceneData.BonusProjectile);
-            }
+        }
+
+        protected override void Attack()
+        {
+            StartCoroutine(FireClip());
         }
 
         private IEnumerator FireClip()
@@ -47,21 +45,33 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage.Value;
+            // ✅ CharacterStatBlueprint 기반 데미지 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("🔫 [GunAbility] Critical hit!");
+            }
+
+            // ✅ 넉백 계산에 방어력 계수 반영
+            float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
 
             Projectile projectile = entityManager.SpawnProjectile(
                 projectileIndex,
                 playerCharacter.CenterTransform.position,
                 totalDamage,
-                knockback.Value,
-                level >= 0 ? speed.Value * evolvedSpeedMultiplier : speed.Value, // ✅ 진화 시 속도 업
+                effectiveKnockback,
+                level >= 1 ? speed.Value * evolvedSpeedMultiplier : speed.Value, // ✅ 진화 시 속도 업
                 monsterLayer
             );
 
             // ✅ 레벨 1 이상이면 관통 모드 활성화
-            if (level >= 0 && projectile is GunProjectile gunProjectile)
+            if (level >= 1 && projectile is GunProjectile gunProjectile)
             {
                 gunProjectile.EnablePiercing(evolvedLifetime, piercingEffectPrefab);
+                Debug.Log("🔫 [GunAbility] Piercing mode enabled.");
             }
 
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);

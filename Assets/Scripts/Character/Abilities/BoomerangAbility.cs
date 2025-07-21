@@ -31,13 +31,10 @@ namespace Vampire
         {
             base.Use();
 
-            if (CrossSceneData.ExtraProjectile && boomerangCount != null)
+            // ✅ CharacterStatBlueprint의 extraProjectiles 반영
+            if (playerStats.extraProjectiles > 0 && boomerangCount != null)
             {
-                boomerangCount.ForceAdd(1);  
-            }
-            if (CrossSceneData.BonusProjectile > 0 && boomerangCount != null)
-            {
-                boomerangCount.ForceAdd(CrossSceneData.BonusProjectile);  
+                boomerangCount.ForceAdd(playerStats.extraProjectiles);
             }
 
             gameObject.SetActive(true);
@@ -83,11 +80,22 @@ namespace Vampire
 
         protected virtual void ThrowBoomerang()
         {
+            // ✅ CharacterStatBlueprint 기반 스탯 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+            float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("🪃 BoomerangAbility: Critical Hit!");
+            }
+
             Boomerang boomerang = entityManager.SpawnBoomerang(
                 boomerangIndex,
                 playerCharacter.CenterTransform.position,
-                damage.Value,
-                knockback.Value,
+                totalDamage,
+                totalKnockback,
                 throwRadius,
                 throwTime,
                 monsterLayer
@@ -107,11 +115,22 @@ namespace Vampire
 
         private void ThrowAwakenedBoomerang()
         {
+            // ✅ CharacterStatBlueprint 기반 스탯 계산
+            float totalDamage = playerStats.attackPower * damage.Value;
+            float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                totalDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("🪃 BoomerangAbility: Critical Hit (Awakened)!");
+            }
+
             Boomerang boomerang = entityManager.SpawnBoomerang(
                 boomerangIndex,
                 playerCharacter.CenterTransform.position,
-                damage.Value,
-                knockback.Value,
+                totalDamage,
+                totalKnockback,
                 throwRadius * awakenedThrowRadiusMultiplier,
                 throwTime,
                 monsterLayer

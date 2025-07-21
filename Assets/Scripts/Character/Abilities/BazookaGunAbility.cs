@@ -42,7 +42,7 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            if (level >= 1 && !isEvolved)
+            if (level >= 2 && !isEvolved)
             {
                 isEvolved = true;
                 StartCoroutine(WaterBeamAttackLoop());
@@ -112,7 +112,16 @@ namespace Vampire
                     Monster monster = collider.GetComponent<Monster>();
                     if (monster != null)
                     {
-                        float damageThisFrame = beamDamagePerSecond * Time.deltaTime;
+                        // ✅ CharacterStatBlueprint 기반 데미지 계산
+                        float damageThisFrame = beamDamagePerSecond * Time.deltaTime * playerStats.attackPower;
+
+                        // ✅ 치명타 확률 적용
+                        if (Random.value < playerStats.criticalChance)
+                        {
+                            damageThisFrame *= (1 + playerStats.criticalDamage);
+                            Debug.Log("[BazookaGun] 💥 Critical Hit!");
+                        }
+
                         monster.TakeDamage(damageThisFrame, Vector2.zero);
                         Debug.Log($"[BazookaGun] 🐘 {monster.name}에게 {damageThisFrame:F1} 데미지 적용");
                     }
@@ -129,7 +138,6 @@ namespace Vampire
             Debug.Log("[BazookaGun] 🐘 물대포 종료");
         }
 
-        
         private IEnumerator LaunchProjectileAnimation()
         {
             ISpatialHashGridClient targetEntity = entityManager.Grid.FindClosestInRadius(bazookaGun.transform.position, targetRadius);
@@ -158,16 +166,25 @@ namespace Vampire
 
             bazookaGun.transform.rotation = Quaternion.Euler(0, 0, targetTheta);
 
-            // ✅ 발사체 생성
+            // ✅ 발사체 생성 (CharacterStatBlueprint 반영)
+            float projectileDamage = playerStats.attackPower * damage.Value;
+
+            // ✅ 치명타 확률 적용
+            if (Random.value < playerStats.criticalChance)
+            {
+                projectileDamage *= (1 + playerStats.criticalDamage);
+                Debug.Log("[BazookaGun] 💥 Critical Projectile!");
+            }
+
             ExplosiveProjectile projectile = (ExplosiveProjectile)entityManager.SpawnProjectile(
                 projectileIndex,
                 launchTransform.position,
-                damage.Value,
-                knockback.Value,
+                projectileDamage,
+                knockback.Value * (1 + playerStats.defense * 0.1f), // ✅ 넉백 강화
                 speed.Value,
                 monsterLayer
             );
-            projectile.SetupExplosion(damage.Value, explosionAOE.Value, knockback.Value);
+            projectile.SetupExplosion(projectileDamage, explosionAOE.Value, knockback.Value);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
 
             launchParticles.Play();
@@ -175,6 +192,5 @@ namespace Vampire
             // 발사체 날리기
             projectile.Launch(launchDirection);
         }
-
     }
 }

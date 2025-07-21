@@ -5,10 +5,21 @@ using System.Collections.Generic;
 namespace Vampire
 {
     [System.Serializable]
+    public class UpgradeStateSaveData
+    {
+        public string upgradeName;         // 업그레이드 이름
+        public int level;                  // 현재 레벨
+        public int nextCost;               // 다음 업그레이드 비용
+        public float upgradeIncrement;     // 업그레이드 시 증가량
+    }
+
+    [System.Serializable]
     public class SaveData
     {
         public List<ItemSaveData> ownedItems;
         public List<UpgradeSaveData> upgradeLevels;
+        public List<UpgradeStateSaveData> upgradeStates; // ✅ 새 필드
+        public CharacterStatBlueprint playerStats; // ✅ 추가: 캐릭터 스탯 데이터
     }
 
     [System.Serializable]
@@ -35,37 +46,59 @@ namespace Vampire
             Debug.Log($"[SaveManager] Save path: {savePath}");
         }
 
-        public void SaveGame(List<ShopItemBlueprint> items, List<UpgradeItemBlueprint> upgrades)
+        /// <summary>
+        /// 게임 데이터 저장 (아이템, 업그레이드, 캐릭터 스탯 포함)
+        /// </summary>
+        public void SaveGame(
+            List<ShopItemBlueprint> items,
+            List<UpgradeItemBlueprint> upgrades,
+            CharacterStatBlueprint playerStats,
+            List<UpgradeStateSaveData> upgradeStates
+        )
         {
             SaveData data = new SaveData();
 
             // ✅ Shop Items 저장
             data.ownedItems = new List<ItemSaveData>();
-            foreach (var item in items)
+            if (items != null) // null 방지
             {
-                data.ownedItems.Add(new ItemSaveData
+                foreach (var item in items)
                 {
-                    itemName = item.itemName,
-                    owned = item.owned
-                });
+                    data.ownedItems.Add(new ItemSaveData
+                    {
+                        itemName = item.itemName,
+                        owned = item.owned
+                    });
+                }
             }
 
             // ✅ Upgrade Levels 저장
             data.upgradeLevels = new List<UpgradeSaveData>();
-            foreach (var upgrade in upgrades)
+            if (upgrades != null) // null 방지
             {
-                data.upgradeLevels.Add(new UpgradeSaveData
+                foreach (var upgrade in upgrades)
                 {
-                    upgradeName = upgrade.upgradeName,
-                    level = upgrade.level
-                });
+                    data.upgradeLevels.Add(new UpgradeSaveData
+                    {
+                        upgradeName = upgrade.upgradeName,
+                        level = upgrade.level
+                    });
+                }
             }
+
+            // ✅ Upgrade States 저장
+            data.upgradeStates = upgradeStates ?? new List<UpgradeStateSaveData>();
+
+            // ✅ Player Stats 저장
+            data.playerStats = playerStats ?? new CharacterStatBlueprint();
 
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(savePath, json);
             Debug.Log($"[SaveManager] Game saved at: {savePath}");
         }
-
+        /// <summary>
+        /// 게임 데이터 로드
+        /// </summary>
         public SaveData LoadGame()
         {
             if (File.Exists(savePath))
@@ -81,8 +114,35 @@ namespace Vampire
                 return new SaveData
                 {
                     ownedItems = new List<ItemSaveData>(),
-                    upgradeLevels = new List<UpgradeSaveData>()
+                    upgradeLevels = new List<UpgradeSaveData>(),
+                    upgradeStates = new List<UpgradeStateSaveData>(), // ✅ 기본 초기화
+                    playerStats = new CharacterStatBlueprint()
                 };
+            }
+        }
+
+        public void SaveStats(CharacterStatBlueprint stats)
+        {
+            SaveData data = LoadGame(); // 기존 데이터 불러오기
+            data.playerStats = stats;
+
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(savePath, json);
+            Debug.Log("[SaveManager] Player stats saved.");
+        }
+
+        public CharacterStatBlueprint LoadStats()
+        {
+            SaveData data = LoadGame();
+            if (data.playerStats != null)
+            {
+                Debug.Log("[SaveManager] Player stats loaded.");
+                return data.playerStats;
+            }
+            else
+            {
+                Debug.LogWarning("[SaveManager] No player stats found in save. Initializing defaults.");
+                return new CharacterStatBlueprint(); // 기본값 반환
             }
         }
     }

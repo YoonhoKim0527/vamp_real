@@ -9,6 +9,7 @@ namespace Vampire
     public class LevelManager : MonoBehaviour
     {
         private LevelBlueprint levelBlueprint;
+
         [SerializeField] private Character playerCharacter;
         [SerializeField] private EntityManager entityManager;
         [SerializeField] private AbilityManager abilityManager;
@@ -19,83 +20,112 @@ namespace Vampire
         [SerializeField] private GameOverDialog gameOverDialog;
         [SerializeField] private GameTimer gameTimer;
         [SerializeField] private TilemapBackgroundGenerator tilemapBackgroundGenerator;
+
         private float levelTime = 0;
         private float timeSinceLastMonsterSpawned;
         private float timeSinceLastChestSpawned;
         private bool miniBossSpawned = false;
         private bool finalBossSpawned = false;
 
+        private bool isInitialized = false;
+
         public void Init(LevelBlueprint levelBlueprint)
         {
             this.levelBlueprint = levelBlueprint;
             levelTime = 0;
 
-            // Initialize the entity manager
+            var gameStateManager = FindObjectOfType<GameStateManager>();
+            CharacterStatBlueprint playerStats = gameStateManager.PlayerStats;
+            List<UpgradeStateSaveData> upgradeStates = gameStateManager.GetUpgradeStatesSafe();
+
+            Debug.Log($"[LevelManager] Loaded PlayerStats: Attack={playerStats.attackPower}, ExtraProjectiles={playerStats.extraProjectiles}");
+
             entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
-            // Initialize the ability manager
-            abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, abilityManager);
+            abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, playerStats);
             abilitySelectionDialog.Init(abilityManager, entityManager, playerCharacter);
-            // Initialize the character
             playerCharacter.Init(entityManager, abilityManager, statsManager);
             playerCharacter.OnDeath.AddListener(GameOver);
-            // Spawn initial gems
+
             entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
-            // Spawn a singular chest
             entityManager.SpawnChest(levelBlueprint.chestBlueprint);
-            // Initialize the infinite background
             infiniteBackground.Init(this.levelBlueprint.backgroundTexture, playerCharacter.transform);
-            // Initialize inventory
             tilemapBackgroundGenerator.Init(levelBlueprint.backgroundTiles, playerCharacter.transform);
             inventory.Init();
+
+            isInitialized = true; // ✅ 이제 초기화 완료
+            levelBlueprint.Initialize();
         }
 
-        // Start is called before the first frame update
-        void Start()
+        IEnumerator Start()
         {
             if (CrossSceneData.LevelBlueprint == null)
             {
-                Debug.LogError("LevelBlueprint is null! �� ���� �� �� ������ ������");
-                return;
+                Debug.LogError("[LevelManager] LevelBlueprint is null! Cannot initialize level.");
+                yield break;
             }
 
+            // ✅ GameStateManager 초기화 완료 대기
+            var gameStateManager = FindObjectOfType<GameStateManager>();
+            while (gameStateManager == null || !gameStateManager.IsInitialized)
+            {
+                Debug.Log("[LevelManager] Waiting for GameStateManager to initialize...");
+                yield return null; // 다음 프레임까지 대기
+                gameStateManager = FindObjectOfType<GameStateManager>();
+            }
+
+            Debug.Log("[LevelManager] GameStateManager is ready. Proceeding with Init().");
             Init(CrossSceneData.LevelBlueprint);
         }
-        // Update is called once per frame
+
         void Update()
         {
-            // Time
+            if (!isInitialized) return; // ✅ 초기화 전이면 아무것도 하지 않음
             levelTime += Time.deltaTime;
             gameTimer.SetTime(levelTime);
-            // Monster spawning timer
+
+            HandleMonsterSpawning();
+            HandleBossSpawning();
+            HandleChestSpawning();
+        }
+
+        private void HandleMonsterSpawning()
+        {
             if (levelTime < levelBlueprint.levelTime)
             {
                 timeSinceLastMonsterSpawned += Time.deltaTime;
                 float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime / levelBlueprint.levelTime);
                 float monsterSpawnDelay = spawnRate > 0 ? 1.0f / spawnRate : float.PositiveInfinity;
+
                 if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
                 {
                     (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime / levelBlueprint.levelTime);
                     (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
                     MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
                     entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
+
                     timeSinceLastMonsterSpawned = Mathf.Repeat(timeSinceLastMonsterSpawned, monsterSpawnDelay);
                 }
             }
-            // Boss spawning
+        }
+
+        private void HandleBossSpawning()
+        {
             if (!miniBossSpawned && levelTime > levelBlueprint.miniBosses[0].spawnTime)
             {
                 miniBossSpawned = true;
                 entityManager.SpawnMonsterRandomPosition(levelBlueprint.monsters.Length, levelBlueprint.miniBosses[0].bossBlueprint);
             }
-            // Boss spawning
+
             if (!finalBossSpawned && levelTime > levelBlueprint.levelTime)
             {
-                //entityManager.KillAllMonsters();
                 finalBossSpawned = true;
                 Monster finalBoss = entityManager.SpawnMonsterRandomPosition(levelBlueprint.monsters.Length, levelBlueprint.finalBoss.bossBlueprint);
                 finalBoss.OnKilled.AddListener(LevelPassed);
             }
-            // Chest spawning timer
+        }
+
+        private void HandleChestSpawning()
+        {
             timeSinceLastChestSpawned += Time.deltaTime;
             if (timeSinceLastChestSpawned >= levelBlueprint.chestSpawnDelay)
             {
@@ -111,20 +141,12 @@ namespace Vampire
         {
             Time.timeScale = 0;
 
-            // 기존 코인 누적
+            // 코인 저장
             int coinCount = PlayerPrefs.GetInt("Coins");
             PlayerPrefs.SetInt("Coins", coinCount + statsManager.CoinsGained);
 
-            // SaveGame 호출 (중복 방지)
             var gameStateManager = FindObjectOfType<GameStateManager>();
-            if (gameStateManager != null)
-            {
-                gameStateManager.SaveGame();
-            }
-            else
-            {
-                Debug.LogWarning("[LevelManager] GameStateManager not found! Skipping SaveGame.");
-            }
+            gameStateManager?.SaveGame();
 
             gameOverDialog.Open(false, statsManager);
         }
@@ -133,20 +155,11 @@ namespace Vampire
         {
             Time.timeScale = 0;
 
-            // 기존 코인 누적
             int coinCount = PlayerPrefs.GetInt("Coins");
             PlayerPrefs.SetInt("Coins", coinCount + statsManager.CoinsGained);
 
-            // SaveGame 호출 (중복 방지)
             var gameStateManager = FindObjectOfType<GameStateManager>();
-            if (gameStateManager != null)
-            {
-                gameStateManager.SaveGame();
-            }
-            else
-            {
-                Debug.LogWarning("[LevelManager] GameStateManager not found! Skipping SaveGame.");
-            }
+            gameStateManager?.SaveGame();
 
             gameOverDialog.Open(true, statsManager);
         }

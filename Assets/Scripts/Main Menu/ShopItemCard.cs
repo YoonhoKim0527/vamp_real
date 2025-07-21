@@ -16,19 +16,11 @@ namespace Vampire
 
         private Shop shop;
         private ShopItemBlueprint itemBlueprint;
-        private CoinDisplay coinDisplay;
 
-        public void Init(Shop shop, ShopItemBlueprint blueprint, CoinDisplay coinDisplay)
+        public void Init(Shop shop, ShopItemBlueprint blueprint)
         {
             this.shop = shop;
             this.itemBlueprint = blueprint;
-
-            // ✅ CoinDisplay 연결: 인자로 전달 못 받으면 자동 탐색
-            this.coinDisplay = coinDisplay != null ? coinDisplay : FindObjectOfType<CoinDisplay>();
-            if (this.coinDisplay == null)
-            {
-                Debug.LogWarning("[ShopItemCard] CoinDisplay not found! UI may not update coins.");
-            }
 
             Debug.Log($"Init ShopItemCard: {blueprint.itemName}, {blueprint.cost}, {blueprint.itemSprite}");
 
@@ -39,10 +31,13 @@ namespace Vampire
 
         private void BuyItem()
         {
-            int coins = PlayerPrefs.GetInt("Coins", 0);
-            if (coins >= itemBlueprint.cost && !itemBlueprint.owned)
+            int currentCoins = CoinManager.Instance.GetCoins(); // ✅ CoinManager로 코인 조회
+
+            if (currentCoins >= itemBlueprint.cost && !itemBlueprint.owned)
             {
-                PlayerPrefs.SetInt("Coins", coins - itemBlueprint.cost);
+                // ✅ 코인 차감
+                CoinManager.Instance.SpendCoins(itemBlueprint.cost);
+
                 itemBlueprint.owned = true;
                 Debug.Log($"[ShopItemCard] Purchased {itemBlueprint.itemName}");
 
@@ -58,16 +53,16 @@ namespace Vampire
                 {
                     shop.RefreshShopUI();
                 }
-
-                // ✅ 메인 UI의 CoinDisplay도 갱신
-                var mainCoinDisplay = FindObjectOfType<CoinDisplay>();
-                if (mainCoinDisplay != null)
-                {
-                    mainCoinDisplay.UpdateDisplay();
-                }
+            }
+            else if (itemBlueprint.owned)
+            {
+                Debug.LogWarning($"[ShopItemCard] {itemBlueprint.itemName} already owned.");
+            }
+            else
+            {
+                Debug.LogWarning($"[ShopItemCard] Not enough coins! Current: {currentCoins}, Needed: {itemBlueprint.cost}");
             }
         }
-
 
         public void Refresh()
         {
