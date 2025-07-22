@@ -28,11 +28,6 @@ namespace Vampire
 
         protected virtual void Update()
         {
-            if (target != null)
-            {
-                Vector3 dir = (target.position - transform.position).normalized;
-                transform.position += dir * speed.Value * Time.deltaTime;
-            }
             
             timeSinceLastAttack += Time.deltaTime;
             if (timeSinceLastAttack >= cooldown.Value)

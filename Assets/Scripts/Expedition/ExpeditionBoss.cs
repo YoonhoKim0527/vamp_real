@@ -1,74 +1,49 @@
-using System.Collections;
 using UnityEngine;
+using System;
 
 namespace Vampire
 {
-    public class ExpeditionBoss : IDamageable
+    public class ExpeditionBoss : MonoBehaviour
     {
-        [SerializeField] SpriteRenderer bossSpriteRenderer;
-        [SerializeField] SpriteAnimator bossAnimator;
-        [SerializeField] BoxCollider2D bossCollider;
-        [SerializeField] ParticleSystem deathParticles;
-
         float currentHp;
-        float maxHp;
-        ExpeditionManager expeditionManager;
-        bool alive = true;
+        ExpeditionBossBlueprint blueprint;
 
-        public float HP => currentHp;
-        public float MaxHP => maxHp;
+        public event Action OnDeath;
 
-        public void InitBoss(ExpeditionManager manager, ExpeditionBossBlueprint blueprint)
+        public void Initialize(ExpeditionBossBlueprint blueprint)
         {
-            expeditionManager = manager;
+            this.blueprint = blueprint;
+            currentHp = blueprint.hp;
 
-            // HP 설정
-            maxHp = blueprint.hp;
-            currentHp = maxHp;
+            ExpeditionUIManager.Instance?.InitBossUI(blueprint.stageName, blueprint.hp);
 
-            // 숨쉬는 애니메이션 적용
-            bossAnimator.Init(blueprint.breatheAnimation, blueprint.frameTime, true);
-            bossAnimator.StartAnimating(true);
-
-            // 위치 초기화
-            transform.position = manager.BossSpawnPoint.position;
-
-            // 콜라이더 크기 맞춤 (필요시)
-            bossCollider.size = bossSpriteRenderer.bounds.size;
-
-            alive = true;
+            var animator = GetComponent<SpriteAnimator>();
+            if (animator != null)
+            {
+                animator.Init(blueprint.breatheAnimation, blueprint.frameTime);
+                animator.StartAnimating();
+            }
+            else
+            {
+                Debug.LogWarning("[ExpeditionBoss] SpriteAnimator not found on boss prefab!");
+            }
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback)
+        public void TakeDamage(float damage)
         {
-            if (!alive) return;
-
             currentHp -= damage;
-            expeditionManager.UpdateBossHP(currentHp, maxHp);
+            currentHp = Mathf.Max(0f, currentHp);
 
-            if (currentHp <= 0)
-                StartCoroutine(Killed());
+            ExpeditionUIManager.Instance?.UpdateBossHP(currentHp);
+
+            if (currentHp <= 0f)
+                Die();
         }
 
-        public override void Knockback(Vector2 knockback)
+        void Die()
         {
-            // ExpeditionBoss는 넉백 없음 → 무시
-        }
-
-        IEnumerator Killed()
-        {
-            alive = false;
-
-            if (deathParticles != null)
-                deathParticles.Play();
-
-            // 애니메이션 정지
-            bossAnimator.StopAnimating();
-            bossSpriteRenderer.enabled = false;
-
-            yield return new WaitForSeconds(1f); // 죽는 연출 시간
-
-            expeditionManager.OnBossDefeated();
+            Debug.Log($"Boss defeated! Reward: {blueprint.rewardGold} Gold, {blueprint.rewardExp} EXP");
+            OnDeath?.Invoke(); // ✅ 이벤트 호출
             Destroy(gameObject);
         }
     }
