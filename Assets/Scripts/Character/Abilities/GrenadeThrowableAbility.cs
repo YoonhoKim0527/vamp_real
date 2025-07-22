@@ -45,13 +45,13 @@ namespace Vampire
                     float totalDamage = playerStats.attackPower * damage.Value;
 
                     // ✅ 치명타 확률 적용
-                    if (Random.value < playerStats.criticalChance)
+                    bool isCritical = Random.value < playerStats.criticalChance;
+                    if (isCritical)
                     {
                         totalDamage *= (1 + playerStats.criticalDamage);
                         Debug.Log("💥 [Grenade] Critical hit!");
                     }
 
-                    // ✅ 넉백 계산에 플레이어 방어력 반영
                     float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
 
                     GrenadeThrowable throwable = (GrenadeThrowable)entityManager.SpawnThrowable(
@@ -64,7 +64,9 @@ namespace Vampire
                     );
 
                     throwable.SetupGrenade(fragmentCount.Value);
-                    throwable.Throw(origin + direction * throwRadius); // ✅ 각도별 위치로 던짐
+
+                    // 🟥 critical 정보도 넘기기
+                    throwable.Throw(origin + direction * throwRadius, isCritical);
                     throwable.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
                 }
 

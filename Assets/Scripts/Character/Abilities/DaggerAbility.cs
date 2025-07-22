@@ -192,10 +192,12 @@ namespace Vampire
             float totalDamage = playerStats.attackPower * punchDamage;
             float totalKnockback = punchKnockback * (1 + playerStats.defense * 0.1f);
 
-            // ✅ 치명타 적용
+            // ✅ 치명타 여부 계산
+            bool isCriticalHit = false;
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCriticalHit = true;
                 Debug.Log("🥊 DaggerAbility: Critical Punch!");
             }
 
@@ -208,7 +210,7 @@ namespace Vampire
                 {
                     Vector2 monsterPos = (Vector2)monster.transform.position;
                     Vector2 knockbackDir = (monsterPos - targetPosition).normalized;
-                    DamageMonster(monster, totalDamage, knockbackDir * totalKnockback);
+                    monster.TakeDamage(totalDamage, knockbackDir * totalKnockback, isCriticalHit); // ✅ 크리티컬 여부 전달
                 }
             }
         }

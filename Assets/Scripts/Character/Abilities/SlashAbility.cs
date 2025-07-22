@@ -64,20 +64,27 @@ namespace Vampire
                         Monster monster = collider.gameObject.GetComponentInParent<Monster>();
                         if (monster != null)
                         {
-                            // ✅ CharacterStatBlueprint 기반 데미지 계산
+                            // ✅ 데미지 계산
                             float totalDamage = playerStats.attackPower * damage.Value;
 
-                            // ✅ 치명타 확률 적용
+                            // ✅ 치명타 판정
+                            bool isCritical = false;
                             if (Random.value < playerStats.criticalChance)
                             {
                                 totalDamage *= (1 + playerStats.criticalDamage);
+                                isCritical = true;
                                 Debug.Log("💥 [SlashAbility] Critical hit!");
                             }
 
-                            // ✅ 넉백 방어력 반영
+                            // ✅ 넉백 계산
                             Vector2 knockbackForce = dir * knockback.Value * (1 + playerStats.defense * 0.1f);
 
-                            monster.TakeDamage(totalDamage, knockbackForce);
+                            // ✅ 몬스터에 데미지 적용 (치명타 전달)
+                            monster.TakeDamage(totalDamage, knockbackForce, isCritical);
+
+                            // ✅ DamageText 표시
+                            entityManager.SpawnDamageText(monster.CenterTransform.position, totalDamage, isCritical);
+
                             playerCharacter.OnDealDamage.Invoke(totalDamage);
                         }
                     }

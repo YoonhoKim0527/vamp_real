@@ -70,7 +70,6 @@ namespace Vampire
             PlayerPrefs.SetString("LAST_QUIT", now.ToString());
         }
 
-
         // ---------- 생산 ----------
         void TickRealtime()
         {
@@ -106,7 +105,6 @@ namespace Vampire
             DateTime lastQuit = new DateTime(savedTicks);
             TimeSpan elapsed = DateTime.UtcNow - lastQuit;
 
-        
             double capSec = maxOfflineHours * 3600;
             double seconds = Math.Min(elapsed.TotalSeconds, capSec);
 

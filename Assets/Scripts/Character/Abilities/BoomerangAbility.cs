@@ -80,14 +80,16 @@ namespace Vampire
 
         protected virtual void ThrowBoomerang()
         {
-            // ✅ CharacterStatBlueprint 기반 스탯 계산
             float totalDamage = playerStats.attackPower * damage.Value;
             float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            bool isCritical = false;
 
             // ✅ 치명타 확률 적용
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("🪃 BoomerangAbility: Critical Hit!");
             }
 
@@ -101,8 +103,10 @@ namespace Vampire
                 monsterLayer
             );
 
+            // ✅ Boomerang에 크리티컬 여부 전달
+            boomerang.InitCritical(isCritical);
+
             Vector2 throwPosition;
-            // Throw randomly at nearby enemies
             List<ISpatialHashGridClient> nearbyEnemies = entityManager.Grid.FindNearbyInRadius(playerCharacter.transform.position, throwRadius);
             if (nearbyEnemies.Count > 0)
                 throwPosition = nearbyEnemies[Random.Range(0, nearbyEnemies.Count)].Position;
@@ -115,14 +119,16 @@ namespace Vampire
 
         private void ThrowAwakenedBoomerang()
         {
-            // ✅ CharacterStatBlueprint 기반 스탯 계산
             float totalDamage = playerStats.attackPower * damage.Value;
             float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+            bool isCritical = false;
 
             // ✅ 치명타 확률 적용
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("🪃 BoomerangAbility: Critical Hit (Awakened)!");
             }
 
@@ -136,10 +142,11 @@ namespace Vampire
                 monsterLayer
             );
 
-            // ✅ 부메랑 크기 초기화 후 4배로 고정
             boomerang.transform.localScale = boomerangPrefab.transform.localScale * awakenedSizeMultiplier;
 
-            // ✅ 무작위 방향
+            // ✅ Boomerang에 크리티컬 여부 전달
+            boomerang.InitCritical(isCritical);
+
             Vector2 throwDirection = Random.insideUnitCircle.normalized;
             Vector2 throwPosition = (Vector2)playerCharacter.transform.position + throwDirection * (throwRadius * awakenedThrowRadiusMultiplier);
 

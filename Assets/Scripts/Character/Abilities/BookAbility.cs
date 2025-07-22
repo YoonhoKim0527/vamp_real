@@ -26,6 +26,7 @@ namespace Vampire
 
         private float awakenTimer = 0f;
         private bool isExpanded = false;
+        private bool isCritical = false;
 
         private List<Book> books;
 
@@ -155,10 +156,11 @@ namespace Vampire
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
                 Debug.Log("[BookAbility] Critical hit!");
+                isCritical = true;
             }
 
             Vector2 knockbackDirection = (damageable.transform.position - playerCharacter.transform.position).normalized;
-            damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection);
+            damageable.TakeDamage(totalDamage, knockback.Value * knockbackDirection, isCritical);
 
             playerCharacter.OnDealDamage.Invoke(totalDamage);
         }

@@ -173,6 +173,13 @@ public class SpatialHashGrid
 
     public void UpdateClient(ISpatialHashGridClient client)
     {
+        if (client.ListIndexByCellIndex == null)
+        {
+            // 🟥 아직 등록 안 됐으면 InsertClient로 처리
+            InsertClient(client);
+            return;
+        }
+
         Vector2Int i1 = GetCellIndex(client.Position.x - client.Size.x/2.0f, client.Position.y - client.Size.y/2.0f);
         Vector2Int i2 = GetCellIndex(client.Position.x + client.Size.x/2.0f, client.Position.y + client.Size.y/2.0f);
 
@@ -188,20 +195,25 @@ public class SpatialHashGrid
 
     public void RemoveClient(ISpatialHashGridClient client)
     {
-        
+        if (client.ListIndexByCellIndex == null)
+        {
+            Debug.LogWarning("[SpatialHashGrid] Tried to remove client before it was inserted.");
+            return; // 🟥 grid에 등록된 적 없으면 그냥 무시
+        }
+
         foreach (var indices in client.ListIndexByCellIndex)
         {
             int endIndex = cells[indices.Key].Count - 1;
-            // Remove client by replacing it with client from end of list
             ISpatialHashGridClient endClient = cells[indices.Key][endIndex];
             if (endClient != client)
             {
                 endClient.ListIndexByCellIndex[indices.Key] = indices.Value;
                 cells[indices.Key][indices.Value] = endClient;
             }
-            // And removing end of list
             cells[indices.Key].RemoveAt(endIndex);
         }
+        client.ListIndexByCellIndex.Clear();
+        client.ListIndexByCellIndex = null; // 🟢 제거 후 null로 초기화
     }
 
     public bool CloseToEdge(ISpatialHashGridClient client)

@@ -9,6 +9,7 @@ namespace Vampire
         private float piercingLifetime;
         private GameObject piercingEffectPrefab;
         private GameObject activePiercingEffect;
+        private bool isCritical; // 🟥 치명타 여부 저장
 
         public void EnablePiercing(float lifetime, GameObject effectPrefab)
         {
@@ -16,10 +17,20 @@ namespace Vampire
             piercingLifetime = lifetime;
             piercingEffectPrefab = effectPrefab;
 
-            // ✅ Collider를 관통 모드로 전환
             if (piercingEnabled)
             {
                 col.isTrigger = true; // 충돌 대신 트리거 처리
+            }
+        }
+
+        public override void Launch(Vector2 direction, bool isCritical = false) // 🟥 critical 플래그 추가
+        {
+            this.isCritical = isCritical; // 🟥 내부에 저장
+            base.Launch(direction);
+
+            if (piercingEnabled)
+            {
+                StartCoroutine(PiercingTimer());
             }
         }
 
@@ -27,20 +38,18 @@ namespace Vampire
         {
             if (!piercingEnabled)
             {
-                // ✅ 일반 모드: 적을 맞추면 파괴
-                base.HitDamageable(damageable);
+                base.HitDamageable(damageable); // 🟩 일반 모드 처리
             }
             else
             {
-                // ✅ 관통 모드: 적을 맞춰도 파괴하지 않고 데미지만 적용
-                damageable.TakeDamage(damage, knockback * direction);
+                // 🟥 critical 여부 전달
+                damageable.TakeDamage(damage, knockback * direction, isCritical);
                 OnHitDamageable.Invoke(damage);
 
-                // ✅ 관통 이펙트 생성
                 if (piercingEffectPrefab != null)
                 {
                     GameObject effect = Instantiate(piercingEffectPrefab, transform.position, Quaternion.identity);
-                    Destroy(effect, 0.3f); // 이펙트 짧게 유지
+                    Destroy(effect, 0.3f);
                 }
             }
         }
@@ -50,18 +59,6 @@ namespace Vampire
             if (!piercingEnabled)
             {
                 base.HitNothing();
-            }
-            // ✅ 관통 모드에서는 HitNothing도 무시하고 이동 유지
-        }
-
-        public override void Launch(Vector2 direction)
-        {
-            base.Launch(direction);
-
-            if (piercingEnabled)
-            {
-                // ✅ 일정 시간 후 파괴
-                StartCoroutine(PiercingTimer());
             }
         }
 
@@ -75,11 +72,10 @@ namespace Vampire
         {
             if (!piercingEnabled)
             {
-                base.OnTriggerEnter2D(collider); // 일반 모드 충돌 처리
+                base.OnTriggerEnter2D(collider);
             }
             else
             {
-                // ✅ 관통 모드에서는 충돌 시에도 멈추지 않음
                 if ((targetLayer & (1 << collider.gameObject.layer)) != 0)
                 {
                     if (collider.transform.parent.TryGetComponent<IDamageable>(out IDamageable damageable))

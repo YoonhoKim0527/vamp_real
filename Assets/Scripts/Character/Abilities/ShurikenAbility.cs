@@ -46,10 +46,12 @@ namespace Vampire
             // ✅ CharacterStatBlueprint 기반 데미지/넉백 계산
             float totalDamage = playerStats.attackPower * damage.Value;
 
-            // ✅ 치명타 확률 적용
+            // ✅ 치명타 판정
+            bool isCritical = false;
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
+                isCritical = true;
                 Debug.Log("💥 [ShurikenAbility] Critical hit!");
             }
 
@@ -67,7 +69,7 @@ namespace Vampire
             if (shuriken != null)
             {
                 isShurikenActive = true; // ✅ 운용 중 표시
-                shuriken.Init(playerCharacter, playerStats, throwRadius, throwTime, chainRange, OnShurikenReturn);
+                shuriken.Init(playerCharacter, playerStats, throwRadius, throwTime, chainRange, OnShurikenReturn, isCritical);
                 shuriken.StartAttackSequence();
             }
             else

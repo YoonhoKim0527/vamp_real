@@ -93,7 +93,8 @@ namespace Vampire
                     float totalDamage = playerStats.attackPower * damage.Value;
 
                     // ✅ 치명타 확률 적용
-                    if (Random.value < playerStats.criticalChance)
+                    bool isCritical = Random.value < playerStats.criticalChance;
+                    if (isCritical)
                     {
                         totalDamage *= (1 + playerStats.criticalDamage);
                         Debug.Log("[GarlicAbility] Critical hit!");
@@ -102,10 +103,13 @@ namespace Vampire
                     Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;
                     float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
 
-                    damageable.TakeDamage(totalDamage, effectiveKnockback * knockbackDirection);
+                    // ✅ critical 여부 같이 전달
+                    damageable.TakeDamage(totalDamage, effectiveKnockback * knockbackDirection, isCritical);
+
                     playerCharacter.OnDealDamage.Invoke(totalDamage);
                 }
             }
         }
+
     }
 }

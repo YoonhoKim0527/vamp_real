@@ -102,12 +102,15 @@ namespace Vampire
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2))
+        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), bool isCritical = false)
         {
             if (alive)
             {
-                entityManager.SpawnDamageText(monsterHitbox.transform.position, damage);
+                // ✅ 크리티컬 여부 전달
+                entityManager.SpawnDamageText(monsterHitbox.transform.position, damage, isCritical);
+                Debug.Log($"[Monster] Damage Taken: {damage} (Critical: {isCritical})");
                 currentHealth -= damage;
+
                 if (hitAnimationCoroutine != null) StopCoroutine(hitAnimationCoroutine);
                 if (knockback != default(Vector2))
                 {
@@ -120,7 +123,6 @@ namespace Vampire
                     StartCoroutine(Killed());
             }
         }
-
         protected IEnumerator HitAnimation()
         {
             monsterSpriteRenderer.sharedMaterial = whiteMaterial;
