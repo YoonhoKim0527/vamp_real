@@ -10,6 +10,7 @@ namespace Vampire
 
         [SerializeField] Slider bossHpSlider;
         [SerializeField] TextMeshProUGUI stageNameText;
+        [SerializeField] TextMeshProUGUI bossHpText;
 
         void Awake()
         {
@@ -17,16 +18,18 @@ namespace Vampire
             else Destroy(gameObject);
         }
 
-        public void InitBossUI(string stageName, float maxHp)
+        public void InitBossUI(string stageName)
         {
-            bossHpSlider.maxValue = maxHp;
-            bossHpSlider.value = maxHp;
+            bossHpSlider.maxValue = 1f; // 슬라이더는 항상 현재 bar 기준 진행도만 보여줌
+            bossHpSlider.value = 1f;
             stageNameText.text = stageName;
+            bossHpText.text = $"x1000";
         }
 
-        public void UpdateBossHP(float currentHp)
+        public void UpdateBossBar(int barIndex, float barFill)
         {
-            bossHpSlider.value = currentHp;
+            bossHpSlider.value = barFill;
+            bossHpText.text = $"x{barIndex}";
         }
     }
 }

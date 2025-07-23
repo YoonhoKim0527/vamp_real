@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageName: Boss 1
   bossPortrait: {fileID: -1870314288, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
-  hp: 3000
+  hp: 777
   breatheAnimation:
-  - {fileID: -1209027723, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
-  - {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
+  - {fileID: 993305064, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
+  - {fileID: 1741101967, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
   frameTime: 0.2
   rewardGold: 0
   rewardExp: 0

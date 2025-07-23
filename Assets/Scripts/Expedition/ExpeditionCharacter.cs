@@ -41,6 +41,9 @@ namespace Vampire
             var setBoss = abilityType.GetMethod("SetBoss", BindingFlags.Public | BindingFlags.Instance);
             setBoss?.Invoke(abilityInstance, new object[] { boss });
 
+            var setInterval = abilityType.GetMethod("SetFireInterval", BindingFlags.Public | BindingFlags.Instance);
+            setInterval?.Invoke(abilityInstance, new object[] { blueprint.expeditionAbilityInterval });
+
             // ✅ 애니메이션
             var animator = GetComponent<SpriteAnimator>();
             if (animator != null)

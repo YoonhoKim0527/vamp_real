@@ -23,12 +23,20 @@ MonoBehaviour:
   luck: 0
   acceleration: 0
   walkSpriteSequence:
-  - {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
-  - {fileID: 993851342, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
-  - {fileID: -1209027723, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
+  - {fileID: 21300000, guid: 4a3b2a7c939730b40a5ef97d98d3f41d, type: 3}
+  - {fileID: 21300000, guid: 46cf7c29fe721b3489d7fa569f0888dc, type: 3}
+  - {fileID: 21300000, guid: 1222df11b1700f6418708034645ec488, type: 3}
+  - {fileID: 21300000, guid: 0bc66367d4f29b14f89a4846dbc5685d, type: 3}
+  - {fileID: 21300000, guid: a7a6e896234c143449e62122d75e07a6, type: 3}
+  - {fileID: 21300000, guid: a7072a8dc31677b49a628dd6e7310f7f, type: 3}
+  - {fileID: 21300000, guid: acd15e5e932c9b441b8cb9517b585547, type: 3}
+  - {fileID: 21300000, guid: 3ed5b0ce0c5f48743b830736bb300c3c, type: 3}
+  - {fileID: 21300000, guid: 747d993dcacb29942aa92a99f24fc5e1, type: 3}
+  - {fileID: 21300000, guid: 7b4d57a8db1cca841a8f7adfaa7afc81, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
   farmProductionPerSecond: 2
   abilityPrefab: {fileID: 4536051839462506652, guid: 04a773d446f714642b5fd5615e74abba, type: 3}
   abilityClassName: Vampire.ExpeditionSimpleAbility
+  expeditionAbilityInterval: 1

@@ -18,11 +18,22 @@ namespace Vampire
         {
             boss = bossTransform;
         }
+        public void SetFireInterval(float interval)
+        {
+            fireInterval = interval;
+        }
 
         protected virtual void Update()
         {
+            float speedMultiplier = BoostManager.Instance != null
+                ? BoostManager.Instance.GetMultiplier(BoostType.AttackSpeed)
+                : 1f;
+
+            float currentInterval = fireInterval / speedMultiplier;
+
             timer += Time.deltaTime;
-            if (timer >= fireInterval && boss != null)
+
+            if (timer >= currentInterval && boss != null)
             {
                 timer = 0f;
                 TriggerAbility();
