@@ -46,6 +46,7 @@ namespace Vampire
         protected override void LaunchProjectile()
         {
             float totalDamage = playerStats.attackPower * damage.Value;
+            Debug.Log($"total: {totalDamage}, attackpower: {playerStats.attackPower}, damge: {damage.Value}");
 
             // ✅ 치명타 확률 적용
             bool isCritical = Random.value < playerStats.criticalChance;

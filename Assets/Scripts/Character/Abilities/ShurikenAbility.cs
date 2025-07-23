@@ -45,6 +45,7 @@ namespace Vampire
 
             // ✅ CharacterStatBlueprint 기반 데미지/넉백 계산
             float totalDamage = playerStats.attackPower * damage.Value;
+            Debug.Log($"total: {totalDamage}, attackpower: {playerStats.attackPower}, damge: {damage.Value}");
 
             // ✅ 치명타 판정
             bool isCritical = false;

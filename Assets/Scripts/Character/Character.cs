@@ -94,7 +94,12 @@ namespace Vampire
             }
         }
 
-        public virtual void Init(EntityManager entityManager, AbilityManager abilityManager, StatsManager statsManager)
+        public virtual void Init(
+            EntityManager entityManager, 
+            AbilityManager abilityManager, 
+            StatsManager statsManager, 
+            CharacterStatBlueprint gameStats // ✅ 추가
+        )
         {
             this.entityManager = entityManager;
             this.abilityManager = abilityManager;
@@ -105,9 +110,9 @@ namespace Vampire
             coroutineQueue = new CoroutineQueue(this);
             coroutineQueue.StartLoop();
 
-            // ✅ 체력 및 업그레이드 초기화
-            currentHealth = stats.GetTotalHP();
-            healthBar.Setup(currentHealth, 0, stats.GetTotalHP());
+            // ✅ GameStateManager에서 곱연산된 stats 사용
+            currentHealth = gameStats.maxHealth;
+            healthBar.Setup(currentHealth, 0, gameStats.maxHealth);
 
             expBar.Setup(currentExp, 0, nextLevelExp);
             currentLevel = 1;
@@ -116,15 +121,17 @@ namespace Vampire
             spriteAnimator.Init(characterBlueprint.walkSpriteSequence, characterBlueprint.walkFrameTime, false);
 
             movementSpeed = new UpgradeableMovementSpeed();
-            movementSpeed.Value = stats.GetTotalSpeed();
+            movementSpeed.Value = gameStats.moveSpeed;
             abilityManager.RegisterUpgradeableValue(movementSpeed, true);
             UpdateMoveSpeed();
 
             armor = new UpgradeableArmor();
-            armor.Value = characterBlueprint.armor;
+            armor.Value = (int)gameStats.defense;
             abilityManager.RegisterUpgradeableValue(armor, true);
 
             zPositioner.Init(transform);
+
+            Debug.Log($"[Character] Initialized with Stats: HP={gameStats.maxHealth}, Damage={gameStats.attackPower}");
         }
 
         public void RecalculateStats()

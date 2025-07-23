@@ -165,6 +165,10 @@ namespace Vampire
                 {
                     newItemUI.SetBackgroundColor(Color.yellow);
                 }
+                else if (upgradedEquip.tier == 4)
+                {
+                    newItemUI.SetBackgroundColor(Color.white);
+                }
                 else
                 {
                     newItemUI.SetBackgroundColor(Color.blue);

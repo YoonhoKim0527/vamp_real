@@ -15,6 +15,10 @@ namespace Vampire
         [SerializeField] private List<UpgradeItemBlueprint> allUpgrades;
         [SerializeField] private CharacterStatBlueprint playerStats;
 
+        [SerializeField] private CharacterBlueprint selectedCharacter; // ✅ 선택된 캐릭터
+
+        private CharacterStatBlueprint originalStats; // ✅ 원본 스탯 백업
+
         public bool IsInitialized { get; private set; } = false; // ✅ 초기화 완료 여부
 
         void Awake()
@@ -47,6 +51,19 @@ namespace Vampire
             Debug.Log("[GameStateManager] Loading game data...");
             LoadGame();
             IsInitialized = true; // ✅ 초기화 완료 플래그 설정
+
+            // ✅ 선택한 캐릭터를 CrossSceneData에서 받아오기
+            if (CrossSceneData.CharacterBlueprint != null)
+            {
+                selectedCharacter = CrossSceneData.CharacterBlueprint;
+                Debug.Log($"[GameStateManager] Selected Character: {selectedCharacter.name}");
+            }
+            else
+            {
+                Debug.LogWarning("[GameStateManager] No CharacterBlueprint found in CrossSceneData.");
+            }
+
+            ApplyCharacterMultipliers(); // ✅ 게임 진입 시 곱연산
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             if (currentScene == "MainMenu") // ✅ MainMenu Scene일 때만
@@ -187,6 +204,42 @@ namespace Vampire
 
             Debug.LogWarning("[GameStateManager] UpgradeManager is null. Returning empty list.");
             return new List<UpgradeStateSaveData>();
+        }
+
+        public void ApplyCharacterMultipliers()
+        {
+            if (selectedCharacter == null)
+            {
+                Debug.LogWarning("[GameStateManager] No character selected. Skipping stat multipliers.");
+                return;
+            }
+
+            // ✅ 원본 스탯 백업
+            originalStats = new CharacterStatBlueprint();
+            originalStats.CopyFrom(playerStats);
+
+            // ✅ 곱연산 적용
+            playerStats.attackPower *= selectedCharacter.baseDamage;
+            playerStats.maxHealth *= selectedCharacter.hp;
+            playerStats.moveSpeed *= selectedCharacter.movespeed;
+            playerStats.defense *= selectedCharacter.armor;
+            playerStats.healthRegen *= selectedCharacter.recovery;
+            playerStats.criticalChance *= selectedCharacter.luck;
+
+            Debug.Log("[GameStateManager] Character stat multipliers applied.");
+        }
+
+        public void ResetCharacterStats()
+        {
+            if (originalStats != null)
+            {
+                playerStats.CopyFrom(originalStats);
+                Debug.Log("[GameStateManager] Character stats reset to original values.");
+            }
+            else
+            {
+                Debug.LogWarning("[GameStateManager] Original stats backup not found. Cannot reset.");
+            }
         }
     }
 }
