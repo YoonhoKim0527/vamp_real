@@ -41,6 +41,8 @@ namespace Vampire
         public void AddCoins(int amount)
         {
             SetCoins(coins + amount);
+            if (amount > 0)
+            CoinGainTextSpawner.Instance?.ShowGain(amount);
         }
 
         public bool SpendCoins(int amount)
