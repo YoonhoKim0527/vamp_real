@@ -7,6 +7,7 @@ namespace Vampire
     public enum BoostType
     {
         Damage,
-        AttackSpeed
+        AttackSpeed,
+        Coin
     }
 }
