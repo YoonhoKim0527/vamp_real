@@ -1,75 +1,123 @@
-using System.Collections;
 using UnityEngine;
+using System;
 
 namespace Vampire
 {
-    public class ExpeditionBoss : IDamageable
+    public class ExpeditionBoss : MonoBehaviour
     {
-        [SerializeField] SpriteRenderer bossSpriteRenderer;
-        [SerializeField] SpriteAnimator bossAnimator;
-        [SerializeField] BoxCollider2D bossCollider;
-        [SerializeField] ParticleSystem deathParticles;
+        const int BarCount = 1000;
 
         float currentHp;
         float maxHp;
-        ExpeditionManager expeditionManager;
-        bool alive = true;
+        float hpPerBar;
 
-        public float HP => currentHp;
-        public float MaxHP => maxHp;
+        ExpeditionBossBlueprint blueprint;
+        ExpeditionEntityManager entityManager;
 
-        public void InitBoss(ExpeditionManager manager, ExpeditionBossBlueprint blueprint)
+        public event Action OnDeath;
+
+        bool isFrozen;
+        float freezeTimer;
+        SpriteRenderer spriteRenderer;
+        float damageAccumulated = 0f;
+
+        public void Initialize(ExpeditionBossBlueprint blueprint, ExpeditionEntityManager entityManager)
         {
-            expeditionManager = manager;
+            this.blueprint = blueprint;
+            this.entityManager = entityManager;
 
-            // HP 설정
             maxHp = blueprint.hp;
             currentHp = maxHp;
+            hpPerBar = maxHp / BarCount;
 
-            // 숨쉬는 애니메이션 적용
-            bossAnimator.Init(blueprint.breatheAnimation, blueprint.frameTime, true);
-            bossAnimator.StartAnimating(true);
+            ExpeditionUIManager.Instance?.InitBossUI(blueprint.stageName);
+            UpdateHpUI();
 
-            // 위치 초기화
-            transform.position = manager.BossSpawnPoint.position;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            var animator = GetComponent<SpriteAnimator>();
 
-            // 콜라이더 크기 맞춤 (필요시)
-            bossCollider.size = bossSpriteRenderer.bounds.size;
-
-            alive = true;
+            if (animator != null)
+            {
+                animator.Init(blueprint.breatheAnimation, blueprint.frameTime);
+                animator.StartAnimating();
+            }
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback, bool isCritical = false)
+        public void TakeDamage(float damage)
         {
-            if (!alive) return;
+            float multiplier = BoostManager.Instance != null
+                ? BoostManager.Instance.GetMultiplier(BoostType.Damage)
+                : 1f;
+
+            damage *= multiplier;
+
+            if (isFrozen)
+                damage *= 2f;
 
             currentHp -= damage;
-            expeditionManager.UpdateBossHP(currentHp, maxHp);
+            currentHp = Mathf.Max(0f, currentHp);
 
-            if (currentHp <= 0)
-                StartCoroutine(Killed());
+            UpdateHpUI();
+
+            if (entityManager != null)
+            {
+                Vector2 spawnPos = transform.position + Vector3.up * 2;
+                entityManager.SpawnDamageText(spawnPos, damage);
+            }
+            damageAccumulated += damage;
+
+            if (damageAccumulated >= 100f)
+            {
+                int coinsToAdd = Mathf.FloorToInt(damageAccumulated / 100f);
+                CoinManager.Instance.AddCoins(coinsToAdd);
+                damageAccumulated -= coinsToAdd * 100f;
+            }
+            if (currentHp <= 0f)
+                Die();
         }
 
-        public override void Knockback(Vector2 knockback)
+        void UpdateHpUI()
         {
-            // ExpeditionBoss는 넉백 없음 → 무시
+            int currentBar = Mathf.FloorToInt(currentHp / hpPerBar);
+            float currentBarFill = (currentHp % hpPerBar) / hpPerBar;
+
+            ExpeditionUIManager.Instance?.UpdateBossBar(currentBar, currentBarFill);
         }
 
-        IEnumerator Killed()
+        void Die()
         {
-            alive = false;
-
-            if (deathParticles != null)
-                deathParticles.Play();
-
-            // 애니메이션 정지
-            bossAnimator.StopAnimating();
-            bossSpriteRenderer.enabled = false;
-
-            yield return new WaitForSeconds(1f); // 죽는 연출 시간
-
-            expeditionManager.OnBossDefeated();
+            Debug.Log($"Boss defeated! Reward: {blueprint.rewardGold} Gold, {blueprint.rewardExp} EXP");
+            OnDeath?.Invoke();
             Destroy(gameObject);
+        }
+
+        public void Freeze(float duration)
+        {
+            if (isFrozen) return;
+
+            isFrozen = true;
+            freezeTimer = duration;
+
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponent<SpriteRenderer>();
+
+            spriteRenderer.color = Color.cyan;
+        }
+
+        void Update()
+        {
+            if (isFrozen)
+            {
+                freezeTimer -= Time.deltaTime;
+                if (freezeTimer <= 0f)
+                    Unfreeze();
+            }
+        }
+
+        void Unfreeze()
+        {
+            isFrozen = false;
+            spriteRenderer.color = Color.white;
         }
     }
 }

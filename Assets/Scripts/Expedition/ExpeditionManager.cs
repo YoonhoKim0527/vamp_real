@@ -1,66 +1,170 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Vampire
 {
     public class ExpeditionManager : MonoBehaviour
     {
-        [Header("Setup")]
-        [SerializeField] Transform fighterSpawnParent;
-        [SerializeField] Transform characterParent;
-        [SerializeField] AbilityManager abilityManager;
-        [SerializeField] EntityManager entityManager;
-        [SerializeField] StatsManager statsManager; // ✅ 추가됨
+        [Header("Characters")]
+        [SerializeField] CharacterBlueprint[] selectedCharacters;
+        [SerializeField] Transform[] characterSpawnPoints;
 
-        List<Transform> spawnPoints = new();
-        List<Character> fighterCharacters = new();
+        [Header("Boss Settings")]
+        [SerializeField] ExpeditionBossBlueprint[] bossBlueprints;
+        [SerializeField] GameObject bossPrefab;
         [SerializeField] Transform bossSpawnPoint;
-        public Transform BossSpawnPoint => bossSpawnPoint;
 
-        public void UpdateBossHP(float currentHp, float maxHp)
-        {
-            Debug.Log($"[Boss HP] {currentHp} / {maxHp}");
-        }
+        ExpeditionBoss currentBoss;
+        int currentBossIndex = 0;
 
-        public void OnBossDefeated()
-        {
-            Debug.Log("[Expedition] Boss defeated!");
-        }
-
-        void Awake()
-        {
-            foreach (Transform child in fighterSpawnParent)
-                spawnPoints.Add(child);
-
-            foreach (Transform child in characterParent)
-            {
-                Character fighter = child.GetComponent<Character>();
-                if (fighter != null)
-                    fighterCharacters.Add(fighter);
-            }
-        }
+        List<ExpeditionCharacter> spawnedCharacters = new List<ExpeditionCharacter>();
+        [SerializeField] ExpeditionEntityManager entityManager;
 
         void Start()
         {
-            SetupExpeditionFighters();
+            SpawnBoss();
+            SpawnCharacters(currentBoss.transform);
         }
 
-        void SetupExpeditionFighters()
+        void SpawnCharacters(Transform bossTransform)
         {
-            var selectedBlueprints = CrossSceneData.ExpeditionCharacters;
-
-            for (int i = 0; i < fighterCharacters.Count && i < spawnPoints.Count && i < selectedBlueprints.Count; i++)
+            for (int i = 0; i < selectedCharacters.Length && i < characterSpawnPoints.Length; i++)
             {
-                Character fighter = fighterCharacters[i];
-                Transform spawn = spawnPoints[i];
-                CharacterBlueprint blueprint = selectedBlueprints[i];
+                var blueprint = selectedCharacters[i];
+                if (blueprint == null) continue;
 
-                fighter.transform.position = spawn.position;
+                GameObject go = new GameObject($"ExpeditionChar_{i}_{blueprint.name}");
+                go.transform.position = characterSpawnPoints[i].position;
 
-                // ✅ statsManager까지 포함해서 Init 호출
-                //fighter.SetBlueprint(blueprint);
-                fighter.Init(entityManager, abilityManager, statsManager);
+                if (i % 2 == 1)
+                {
+                    var scale = go.transform.localScale;
+                    scale.x = -1;
+                    go.transform.localScale = scale;
+                }
+
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sprite = blueprint.walkSpriteSequence.Length > 0 ? blueprint.walkSpriteSequence[0] : null;
+
+                var animator = go.AddComponent<SpriteAnimator>();
+                animator.Init(blueprint.walkSpriteSequence, blueprint.walkFrameTime);
+                animator.StartAnimating();
+
+                var character = go.AddComponent<ExpeditionCharacter>();
+                character.Initialize(blueprint, bossTransform);
+                spawnedCharacters.Add(character); // ✅ 저장
             }
         }
+
+        void SpawnBoss()
+        {
+            if (currentBossIndex >= bossBlueprints.Length)
+            {
+                Debug.Log("🎉 모든 보스를 처치했습니다! 게임 클리어!");
+                return;
+            }
+
+            var blueprint = bossBlueprints[currentBossIndex];
+            var bossGO = Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
+            currentBoss = bossGO.GetComponent<ExpeditionBoss>();
+            currentBoss.Initialize(blueprint, entityManager);
+            currentBoss.OnDeath += HandleBossDeath;
+
+            var tapDamage = FindObjectOfType<UITapDamage>();
+            if (tapDamage != null)
+            {
+                tapDamage.SetBoss(currentBoss);
+            }
+
+            currentBossIndex++;
+        }
+        void HandleBossDeath()
+        {
+            Debug.Log("☠️ 보스 사망 → 다음 보스 생성");
+
+            // 🔥 현재 있는 모든 ExpeditionProjectile 제거
+            foreach (var proj in GameObject.FindObjectsOfType<ExpeditionProjectile>())
+            {
+                Destroy(proj.gameObject);
+            }
+
+            SpawnBoss();
+
+            if (currentBoss != null)
+            {
+                foreach (var character in spawnedCharacters)
+                {
+                    character.SetBoss(currentBoss.transform);
+                }
+            }
+        }
+        public bool TrySelectCharacter(CharacterBlueprint blueprint)
+        {
+            for (int i = 0; i < selectedCharacters.Length; i++)
+            {
+                if (selectedCharacters[i] == null)
+                {
+                    selectedCharacters[i] = blueprint;
+                    SpawnCharacterAt(i, blueprint);
+                    return true;
+                }
+            }
+            Debug.Log("❗ 최대 6마리까지만 선택할 수 있습니다.");
+            return false;
+        }
+
+        public void RemoveSelectedCharacter(CharacterBlueprint blueprint)
+        {
+            for (int i = 0; i < selectedCharacters.Length; i++)
+            {
+                if (selectedCharacters[i] == blueprint)
+                {
+                    selectedCharacters[i] = null;
+                    var go = GameObject.Find($"ExpeditionChar_{i}_{blueprint.name}");
+                    if (go) Destroy(go);
+
+                    return;
+                }
+            }
+        }
+
+        public bool IsCharacterSelected(CharacterBlueprint blueprint)
+        {
+            foreach (var b in selectedCharacters)
+            {
+                if (b == blueprint) return true;
+            }
+            return false;
+        }
+        void SpawnCharacterAt(int index, CharacterBlueprint blueprint)
+        {
+            if (index >= characterSpawnPoints.Length) return;
+
+            Transform spawnPoint = characterSpawnPoints[index];
+
+            GameObject go = new GameObject($"ExpeditionChar_{index}_{blueprint.name}");
+            go.transform.position = spawnPoint.position;
+
+            if (index % 2 == 1)
+            {
+                var scale = go.transform.localScale;
+                scale.x = -1;
+                go.transform.localScale = scale;
+            }
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = blueprint.walkSpriteSequence.Length > 0 ? blueprint.walkSpriteSequence[0] : null;
+
+            var animator = go.AddComponent<SpriteAnimator>();
+            animator.Init(blueprint.walkSpriteSequence, blueprint.walkFrameTime);
+            animator.StartAnimating();
+
+            var character = go.AddComponent<ExpeditionCharacter>();
+            character.Initialize(blueprint, currentBoss?.transform);
+            spawnedCharacters.Add(character);
+
+            // 필요한 경우 spawnedCharacters에 저장
+        }
     }
+    
 }

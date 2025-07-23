@@ -1,3 +1,7 @@
 <projectSettings>
   <projectSetting name="Google.VersionHandler.VerboseLoggingEnabled" value="False" />
+<<<<<<< HEAD
+=======
+  <projectSetting name="GooglePlayServices.PromptBeforeAutoResolution" value="False" />
+>>>>>>> c7a2835b780cc4eea1fc86d8590829b1fd1aa051
 </projectSettings>

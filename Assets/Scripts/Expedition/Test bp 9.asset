@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
+  m_Name: Test bp 9
+  m_EditorClassIdentifier: 
+  name: asd
+  owned: 1
+  cost: 999
+  baseDamage: 100
+  hp: 0
+  recovery: 0
+  armor: 0
+  movespeed: 0
+  luck: 0
+  acceleration: 0
+  walkSpriteSequence:
+  - {fileID: 708233302, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: 1274901905, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  - {fileID: 1713860565, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
+  walkFrameTime: 0.1
+  startingAbilities:
+  - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
+  farmProductionPerSecond: 2
+  abilityPrefab: {fileID: 4536051839462506652, guid: 3a7fd4eec9277b046a9647be4539afa7, type: 3}
+  abilityClassName: Vampire.ExpeditionPoisonAbility
+  expeditionAbilityInterval: 1

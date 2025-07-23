@@ -19,6 +19,10 @@ namespace Vampire
         public float walkFrameTime;
         public GameObject[] startingAbilities;
         public float farmProductionPerSecond = 2f;
+        public GameObject abilityPrefab;
+        public string abilityClassName;
+        public float expeditionAbilityInterval = 1.0f;
+
 
         public float LevelToExpIncrease(int level)
         {
