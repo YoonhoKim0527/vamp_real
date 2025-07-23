@@ -91,7 +91,6 @@ namespace Vampire
                 if (Random.value < playerStats.criticalChance)
                 {
                     totalDamage *= (1 + playerStats.criticalDamage);
-                    Debug.Log("💥 [RadialBlastAbility] Critical hit!");
                     isCritical = true;
                 }
 

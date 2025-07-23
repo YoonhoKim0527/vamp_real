@@ -52,7 +52,6 @@ namespace Vampire
             if (isCritical)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
-                Debug.Log("🔫 [GunAbility] Critical hit!");
             }
 
             float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);

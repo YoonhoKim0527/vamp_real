@@ -56,7 +56,6 @@ namespace Vampire
                 {
                     totalDamage *= (1 + playerStats.criticalDamage);
                     isCritical = true;
-                    Debug.Log("🔥 [MolotovAbility] Critical hit!");
                 }
 
                 MolotovThrowable throwable = (MolotovThrowable)entityManager.SpawnThrowable(

@@ -44,7 +44,6 @@ namespace Vampire
                         if (Random.value < playerStats.criticalChance)
                         {
                             totalDamage *= (1 + playerStats.criticalDamage);
-                            Debug.Log("☠️ [PoisonCloud] Critical hit!");
                         }
 
                         d.TakeDamage(totalDamage, Vector2.zero);

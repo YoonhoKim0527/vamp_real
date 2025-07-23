@@ -39,7 +39,6 @@ namespace Vampire
                         if (Random.value < playerStats.criticalChance)
                         {
                             totalDamage *= (1 + playerStats.criticalDamage);
-                            Debug.Log("🗡️ FixedDirectionStabAbility: Critical hit!");
                             isCritical = true;
                         }
 

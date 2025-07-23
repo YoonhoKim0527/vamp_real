@@ -120,12 +120,10 @@ namespace Vampire
                         if (Random.value < playerStats.criticalChance)
                         {
                             damageThisFrame *= (1 + playerStats.criticalDamage);
-                            Debug.Log("[BazookaGun] 💥 Critical Hit!");
                             isCritical = true;
                         }
 
                         monster.TakeDamage(damageThisFrame, Vector2.zero, isCritical);
-                        Debug.Log($"[BazookaGun] 🐘 {monster.name}에게 {damageThisFrame:F1} 데미지 적용");
                     }
                 }
 

@@ -90,7 +90,6 @@ namespace Vampire
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
                 isCritical = true;
-                Debug.Log("🪃 BoomerangAbility: Critical Hit!");
             }
 
             Boomerang boomerang = entityManager.SpawnBoomerang(
@@ -129,7 +128,6 @@ namespace Vampire
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
                 isCritical = true;
-                Debug.Log("🪃 BoomerangAbility: Critical Hit (Awakened)!");
             }
 
             Boomerang boomerang = entityManager.SpawnBoomerang(

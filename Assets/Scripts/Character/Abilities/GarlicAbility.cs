@@ -97,7 +97,6 @@ namespace Vampire
                     if (isCritical)
                     {
                         totalDamage *= (1 + playerStats.criticalDamage);
-                        Debug.Log("[GarlicAbility] Critical hit!");
                     }
 
                     Vector2 knockbackDirection = (damageable.transform.position - transform.position).normalized;

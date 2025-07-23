@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c67b141f5f1c024da4467858bcbd1a4, type: 3}
+  m_Name: NewEquipmentBlueprint
+  m_EditorClassIdentifier: 
+  equipments:
+  - name: carrot wand
+    icon: {fileID: 21300000, guid: 08c5fdac87eec6443bac5eccfbf3a9bf, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 1

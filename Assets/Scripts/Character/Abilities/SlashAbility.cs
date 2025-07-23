@@ -73,7 +73,6 @@ namespace Vampire
                             {
                                 totalDamage *= (1 + playerStats.criticalDamage);
                                 isCritical = true;
-                                Debug.Log("💥 [SlashAbility] Critical hit!");
                             }
 
                             // ✅ 넉백 계산

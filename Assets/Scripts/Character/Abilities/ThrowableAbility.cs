@@ -57,7 +57,6 @@ namespace Vampire
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
                 isCritical = true;
-                Debug.Log("💥 [ThrowableAbility] Critical hit!");
             }
 
             // ✅ 방어력 기반 넉백 강화

@@ -66,11 +66,6 @@ namespace Vampire
                 {
                     float totalDamage = damage; // ✅ 이미 Ability 쪽에서 계산된 값 사용
 
-                    if (isCritical)
-                    {
-                        Debug.Log("💥 [ShurikenProjectile] Critical hit (from Ability)!");
-                    }
-
                     Vector2 knockbackDir = (currentTarget.transform.position - player.CenterTransform.position).normalized;
                     float effectiveKnockback = knockback * (1 + playerStats.defense * 0.1f);
 

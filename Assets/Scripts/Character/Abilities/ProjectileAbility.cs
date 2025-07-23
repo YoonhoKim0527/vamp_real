@@ -52,7 +52,6 @@ namespace Vampire
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
                 isCritical = true;
-                Debug.Log("🎯 [ProjectileAbility] Critical hit!");
             }
 
             // ✅ 넉백에 defense 보정
