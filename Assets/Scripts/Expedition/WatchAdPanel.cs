@@ -21,5 +21,12 @@ namespace Vampire
                 BoostManager.Instance.ActivateBoost(BoostType.AttackSpeed, 2f, 10f);
             });
         }
+        public void OnClick_CoinBoostOnly()
+        {
+            AdsManager.Instance.ShowRewardAd(() =>
+            {
+                BoostManager.Instance.ActivateBoost(BoostType.Coin, 2f, 10f); // 10초 동안 코인 2배
+            });
+        }
     }
 }
