@@ -43,7 +43,7 @@ namespace Vampire
             entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
             abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, playerStats);
             abilitySelectionDialog.Init(abilityManager, entityManager, playerCharacter);
-            playerCharacter.Init(entityManager, abilityManager, statsManager);
+            playerCharacter.Init(entityManager, abilityManager, statsManager, playerStats);
             playerCharacter.OnDeath.AddListener(GameOver);
 
             entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
@@ -148,6 +148,9 @@ namespace Vampire
             var gameStateManager = FindObjectOfType<GameStateManager>();
             gameStateManager?.SaveGame();
 
+            // ✅ 스탯 초기화
+            gameStateManager?.ResetCharacterStats();
+
             gameOverDialog.Open(false, statsManager);
         }
 
@@ -160,6 +163,9 @@ namespace Vampire
 
             var gameStateManager = FindObjectOfType<GameStateManager>();
             gameStateManager?.SaveGame();
+
+            // ✅ 스탯 초기화
+            gameStateManager?.ResetCharacterStats();
 
             gameOverDialog.Open(true, statsManager);
         }
