@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageName: Boss 1
   bossPortrait: {fileID: -1870314288, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
-  hp: 777
+  hp: 1e+11
   breatheAnimation:
   - {fileID: 993305064, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
   - {fileID: 1741101967, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
