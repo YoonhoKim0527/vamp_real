@@ -15,13 +15,13 @@ MonoBehaviour:
   name: frog
   owned: 1
   cost: 999
-  baseDamage: 2
-  hp: 50
-  recovery: 0
-  armor: 100
-  movespeed: 2
+  baseDamage: 1
+  hp: 10
+  recovery: 1
+  armor: 1
+  movespeed: 1
   luck: 1
-  acceleration: 50
+  acceleration: 5
   walkSpriteSequence:
   - {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   - {fileID: 993851342, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
@@ -29,5 +29,8 @@ MonoBehaviour:
   - {fileID: -1209027723, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
+  - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
   farmProductionPerSecond: 2
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1

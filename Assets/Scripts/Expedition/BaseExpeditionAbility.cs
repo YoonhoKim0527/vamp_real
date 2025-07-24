@@ -9,6 +9,26 @@ namespace Vampire
         protected float baseDamage = 1f;
         protected Transform boss;
 
+        // ✅ GameStateManager 캐싱
+        protected GameStateManager gameStateManager;
+
+        protected virtual void Start()
+        {
+            // ✅ GameStateManager 찾고 캐싱
+            gameStateManager = FindObjectOfType<GameStateManager>();
+            if (gameStateManager != null)
+            {
+                // ✅ 곱연산 끝난 공격력 가져오기
+                float updatedDamage = gameStateManager.PlayerStats.attackPower;
+                SetDamage(updatedDamage);
+                Debug.Log($"[BaseExpeditionAbility] Damage set to {baseDamage}");
+            }
+            else
+            {
+                Debug.LogWarning("[BaseExpeditionAbility] GameStateManager not found!");
+            }
+        }
+
         public virtual void SetDamage(float damage)
         {
             baseDamage = damage;
@@ -18,6 +38,7 @@ namespace Vampire
         {
             boss = bossTransform;
         }
+
         public void SetFireInterval(float interval)
         {
             fireInterval = interval;

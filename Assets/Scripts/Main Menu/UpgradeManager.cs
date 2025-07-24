@@ -40,6 +40,8 @@ namespace Vampire
         [SerializeField] private int[] unlockRequirements = new int[8];            // 해금 조건 (공격력 레벨)
         [SerializeField] private GameObject unlockParticlePrefab;                  // 🔥 해금 파티클 Prefab
 
+        [SerializeField] private BaseExpeditionAbility BaseExpeditionAbility;
+
         private List<UpgradeStateSaveData> upgradeStates = new List<UpgradeStateSaveData>();
 
         private void Start()

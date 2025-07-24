@@ -15,12 +15,12 @@ MonoBehaviour:
   name: Test
   owned: 0
   cost: 799
-  baseDamage: 9
-  hp: 110
-  recovery: 0
-  armor: 0
-  movespeed: 1.15
-  luck: 2
+  baseDamage: 1
+  hp: 1
+  recovery: 1
+  armor: 1
+  movespeed: 1
+  luck: 1
   acceleration: 50
   walkSpriteSequence:
   - {fileID: -1711853846, guid: 8f2f1cdf6848a4a8495353d4eba4ecea, type: 3}
@@ -33,3 +33,6 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 1f4699d7a46c44170930119aed6fe806, type: 3}
   - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
   farmProductionPerSecond: 2
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1

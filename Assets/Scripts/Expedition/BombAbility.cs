@@ -20,6 +20,7 @@ namespace Vampire
             GameObject bombGO = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
 
             var bomb = bombGO.GetComponent<BombProjectile>();
+            
             if (bomb != null)
                 bomb.Launch(targetPos, baseDamage);
             else
