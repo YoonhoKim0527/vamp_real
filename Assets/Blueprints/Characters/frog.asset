@@ -21,7 +21,7 @@ MonoBehaviour:
   armor: 1
   movespeed: 1
   luck: 1
-  acceleration: 5
+  acceleration: 20
   walkSpriteSequence:
   - {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   - {fileID: 993851342, guid: 655d54593c380bc45b6fed69f682493e, type: 3}

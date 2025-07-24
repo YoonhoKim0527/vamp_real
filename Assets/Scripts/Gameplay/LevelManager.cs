@@ -173,13 +173,34 @@ namespace Vampire
         public void Restart()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            var gsm = FindObjectOfType<GameStateManager>();
+            if (gsm != null)
+            {
+                var selected = CrossSceneData.CharacterBlueprint;
+                if (selected != null)
+                {
+                    gsm.SetSelectedCharacter(selected);      // ✅ 선택 캐릭터 다시 설정
+                    gsm.ApplyCharacterMultipliers();         // ✅ 곱연산 다시 적용
+                    Debug.Log("[LevelManager] Restart - 캐릭터 곱연산 재적용");
+                }
+            }
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // GameScene 재시작
         }
 
         public void ReturnToMainMenu()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(0);
+
+            var gsm = FindObjectOfType<GameStateManager>();
+            if (gsm != null)
+            {
+                gsm.ResetCharacterStats(); // ✅ 곱연산 해제하고 업그레이드 상태로 복귀
+                Debug.Log("[LevelManager] ReturnToMainMenu - 스탯 초기화");
+            }
+
+            SceneManager.LoadScene(0); // MainMenu
         }
     }
 }

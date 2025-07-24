@@ -45,7 +45,9 @@ namespace Vampire
             var gsm = FindObjectOfType<GameStateManager>();
             if (gsm != null)
             {
-                gsm.SetSelectedCharacter(blueprint);           // 캐릭터 설정
+                gsm.LoadGame(); // ✅ 업그레이드 반영된 playerStats 불러오기
+
+                gsm.SetSelectedCharacter(blueprint);           // ✅ 캐릭터 설정
                 gsm.ApplyCharacterMultipliers();               // ✅ 곱연산 적용
                 Debug.Log($"[CharacterSelector] 캐릭터 설정 + 곱연산 적용: {blueprint.name}");
             }

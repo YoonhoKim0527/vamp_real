@@ -15,7 +15,7 @@ MonoBehaviour:
   name: hog
   owned: 1
   cost: 999
-  baseDamage: 1
+  baseDamage: 2
   hp: 1
   recovery: 1
   armor: 1
