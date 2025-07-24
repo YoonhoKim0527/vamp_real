@@ -15,10 +15,10 @@ MonoBehaviour:
   name: Test
   owned: 0
   cost: 999
-  baseDamage: 8
-  hp: 50
-  recovery: 0
-  armor: 0
+  baseDamage: 1
+  hp: 1
+  recovery: 1
+  armor: 1
   movespeed: 1
   luck: 1
   acceleration: 50
@@ -34,3 +34,6 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 54bc67e1508814be78d516b6fe8d264e, type: 3}
   - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
   farmProductionPerSecond: 0
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1

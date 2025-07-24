@@ -15,11 +15,11 @@ MonoBehaviour:
   name: Quokka
   owned: 1
   cost: 999
-  baseDamage: 6
-  hp: 1000
-  recovery: 0
-  armor: 100
-  movespeed: 2
+  baseDamage: 1
+  hp: 1
+  recovery: 1
+  armor: 1
+  movespeed: 1
   luck: 1
   acceleration: 50
   walkSpriteSequence:
@@ -31,3 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
   farmProductionPerSecond: 2
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1

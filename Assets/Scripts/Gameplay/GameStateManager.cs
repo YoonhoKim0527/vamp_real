@@ -21,8 +21,19 @@ namespace Vampire
 
         public bool IsInitialized { get; private set; } = false; // ✅ 초기화 완료 여부
 
+        public float TotalDamage => playerStats.attackPower;
+
         void Awake()
         {
+            // ✅ 싱글턴처럼 처리 (중복 생성 방지)
+            if (FindObjectsOfType<GameStateManager>().Length > 1)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            DontDestroyOnLoad(this);
+
             if (saveManager == null)
                 saveManager = GetComponent<SaveManager>();
 
@@ -45,6 +56,7 @@ namespace Vampire
                 }
             }
         }
+
 
         void Start()
         {

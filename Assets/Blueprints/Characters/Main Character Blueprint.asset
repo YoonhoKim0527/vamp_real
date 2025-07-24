@@ -15,11 +15,11 @@ MonoBehaviour:
   name: Blue
   owned: 1
   cost: 999
-  baseDamage: 2
-  hp: 100
-  recovery: 0
-  armor: 0
-  movespeed: 1.15
+  baseDamage: 1
+  hp: 1
+  recovery: 1
+  armor: 1
+  movespeed: 1
   luck: 1
   acceleration: 50
   walkSpriteSequence:
@@ -31,3 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 6bf0c7ded38f2427f8fbf34693543d88, type: 3}
   farmProductionPerSecond: 0
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1

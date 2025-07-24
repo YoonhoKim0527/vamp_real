@@ -15,11 +15,11 @@ MonoBehaviour:
   name: what
   owned: 1
   cost: 999
-  baseDamage: 4
-  hp: 1000
-  recovery: 0
-  armor: 100
-  movespeed: 2
+  baseDamage: 1
+  hp: 1
+  recovery: 1
+  armor: 1
+  movespeed: 1
   luck: 1
   acceleration: 32.65
   walkSpriteSequence:
@@ -31,3 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 8208614024823823667, guid: caab771513d26ec4e96a8a1648c6183e, type: 3}
   farmProductionPerSecond: 0
+  abilityPrefab: {fileID: 0}
+  abilityClassName: 
+  expeditionAbilityInterval: 1
