@@ -42,13 +42,25 @@ namespace Vampire
         {
             CrossSceneData.CharacterBlueprint = blueprint;
 
+            var gsm = FindObjectOfType<GameStateManager>();
+            if (gsm != null)
+            {
+                gsm.SetSelectedCharacter(blueprint);           // 캐릭터 설정
+                gsm.ApplyCharacterMultipliers();               // ✅ 곱연산 적용
+                Debug.Log($"[CharacterSelector] 캐릭터 설정 + 곱연산 적용: {blueprint.name}");
+            }
+            else
+            {
+                Debug.LogWarning("[CharacterSelector] GameStateManager 없음.");
+            }
+
             if (CrossSceneData.LevelBlueprint == null)
             {
-                Debug.LogError("LevelBlueprint is null!         õ     ʾҽ  ϴ .");
+                Debug.LogError("LevelBlueprint is null!");
                 return;
             }
 
-            SceneManager.LoadScene(1); //              ̵ 
+            SceneManager.LoadScene(1); // GameScene
         }
 
     }

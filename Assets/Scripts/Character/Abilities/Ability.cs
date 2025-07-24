@@ -45,11 +45,6 @@ namespace Vampire
             this.entityManager = entityManager;
             this.playerCharacter = playerCharacter;
             this.playerStats = playerStats; // ✅ 주입
-            Debug.Log($"[Ability] {this.GetType().Name} initialized with PlayerStats: Attack={playerStats.attackPower}, Projectiles={playerStats.extraProjectiles}");
-
-
-            Debug.Log($"[Ability] Initialized with PlayerStats: Attack={playerStats.attackPower}, ExtraProjectiles={playerStats.extraProjectiles}");
-
             // Register upgradeable fields
             upgradeableValues = this.GetType()
                 .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)

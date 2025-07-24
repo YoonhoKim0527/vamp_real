@@ -39,8 +39,6 @@ namespace Vampire
             this.playerCharacter = playerCharacter;
             this.playerStats = playerStats; // ✅ 주입 후 저장
 
-            Debug.Log($"[AbilityManager] Initialized with PlayerStats: Attack={playerStats.attackPower}, Projectiles={playerStats.extraProjectiles}");
-
             registeredUpgradeableValues = new FastList<IUpgradeableValue>();
             ownedAbilities = new WeightedAbilities();
 
@@ -49,7 +47,6 @@ namespace Vampire
                 Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
                 // ✅ Ability에도 PlayerStats 전달
                 ability.Init(this, entityManager, playerCharacter, this.playerStats);
-                Debug.Log($"[AbilityManager] Injected PlayerStats into {ability.name}");
                 ability.Select();
                 ownedAbilities.Add(ability);
             }
@@ -62,7 +59,6 @@ namespace Vampire
                 Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
                 // ✅ Ability에도 PlayerStats 전달
                 ability.Init(this, entityManager, playerCharacter, this.playerStats);
-                Debug.Log($"[AbilityManager] Injected PlayerStats into {ability.name}");
                 newAbilities.Add(ability);
             }
         }
