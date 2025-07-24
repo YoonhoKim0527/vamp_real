@@ -15,13 +15,13 @@ MonoBehaviour:
   name: hog
   owned: 1
   cost: 999
-  baseDamage: 1
+  baseDamage: 10
   hp: 1
   recovery: 1
   armor: 1
   movespeed: 1
   luck: 1
-  acceleration: 50
+  acceleration: 1
   walkSpriteSequence:
   - {fileID: -1490207750, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}
   - {fileID: 453917030, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}

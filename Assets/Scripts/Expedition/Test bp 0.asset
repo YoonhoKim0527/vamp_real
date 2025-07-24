@@ -15,7 +15,7 @@ MonoBehaviour:
   name: asd
   owned: 1
   cost: 999
-  baseDamage: 50
+  baseDamage: 3
   hp: 0
   recovery: 0
   armor: 0
