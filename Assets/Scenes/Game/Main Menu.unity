@@ -15212,7 +15212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd00adbbc5d277499437e45193b3135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveManager: {fileID: 0}
+  saveManager: {fileID: 1818370577}
   upgradeManager: {fileID: 1142280809}
   allItems:
   - {fileID: 11400000, guid: 8e032e5a4103f6a40b9c39a660b80acf, type: 2}

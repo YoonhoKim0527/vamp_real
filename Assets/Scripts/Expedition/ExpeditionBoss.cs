@@ -15,7 +15,7 @@ namespace Vampire
         ExpeditionEntityManager entityManager;
 
         public event Action OnDeath;
-
+        public float HP => currentHp;
         bool isFrozen;
         float freezeTimer;
         SpriteRenderer spriteRenderer;
@@ -29,6 +29,7 @@ namespace Vampire
             maxHp = blueprint.hp;
             currentHp = maxHp;
             hpPerBar = maxHp / BarCount;
+            
 
             ExpeditionUIManager.Instance?.InitBossUI(blueprint.stageName);
             UpdateHpUI();
@@ -41,6 +42,11 @@ namespace Vampire
                 animator.Init(blueprint.breatheAnimation, blueprint.frameTime);
                 animator.StartAnimating();
             }
+        }
+        public void SetHP(float hp)
+        {
+            currentHp = Mathf.Clamp(hp, 0f, maxHp);
+            UpdateHpUI();
         }
 
         public void TakeDamage(float damage)
@@ -121,3 +127,4 @@ namespace Vampire
         }
     }
 }
+  

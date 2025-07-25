@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
   m_Name: Test bp 6
   m_EditorClassIdentifier: 
-  name: asd
+  name: 6
   owned: 1
   cost: 999
   baseDamage: 100

@@ -31,6 +31,7 @@ namespace Vampire
 
             UpdateBoostUI();
         }
+        public Dictionary<BoostType, float> RemainingTimes => remainingTimes;
 
         public float GetMultiplier(BoostType type)
         {

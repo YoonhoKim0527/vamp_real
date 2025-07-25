@@ -7,7 +7,14 @@ namespace Vampire
     {
         public void OnClickBackToMenu()
         {
-            SceneManager.LoadScene(0); // 메인메뉴 씬 이름이 정확히 일치해야 함
+            var expeditionManager = FindObjectOfType<ExpeditionManager>();
+            if (expeditionManager != null)
+            {
+                Debug.Log("🏠 메인메뉴 이동 전 저장 실행");
+                expeditionManager.SendMessage("SaveExpeditionData");
+            }
+
+            SceneManager.LoadScene(0); // 또는 정확한 메인메뉴 씬 이름 사용
         }
     }
 }

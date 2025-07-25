@@ -64,7 +64,7 @@ namespace Vampire
             // ❌ selectedCharacter 설정 제거
             // ❌ ApplyCharacterMultipliers() 호출 제거
 
-            if (currentScene == "MainMenu")
+            if (currentScene == "Main Menu")
             {
                 InitShopAndUpgradeUI();
             }
@@ -93,7 +93,7 @@ namespace Vampire
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-            if (currentScene == "MainMenu")
+            if (currentScene == "Main Menu")
             {
                 RestoreItems(data);
                 RestoreUpgrades(data);
