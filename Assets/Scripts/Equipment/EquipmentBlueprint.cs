@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 namespace Vampire
 {
     [CreateAssetMenu(fileName = "NewEquipmentBlueprint", menuName = "Equipment/Blueprint")]
     public class EquipmentBlueprint : ScriptableObject
     {
-        public Equipment[] equipments; // 장비 데이터 배열
+        public List<Equipment> equipments; // ✅ 배열 → 리스트로 변경
     }
 }

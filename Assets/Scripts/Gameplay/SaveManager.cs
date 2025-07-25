@@ -14,12 +14,21 @@ namespace Vampire
     }
 
     [System.Serializable]
+    public class EquippedItemSaveData
+    {
+        public EquipmentType type;
+        public string equipmentName;
+        public int tier; // ✅ 고유 식별을 위한 추가
+    }
+
+    [System.Serializable]
     public class SaveData
     {
         public List<ItemSaveData> ownedItems;
         public List<UpgradeSaveData> upgradeLevels;
         public List<UpgradeStateSaveData> upgradeStates; // ✅ 새 필드
         public CharacterStatBlueprint playerStats; // ✅ 추가: 캐릭터 스탯 데이터
+        public List<EquippedItemSaveData> equippedItems;
     }
 
     [System.Serializable]
@@ -49,11 +58,24 @@ namespace Vampire
         /// <summary>
         /// 게임 데이터 저장 (아이템, 업그레이드, 캐릭터 스탯 포함)
         /// </summary>
+        /// overloading 
         public void SaveGame(
             List<ShopItemBlueprint> items,
             List<UpgradeItemBlueprint> upgrades,
             CharacterStatBlueprint playerStats,
             List<UpgradeStateSaveData> upgradeStates
+        )
+        {
+            var oldData = LoadGame();
+            SaveGame(items, upgrades, playerStats, upgradeStates, oldData.equippedItems);
+        }
+        
+        public void SaveGame(
+            List<ShopItemBlueprint> items,
+            List<UpgradeItemBlueprint> upgrades,
+            CharacterStatBlueprint playerStats,
+            List<UpgradeStateSaveData> upgradeStates,
+            List<EquippedItemSaveData> equippedItems
         )
         {
             SaveData data = new SaveData();
@@ -71,6 +93,9 @@ namespace Vampire
                     });
                 }
             }
+
+            // equiped items 저장
+            data.equippedItems = equippedItems ?? new List<EquippedItemSaveData>();
 
             // ✅ Upgrade Levels 저장
             data.upgradeLevels = new List<UpgradeSaveData>();

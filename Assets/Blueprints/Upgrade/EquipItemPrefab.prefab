@@ -252,6 +252,9 @@ MonoBehaviour:
   iconImage: {fileID: 4590570624012850912}
   glowOutline: {fileID: 5846148603284675004}
   backgroundImage: {fileID: 2225752685760128100}
+  equipButtonPrefab: {fileID: 1176009398646778706, guid: ab4c0998487d02a4dba3e85703ee34a5, type: 3}
+  defaultBackgroundSprite: {fileID: 0}
+  equippedBackgroundSprite: {fileID: 21300000, guid: 05c1da091a3527243bdfe07151093e61, type: 3}
 --- !u!1 &8914293641966522872
 GameObject:
   m_ObjectHideFlags: 0

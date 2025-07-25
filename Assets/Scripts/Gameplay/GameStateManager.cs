@@ -18,6 +18,8 @@ namespace Vampire
         private CharacterBlueprint selectedCharacter; // ✅ 씬 저장 방지 위해 SerializeField 제거
         private CharacterStatBlueprint originalStats;
 
+        [SerializeField] private EquipmentManager equipmentManager;
+
         public bool IsInitialized { get; private set; } = false;
 
         public float TotalDamage => playerStats.attackPower;
@@ -64,7 +66,7 @@ namespace Vampire
             // ❌ selectedCharacter 설정 제거
             // ❌ ApplyCharacterMultipliers() 호출 제거
 
-            if (currentScene == "MainMenu")
+            if (currentScene == "Main Menu")
             {
                 InitShopAndUpgradeUI();
             }
@@ -83,8 +85,10 @@ namespace Vampire
             if (allUpgrades == null) allUpgrades = new List<UpgradeItemBlueprint>();
 
             List<UpgradeStateSaveData> upgradeStates = upgradeManager?.GetUpgradeStates() ?? new List<UpgradeStateSaveData>();
+            var equippedItems = equipmentManager?.GetEquippedItemsForSave() ?? new List<EquippedItemSaveData>();
 
-            saveManager.SaveGame(allItems, allUpgrades, playerStats, upgradeStates);
+
+            saveManager.SaveGame(allItems, allUpgrades, playerStats, upgradeStates, equippedItems);
         }
 
         public void LoadGame()
@@ -92,12 +96,33 @@ namespace Vampire
             SaveData data = saveManager.LoadGame();
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-
-            if (currentScene == "MainMenu")
+            Debug.Log($"[GSM] current: {currentScene}");
+            if (currentScene == "Main Menu")
             {
+                Debug.Log("[GameStateManager] 122");
                 RestoreItems(data);
                 RestoreUpgrades(data);
                 upgradeManager?.RefreshAllUI();
+
+                Debug.Log("[GameStateManager] 1");
+
+                // ✅ 여기 추가
+                if (equipmentManager == null)
+                {
+                    equipmentManager = FindObjectOfType<EquipmentManager>();
+                    Debug.LogWarning("[GameStateManager] equipmentManager is null, using FindObjectOfType fallback.");
+                }
+                Debug.Log("[GameStateManager] 2");
+
+                if (equipmentManager != null && data.equippedItems != null)
+                {
+                    equipmentManager.LoadEquippedItems(data.equippedItems);
+                    Debug.Log("[GameStateManager] Loaded equipped items into EquipmentManager.");
+                }
+                else
+                {
+                    Debug.LogWarning("[GameStateManager] EquipmentManager or equippedItems missing.");
+                }
             }
 
             playerStats = data.playerStats ?? new CharacterStatBlueprint();
