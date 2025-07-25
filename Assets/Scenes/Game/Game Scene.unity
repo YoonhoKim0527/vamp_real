@@ -20910,6 +20910,7 @@ MonoBehaviour:
     criticalChance: 0
     criticalDamage: 0
     extraProjectiles: 0
+  equipmentManager: {fileID: 0}
 --- !u!4 &1921396743
 Transform:
   m_ObjectHideFlags: 0

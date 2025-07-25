@@ -13,39 +13,43 @@ MonoBehaviour:
   m_Name: NewEquipmentBlueprint
   m_EditorClassIdentifier: 
   equipments:
+  - name: banana boots
+    icon: {fileID: 21300000, guid: 28a2b833f4c87974e95eecfe5f9ad20f, type: 3}
+    tier: 3
+    type: 2
+    multiply: 1
+  - name: banana helmet
+    icon: {fileID: -1490207750, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}
+    tier: 3
+    type: 3
+    multiply: 1
+  - name: banana wand
+    icon: {fileID: 21300000, guid: 2888a2255a301d44086c71f6c24614bb, type: 3}
+    tier: 3
+    type: 0
+    multiply: 1
+  - name: banana wand
+    icon: {fileID: 21300000, guid: 2888a2255a301d44086c71f6c24614bb, type: 3}
+    tier: 3
+    type: 1
+    multiply: 1
+  - name: coconut wand
+    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
+    tier: 3
+    type: 0
+    multiply: 2
+  - name: banana accessory
+    icon: {fileID: -44017297, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
+    tier: 2
+    type: 4
+    multiply: 1
+  - name: banana armor
+    icon: {fileID: 21300000, guid: 6c631436c7358c44f96191cae45f4b99, type: 3}
+    tier: 2
+    type: 0
+    multiply: 1
   - name: carrot wand
     icon: {fileID: 21300000, guid: 08c5fdac87eec6443bac5eccfbf3a9bf, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
-  - name: coconut wand
-    icon: {fileID: 21300000, guid: 48245554a07862142834e2f0b22f2c2e, type: 3}
-    tier: 1
+    tier: 2
+    type: 0
+    multiply: 2
