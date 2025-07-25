@@ -67,6 +67,7 @@ namespace Vampire
             // ❌ ApplyCharacterMultipliers() 호출 제거
 
             if (currentScene == "Main Menu")
+            if (currentScene == "Main Menu")
             {
                 InitShopAndUpgradeUI();
             }

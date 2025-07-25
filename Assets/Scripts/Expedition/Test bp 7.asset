@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cebba9219e8740668e9101e947a97e4, type: 3}
   m_Name: Test bp 7
   m_EditorClassIdentifier: 
-  name: asd
+  name: 7
   owned: 1
   cost: 999
   baseDamage: 100
@@ -32,3 +32,4 @@ MonoBehaviour:
   farmProductionPerSecond: 2
   abilityPrefab: {fileID: 462643391439929629, guid: 3b9fc9d9bad7a7e408da2cc05e6ebe54, type: 3}
   abilityClassName: Vampire.TornadoAbility
+  expeditionAbilityInterval: 1

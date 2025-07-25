@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63178ebe28770434eb77c9b3f10ce9fe, type: 3}
-  m_Name: New Expedition Boss 3
+  m_Name: EXP B2
   m_EditorClassIdentifier: 
   stageName: Boss 2
   bossPortrait: {fileID: -1490207750, guid: 3aed2838bf939b2459397fa10e8de57f, type: 3}

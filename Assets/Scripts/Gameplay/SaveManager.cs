@@ -28,6 +28,7 @@ namespace Vampire
         public List<UpgradeSaveData> upgradeLevels;
         public List<UpgradeStateSaveData> upgradeStates; // ✅ 새 필드
         public CharacterStatBlueprint playerStats; // ✅ 추가: 캐릭터 스탯 데이터
+        public ExpeditionSaveData expeditionData; 
         public List<EquippedItemSaveData> equippedItems;
     }
 
@@ -44,6 +45,33 @@ namespace Vampire
         public string upgradeName;
         public int level;
     }
+    [System.Serializable]
+    public class ExpeditionSaveData
+    {
+        public int bossIndex;
+        public float bossCurrentHP;
+        public string bossBlueprintName;
+
+        [System.Serializable]
+        public class CharacterData
+        {
+            public string characterName;
+            public Vector2 position;
+            public bool facingLeft;
+        }
+
+        public List<CharacterData> characters = new();
+        public List<BoostSaveData> activeBoosts = new();
+        public List<string> selectedCharacterNames = new();
+    }
+
+    [System.Serializable]
+    public class BoostSaveData
+    {
+        public BoostType type;
+        public float remainingTime;
+    }
+
 
     public class SaveManager : MonoBehaviour
     {
@@ -169,6 +197,68 @@ namespace Vampire
                 Debug.LogWarning("[SaveManager] No player stats found in save. Initializing defaults.");
                 return new CharacterStatBlueprint(); // 기본값 반환
             }
+        }
+        public void SaveExpeditionData
+        (
+            int bossIndex,
+            float bossHP,
+            string bossName,
+            List<GameObject> characterObjects,
+            List<CharacterBlueprint> blueprints
+        )
+        {
+            ExpeditionSaveData data = new();
+            data.bossIndex = bossIndex;
+            data.bossCurrentHP = bossHP;
+            data.bossBlueprintName = bossName;
+
+            // 캐릭터 저장
+            foreach (var obj in characterObjects)
+            {
+                var character = obj.GetComponent<ExpeditionCharacter>();
+                if (character == null) continue;
+
+                string blueprintName = character.GetBlueprintName();
+                bool facingLeft = obj.transform.localScale.x < 0;
+
+                data.characters.Add(new ExpeditionSaveData.CharacterData
+                {
+                    characterName = blueprintName,
+                    position = obj.transform.position,
+                    facingLeft = facingLeft
+                });
+            }
+            // ✅ selectedCharacters 순서대로 이름 저장
+            foreach (var bp in blueprints)
+            {
+                if (bp != null)
+                    data.selectedCharacterNames.Add(bp.name);
+                else
+                    data.selectedCharacterNames.Add(""); // 빈 슬롯
+            }
+
+            // Boost 저장
+            foreach (var kv in BoostManager.Instance.RemainingTimes)
+            {
+                data.activeBoosts.Add(new BoostSaveData
+                {
+                    type = kv.Key,
+                    remainingTime = kv.Value
+                });
+            }
+
+            // 저장
+            SaveData fullData = LoadGame();
+            fullData.expeditionData = data;
+            string json = JsonUtility.ToJson(fullData, true);
+            File.WriteAllText(savePath, json);
+            Debug.Log("[SaveManager] Expedition data saved.");
+        }
+
+        public ExpeditionSaveData LoadExpeditionData()
+        {
+            SaveData data = LoadGame();
+            return data.expeditionData ?? new ExpeditionSaveData();
         }
     }
 }

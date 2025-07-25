@@ -60,5 +60,9 @@ namespace Vampire
             var setBoss = abilityInstance.GetType().GetMethod("SetBoss", BindingFlags.Public | BindingFlags.Instance);
             setBoss?.Invoke(abilityInstance, new object[] { newBoss });
         }
+        public string GetBlueprintName()
+        {
+            return blueprint != null ? blueprint.name : gameObject.name;
+        }
     }
 }
