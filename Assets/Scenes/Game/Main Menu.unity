@@ -12099,72 +12099,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-<<<<<<< HEAD
-=======
---- !u!1 &1333671528
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1333671530}
-  - component: {fileID: 1333671529}
-  m_Layer: 0
-  m_Name: Character
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1333671529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333671528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41c6426ee23684b4694c5c60558c97a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  centerTransform: {fileID: 1333671530}
-  lookIndicator: {fileID: 0}
-  lookIndicatorRadius: 0
-  levelText: {fileID: 0}
-  abilitySelectionDialog: {fileID: 0}
-  healthBar: {fileID: 0}
-  expBar: {fileID: 0}
-  collectableCollider: {fileID: 0}
-  meleeHitboxCollider: {fileID: 0}
-  dustParticles: {fileID: 0}
-  defaultMaterial: {fileID: 0}
-  hitMaterial: {fileID: 0}
-  deathMaterial: {fileID: 0}
-  deathParticles: {fileID: 0}
---- !u!4 &1333671530
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333671528}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1919.9128, y: 1093.1115, z: -2.4180508}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &1338159525 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8416716714309629256, guid: 7f68fda1efc6e8343bfd2c0017ef2e85, type: 3}
-  m_PrefabInstance: {fileID: 719367806}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> 5af3cbab66579821b0b5f0332fd66ac8e29a8554
 --- !u!1 &1350487608
 GameObject:
   m_ObjectHideFlags: 0
@@ -17319,11 +17253,7 @@ MonoBehaviour:
     criticalChance: 0
     criticalDamage: 0
     extraProjectiles: 0
-<<<<<<< HEAD
   equipmentManager: {fileID: 0}
-=======
-  equipmentManager: {fileID: 1605134223}
->>>>>>> 5af3cbab66579821b0b5f0332fd66ac8e29a8554
 --- !u!114 &1818370577
 MonoBehaviour:
   m_ObjectHideFlags: 0
