@@ -182,6 +182,7 @@ namespace Vampire
                 {
                     gsm.SetSelectedCharacter(selected);      // ✅ 선택 캐릭터 다시 설정
                     gsm.ApplyCharacterMultipliers();         // ✅ 곱연산 다시 적용
+                    gsm.ApplyEquipmentMultipliers();
                     Debug.Log("[LevelManager] Restart - 캐릭터 곱연산 재적용");
                 }
             }

@@ -49,7 +49,30 @@ namespace Vampire
 
         private EquipmentUIMode currentMode = EquipmentUIMode.Fusion;
 
+        public bool isInitialized { get; private set; } = false; 
+        
+        private static EquipmentManager instance;
 
+        [Header("Fusion Settings")]
+        [SerializeField] private float successRate = 0.7f; // 70% 확률로 성공
+        [SerializeField] private GameObject successEffectUIPrefab; // 폭죽 이펙트
+        [SerializeField] private GameObject failEffectUIPrefab;    // 실패 이펙트
+        [SerializeField] private RectTransform effectLayerTransform;
+
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            Debug.Log("instance destroy on load");
+        }
 
         private void Start()
         {
@@ -110,6 +133,8 @@ namespace Vampire
 
                 SetTierColor(itemUI, equip.tier);
             }
+
+            isInitialized = true; // ✅ UI 생성이 끝났을 때만 true로 설정
         }
 
         public void RegisterSelection(EquipItemUI itemUI)
@@ -212,6 +237,7 @@ namespace Vampire
 
             if (eq1.name == eq2.name && eq1.tier == eq2.tier)
             {
+                // 장비 제거
                 Destroy(item1.gameObject);
                 Destroy(item2.gameObject);
 
@@ -219,19 +245,56 @@ namespace Vampire
                     .Where(e => e != eq1 && e != eq2)
                     .ToList();
 
-                Equipment upgradedEquip = new Equipment
-                {
-                    name = eq1.name,
-                    icon = eq1.icon,
-                    tier = eq1.tier + 1,
-                    type = eq1.type  // ✅ 기존 type 유지
-                };
+                bool isSuccess = Random.value < successRate;
 
-                blueprint.equipments.Add(upgradedEquip);
+                if (isSuccess)
+                {
+                    Equipment upgradedEquip = new Equipment
+                    {
+                        name = eq1.name,
+                        icon = eq1.icon,
+                        tier = eq1.tier + 1,
+                        type = eq1.type
+                    };
+
+                    blueprint.equipments.Add(upgradedEquip);
+
+                    ShowFusionEffect(true);
+                }
+                else
+                {
+                    ShowFusionEffect(false);
+                }
 
                 if (sortByWeapon) ApplyWeaponSort();
                 else ApplyTierSort();
             }
+            else
+            {
+                Debug.Log("❌ 이름과 티어가 같은 장비만 합성할 수 있습니다.");
+            }
+        }
+
+        private void ShowFusionEffect(bool isSuccess)
+        {
+            GameObject prefab = isSuccess ? successEffectUIPrefab : failEffectUIPrefab;
+
+            if (effectLayerTransform == null)
+            {
+                Debug.LogWarning("Effect Layer가 설정되지 않았습니다.");
+                return;
+            }
+
+            GameObject effect = Instantiate(prefab, effectLayerTransform);
+
+            // 화면 중앙 위치로 정렬
+            RectTransform rt = effect.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                rt.anchoredPosition = Vector2.zero;
+            }
+
+            Destroy(effect, 2f);
         }
 
 
@@ -423,6 +486,7 @@ namespace Vampire
                     e.type == saved.type &&
                     e.tier == saved.tier); // ✅ 정확한 tier까지 비교
 
+
                 if (matchedEquip == null) continue;
 
                 var ui = gridParent.GetComponentsInChildren<EquipItemUI>()
@@ -430,11 +494,21 @@ namespace Vampire
 
                 if (ui != null)
                 {
+                    Debug.Log($"[LoadEquippedItems] Setting equipped: {matchedEquip.name} (Tier {matchedEquip.tier})");
                     ui.SetEquipped(true);
                     equippedByType[saved.type] = ui;
                 }
+                else
+                {
+                    Debug.LogWarning($"[LoadEquippedItems] UI not found for: {matchedEquip.name} (Tier {matchedEquip.tier})");
+                }
             }
             Debug.Log("hi");
+        }
+
+        public List<EquipItemUI> GetEquippedItems()
+        {
+            return equippedByType.Values.ToList();
         }
     }
 }

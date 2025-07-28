@@ -1,6 +1,7 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -57,7 +58,7 @@ namespace Vampire
         void Start()
         {
             Debug.Log("[GameStateManager] Loading game data...");
-            LoadGame();
+            StartCoroutine(LoadGame());
             IsInitialized = true;
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
@@ -66,7 +67,6 @@ namespace Vampire
             // ❌ selectedCharacter 설정 제거
             // ❌ ApplyCharacterMultipliers() 호출 제거
 
-            if (currentScene == "Main Menu")
             if (currentScene == "Main Menu")
             {
                 InitShopAndUpgradeUI();
@@ -92,12 +92,15 @@ namespace Vampire
             saveManager.SaveGame(allItems, allUpgrades, playerStats, upgradeStates, equippedItems);
         }
 
-        public void LoadGame()
+        // GameStateManager.cs
+
+        public IEnumerator LoadGame()
         {
             SaveData data = saveManager.LoadGame();
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             Debug.Log($"[GSM] current: {currentScene}");
+
             if (currentScene == "Main Menu")
             {
                 Debug.Log("[GameStateManager] 122");
@@ -107,12 +110,16 @@ namespace Vampire
 
                 Debug.Log("[GameStateManager] 1");
 
-                // ✅ 여기 추가
                 if (equipmentManager == null)
                 {
                     equipmentManager = FindObjectOfType<EquipmentManager>();
                     Debug.LogWarning("[GameStateManager] equipmentManager is null, using FindObjectOfType fallback.");
                 }
+
+                // ✅ 여기서 기다리기
+                while (equipmentManager != null && !equipmentManager.isInitialized)
+                    yield return null;
+
                 Debug.Log("[GameStateManager] 2");
 
                 if (equipmentManager != null && data.equippedItems != null)
@@ -207,6 +214,52 @@ namespace Vampire
             playerStats.criticalChance *= selectedCharacter.luck;
 
             Debug.Log("[GameStateManager] Character stat multipliers applied.");
+        }
+
+        public void ApplyEquipmentMultipliers()
+        {
+            if (equipmentManager == null)
+            {
+                Debug.LogWarning("[GameStateManager] equipmentManager is null. 장비 곱연산 스킵.");
+                return;
+            }
+
+            Debug.Log("[GameStateManager] ApplyEquipmentMultipliers()");
+
+            var equippedItems = equipmentManager.GetEquippedItems(); // 장착된 EquipItemUI 리스트 가져오기
+
+            foreach (var itemUI in equippedItems)
+            {
+                var equip = itemUI.GetEquipmentData();
+                if (equip == null)
+                {
+                    Debug.LogWarning("[GameStateManager] 장비 데이터가 null임");
+                    continue;
+                }
+
+                switch (equip.type)
+                {
+                    case EquipmentType.Weapon:
+                        playerStats.attackPower *= equip.multiply;
+                        break;
+                    case EquipmentType.Armor:
+                        playerStats.defense *= equip.multiply;
+                        break;
+                    case EquipmentType.Boots:
+                        playerStats.moveSpeed *= equip.multiply;
+                        break;
+                    case EquipmentType.Helmet:
+                        playerStats.criticalChance *= equip.multiply;
+                        break;
+                    case EquipmentType.Accessory:
+                        playerStats.healthRegen *= equip.multiply;
+                        break;
+                }
+
+                Debug.Log($"[GameStateManager] {equip.name} (Tier {equip.tier}) - multiply {equip.multiply} 적용");
+            }
+
+            Debug.Log("[GameStateManager] Equipment stat multipliers applied.");
         }
 
         public void ResetCharacterStats()

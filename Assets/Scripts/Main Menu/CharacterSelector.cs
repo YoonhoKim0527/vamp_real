@@ -49,6 +49,7 @@ namespace Vampire
 
                 gsm.SetSelectedCharacter(blueprint);           // ✅ 캐릭터 설정
                 gsm.ApplyCharacterMultipliers();               // ✅ 곱연산 적용
+                gsm.ApplyEquipmentMultipliers();         // ✅ 장비 곱셈 (추가!)
                 Debug.Log($"[CharacterSelector] 캐릭터 설정 + 곱연산 적용: {blueprint.name}");
             }
             else
