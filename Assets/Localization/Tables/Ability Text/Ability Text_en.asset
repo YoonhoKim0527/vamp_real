@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 7293f9ffd63774eb1b5120a3e14cb7f5, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 6426232618200596482
   m_TableData:
   - m_Id: 21259870208
     m_Localized: Boomerang
@@ -246,6 +247,51 @@ MonoBehaviour:
     m_Localized: flame
     m_Metadata:
       m_Items: []
+  - m_Id: 166052270197760000
+    m_Localized: ThunderChain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166052481506795520
+    m_Localized: ThunderChain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166061034825113600
+    m_Localized: blackHoleAbility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166061141599510528
+    m_Localized: blackHoleAbility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166061420499755008
+    m_Localized: blackHoleAbility
+    m_Metadata:
+      m_Items:
+      - rid: 6426232618200596482
+  - m_Id: 166061540054196224
+    m_Localized: blackHoleAbility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166092684145516544
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166092751216631808
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167149921391665152
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167150035090857984
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6426232618200596482
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e0c86bfbf74d02

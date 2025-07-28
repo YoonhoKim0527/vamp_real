@@ -26,6 +26,22 @@ MonoBehaviour:
     m_Localized: flame
     m_Metadata:
       m_Items: []
+  - m_Id: 166061420499755008
+    m_Localized: blackHole Ability
+    m_Metadata:
+      m_Items: []
+  - m_Id: 166061540054196224
+    m_Localized: blackHole Ability
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167149921391665152
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 167150035090857984
+    m_Localized: asd
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

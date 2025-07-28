@@ -49,7 +49,7 @@ namespace Vampire
 
         private void CheckActivation()
         {
-            if (!isActive && level >= 0)
+            if (!isActive && level >= 1)
             {
                 isActive = true;
                 StartCoroutine(PunchAttackRoutine());

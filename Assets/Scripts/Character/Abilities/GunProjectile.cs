@@ -9,7 +9,6 @@ namespace Vampire
         private float piercingLifetime;
         private GameObject piercingEffectPrefab;
         private GameObject activePiercingEffect;
-        private bool isCritical; // 🟥 치명타 여부 저장
 
         public void EnablePiercing(float lifetime, GameObject effectPrefab)
         {

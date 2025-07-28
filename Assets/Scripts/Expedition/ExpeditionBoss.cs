@@ -92,7 +92,28 @@ namespace Vampire
 
         void Die()
         {
-            Debug.Log($"Boss defeated! Reward: {blueprint.rewardGold} Gold, {blueprint.rewardExp} EXP");
+            var saveManager = FindObjectOfType<SaveManager>();
+            var upgradeData = saveManager?.GetExpeditionUpgradeData();
+
+            float goldMultiplier = 1f + 0.1f * upgradeData.goldGainLevel;
+            float emeraldMultiplier = 1f + 0.1f * upgradeData.emeraldGainLevel;
+
+            int goldReward = Mathf.RoundToInt(blueprint.rewardGold * goldMultiplier);
+            int emeraldReward = Mathf.RoundToInt(blueprint.rewardEmerald * emeraldMultiplier);
+
+            Debug.Log($"Boss defeated! Reward: {goldReward} Gold, {emeraldReward} Emerald");
+
+            // ✅ 보상 상자 드롭
+            if (blueprint.rewardChestPrefab != null)
+            {
+                Vector3 chestPos = transform.position + new Vector3(-1f, -0.5f, 0f);
+                var chest = Instantiate(blueprint.rewardChestPrefab, chestPos, Quaternion.identity);
+
+                var reward = chest.GetComponent<ExpeditionChestReward>();
+                if (reward != null)
+                    reward.Init(goldReward, emeraldReward); // ← 보스에서 직접 넘겨줌
+            }
+
             OnDeath?.Invoke();
             Destroy(gameObject);
         }

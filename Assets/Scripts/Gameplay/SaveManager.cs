@@ -28,8 +28,9 @@ namespace Vampire
         public List<UpgradeSaveData> upgradeLevels;
         public List<UpgradeStateSaveData> upgradeStates; // ✅ 새 필드
         public CharacterStatBlueprint playerStats; // ✅ 추가: 캐릭터 스탯 데이터
-        public ExpeditionSaveData expeditionData; 
+        public ExpeditionSaveData expeditionData;
         public List<EquippedItemSaveData> equippedItems;
+        public ExpeditionUpgradeData expeditionUpgrades;
     }
 
     [System.Serializable]
@@ -71,6 +72,14 @@ namespace Vampire
         public BoostType type;
         public float remainingTime;
     }
+    [System.Serializable]
+    public class ExpeditionUpgradeData
+    {
+        public int damageLevel;
+        public int intervalLevel;
+        public int goldGainLevel;
+        public int emeraldGainLevel;
+    }
 
 
     public class SaveManager : MonoBehaviour
@@ -97,7 +106,7 @@ namespace Vampire
             var oldData = LoadGame();
             SaveGame(items, upgrades, playerStats, upgradeStates, oldData.equippedItems);
         }
-        
+
         public void SaveGame(
             List<ShopItemBlueprint> items,
             List<UpgradeItemBlueprint> upgrades,
@@ -169,7 +178,8 @@ namespace Vampire
                     ownedItems = new List<ItemSaveData>(),
                     upgradeLevels = new List<UpgradeSaveData>(),
                     upgradeStates = new List<UpgradeStateSaveData>(), // ✅ 기본 초기화
-                    playerStats = new CharacterStatBlueprint()
+                    playerStats = new CharacterStatBlueprint(),
+                    expeditionUpgrades = new ExpeditionUpgradeData()
                 };
             }
         }
@@ -260,5 +270,19 @@ namespace Vampire
             SaveData data = LoadGame();
             return data.expeditionData ?? new ExpeditionSaveData();
         }
+
+        public ExpeditionUpgradeData GetExpeditionUpgradeData()
+        {
+            return LoadGame().expeditionUpgrades ?? new ExpeditionUpgradeData();
+        }
+
+        public void SetExpeditionUpgradeData(ExpeditionUpgradeData data)
+        {
+            var fullData = LoadGame();
+            fullData.expeditionUpgrades = data;
+            string json = JsonUtility.ToJson(fullData, true);
+            File.WriteAllText(savePath, json);
+        }
+
     }
 }
