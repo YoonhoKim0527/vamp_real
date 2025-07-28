@@ -13,7 +13,6 @@ namespace Vampire
         {
             this.blueprint = blueprint;
 
-            // ✅ 스킬 클래스 이름 → 타입 얻기
             Type abilityType = Type.GetType(blueprint.abilityClassName);
             if (abilityType == null)
             {
@@ -21,7 +20,6 @@ namespace Vampire
                 return;
             }
 
-            // ✅ 어빌리티 붙이기
             abilityInstance = gameObject.AddComponent(abilityType) as MonoBehaviour;
             if (abilityInstance == null)
             {
@@ -29,20 +27,18 @@ namespace Vampire
                 return;
             }
 
+            var saveManager = FindObjectOfType<SaveManager>();
+            var upgradeData = saveManager.GetExpeditionUpgradeData();
+
+
             // ✅ projectilePrefab 설정
             var projField = abilityType.GetField("projectilePrefab", BindingFlags.NonPublic | BindingFlags.Instance);
-            projField?.SetValue(abilityInstance, blueprint.abilityPrefab);  // 여기 이름 꼭 맞게!
-
-            // ✅ baseDamage 설정
-            var setDamage = abilityType.GetMethod("SetDamage", BindingFlags.Public | BindingFlags.Instance);
-            setDamage?.Invoke(abilityInstance, new object[] { blueprint.baseDamage });
+            projField?.SetValue(abilityInstance, blueprint.abilityPrefab);
 
             // ✅ boss 설정
             var setBoss = abilityType.GetMethod("SetBoss", BindingFlags.Public | BindingFlags.Instance);
             setBoss?.Invoke(abilityInstance, new object[] { boss });
 
-            var setInterval = abilityType.GetMethod("SetFireInterval", BindingFlags.Public | BindingFlags.Instance);
-            setInterval?.Invoke(abilityInstance, new object[] { blueprint.expeditionAbilityInterval });
 
             // ✅ 애니메이션
             var animator = GetComponent<SpriteAnimator>();
@@ -64,5 +60,6 @@ namespace Vampire
         {
             return blueprint != null ? blueprint.name : gameObject.name;
         }
+        
     }
 }

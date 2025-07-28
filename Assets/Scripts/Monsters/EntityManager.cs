@@ -119,12 +119,12 @@ namespace Vampire
             monsterPools[monsterPools.Length - 1].Init(this, playerCharacter, levelBlueprint.finalBoss.bossPrefab);
 
             // 🦇 SwarmSpawner 초기화
-            swarmSpawner = swarmSpawnerParent.AddComponent<SwarmSpawner>();
-            swarmSpawner.Init(this, playerCharacter, swarmMonsterPrefab, swarmMonsterBlueprint);
+            //swarmSpawner = swarmSpawnerParent.AddComponent<SwarmSpawner>();
+            //swarmSpawner.Init(this, playerCharacter, swarmMonsterPrefab, swarmMonsterBlueprint);
 
             // FlowerSpawner 초기화
-            flowerSpawner = flowerSpawnerParent.AddComponent<FlowerSpawner>();
-            flowerSpawner.Init(this, playerCharacter, flowerMonsterPrefab,  flowerMonsterBlueprint);
+            //flowerSpawner = flowerSpawnerParent.AddComponent<FlowerSpawner>();
+            //flowerSpawner.Init(this, playerCharacter, flowerMonsterPrefab,  flowerMonsterBlueprint);
 
             // SwarmMonster 풀 생성
             swarmMonsterPool = monsterPoolParent.AddComponent<MonsterPool>();

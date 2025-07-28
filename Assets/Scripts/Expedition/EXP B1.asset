@@ -19,5 +19,7 @@ MonoBehaviour:
   - {fileID: 993305064, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
   - {fileID: 1741101967, guid: 4770dbdee9afe10449115ea91ae43e0b, type: 3}
   frameTime: 0.2
-  rewardGold: 0
+  rewardGold: 1000
   rewardExp: 0
+  rewardEmerald: 0
+  rewardChestPrefab: {fileID: 1569393229018222962, guid: 3b1779a498c575e409ac0f4311209668, type: 3}

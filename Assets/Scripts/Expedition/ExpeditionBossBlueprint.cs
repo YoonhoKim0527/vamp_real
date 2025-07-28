@@ -17,5 +17,7 @@ namespace Vampire
         [Header("보상")]
         public float rewardGold;
         public float rewardExp;
+        public int rewardEmerald;
+        public GameObject rewardChestPrefab;
     }
 }

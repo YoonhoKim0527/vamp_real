@@ -38,10 +38,10 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 1f4699d7a46c44170930119aed6fe806, type: 3}
   - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
   - {fileID: 7378740072262091319, guid: 8e3dd1e271a61ce408e7d68b9a3f9af4, type: 3}
+  - {fileID: 2873925938844760846, guid: 3d6bf64b82bcfe541985260d78488655, type: 3}
   monsters:
   - monstersPrefab: {fileID: 8960830493049914446, guid: 12adb3a92ed404612906d2c1fe4b586e, type: 3}
     monsterBlueprints:
-    - {fileID: 11400000, guid: c54a6635d5ec3734597c9de9fcd58185, type: 2}
     - {fileID: 11400000, guid: 1d1547b98475241e798c26597f6553a5, type: 2}
     - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
   - monstersPrefab: {fileID: 8960830493049914446, guid: b21d49c07805e4c2c8cab56371c5aad6, type: 3}
@@ -193,3 +193,4 @@ MonoBehaviour:
   chestSpawnAmount: 2
   initialExpGemCount: 500
   initialExpGemType: 1
+  isInitialized: 1

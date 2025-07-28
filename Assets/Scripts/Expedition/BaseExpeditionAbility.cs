@@ -5,28 +5,20 @@ namespace Vampire
     public abstract class BaseExpeditionAbility : MonoBehaviour
     {
         [SerializeField] protected float fireInterval = 1f;
+        protected float initialFireInterval = 1f;
         protected float timer;
         protected float baseDamage = 1f;
         protected Transform boss;
 
         // ✅ GameStateManager 캐싱
         protected GameStateManager gameStateManager;
-
+        SaveManager saveManager;
         protected virtual void Start()
         {
             // ✅ GameStateManager 찾고 캐싱
             gameStateManager = FindObjectOfType<GameStateManager>();
-            if (gameStateManager != null)
-            {
-                // ✅ 곱연산 끝난 공격력 가져오기
-                float updatedDamage = gameStateManager.PlayerStats.attackPower;
-                SetDamage(updatedDamage);
-                Debug.Log($"[BaseExpeditionAbility] Damage set to {baseDamage}");
-            }
-            else
-            {
-                Debug.LogWarning("[BaseExpeditionAbility] GameStateManager not found!");
-            }
+            saveManager = FindAnyObjectByType<SaveManager>();
+            RefreshStats(); 
         }
 
         public virtual void SetDamage(float damage)
@@ -41,6 +33,7 @@ namespace Vampire
 
         public void SetFireInterval(float interval)
         {
+            initialFireInterval = interval;
             fireInterval = interval;
         }
 
@@ -61,7 +54,26 @@ namespace Vampire
             }
         }
 
-        // 각 Ability에서 구현할 실제 행동
         protected abstract void TriggerAbility();
+        public void RefreshStats()
+        {
+            if (gameStateManager == null) gameStateManager = FindObjectOfType<GameStateManager>();
+            if (saveManager == null) saveManager = FindObjectOfType<SaveManager>();
+            if (gameStateManager == null || saveManager == null)
+                return;
+
+            var upgradeData = saveManager.GetExpeditionUpgradeData();
+
+            // ✅ 데미지
+            float damageMultiplier = 1f + 0.1f * upgradeData.damageLevel;
+            float updatedDamage = gameStateManager.PlayerStats.attackPower * damageMultiplier;
+            SetDamage(updatedDamage);
+
+            // ✅ 주기
+            float intervalMultiplier = Mathf.Clamp(1f - 0.01f * upgradeData.intervalLevel, 0.5f, 1f);
+            fireInterval = initialFireInterval * intervalMultiplier;
+
+            Debug.Log($"[RefreshStats] Damage: {updatedDamage}, Interval: {fireInterval}");
+        }
     }
 }
