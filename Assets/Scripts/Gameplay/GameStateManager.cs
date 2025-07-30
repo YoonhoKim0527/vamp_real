@@ -99,16 +99,12 @@ namespace Vampire
             SaveData data = saveManager.LoadGame();
 
             string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            Debug.Log($"[GSM] current: {currentScene}");
 
             if (currentScene == "Main Menu")
             {
-                Debug.Log("[GameStateManager] 122");
                 RestoreItems(data);
                 RestoreUpgrades(data);
                 upgradeManager?.RefreshAllUI();
-
-                Debug.Log("[GameStateManager] 1");
 
                 if (equipmentManager == null)
                 {
@@ -119,8 +115,6 @@ namespace Vampire
                 // ✅ 여기서 기다리기
                 while (equipmentManager != null && !equipmentManager.isInitialized)
                     yield return null;
-
-                Debug.Log("[GameStateManager] 2");
 
                 if (equipmentManager != null && data.equippedItems != null)
                 {

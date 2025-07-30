@@ -510,5 +510,22 @@ namespace Vampire
         {
             return equippedByType.Values.ToList();
         }
+
+        public EquipmentBlueprint GetPlayerBlueprint()
+        {
+            return blueprint;
+        }
+
+        public void RefreshCurrentTab()
+        {
+            if (sortByWeapon)
+            {
+                ApplyWeaponSort();
+            }
+            else
+            {
+                ApplyTierSort();
+            }
+        }
     }
 }
