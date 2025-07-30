@@ -15,7 +15,7 @@ namespace Vampire
 
         protected float timeSinceLastAttack;
         protected int projectileIndex;
-
+        
         protected override void Use()
         {
             base.Use();

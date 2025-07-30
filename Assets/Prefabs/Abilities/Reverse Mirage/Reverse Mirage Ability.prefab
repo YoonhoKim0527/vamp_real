@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3303242751642225015}
-  - component: {fileID: 8802082902539958782}
+  - component: {fileID: 1202384605893190718}
   m_Layer: 9
-  m_Name: Boomerang Ability
+  m_Name: Reverse Mirage Ability
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8802082902539958782
+--- !u!114 &1202384605893190718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,15 +41,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7378740072262091319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38281ec2e561a44df8fb704e6ee81f3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 243eaa4b0322a35418b8ddbde5a17a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 2888a2255a301d44086c71f6c24614bb, type: 3}
+  image: {fileID: 21300000, guid: 07d868e0fd2a23942bd04c6dffb76ed7, type: 3}
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
-      m_KeyId: 21259870208
+      m_KeyId: 167505393525252096
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -58,43 +58,25 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
-      m_KeyId: 193561878528
+      m_KeyId: 167505470889189376
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   rarity: 50
-  boomerangPrefab: {fileID: 7669521032070789568, guid: 560bda884f4ace742a3deff4d448b2b6, type: 3}
+  invincibleDuration: 2
+  cooldown: 4
+  explosionDelay: 2
+  explosionRadius: 2
+  counterDamage:
+    value: 1
+    upgrades: []
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 64
-  throwRadius: 2.5
-  throwTime: 1
-  throwRate:
-    value: 2
-    upgrades: []
-  damage:
-    value: 10
-    upgrades:
-    - 1
-    - 1
-    - 1
-    - 1
-  knockback:
-    value: 0
-    upgrades: []
-  cooldown:
-    value: 2
-    upgrades: []
-  boomerangCount:
-    value: 1
-    upgrades: 010000000100000001000000
-    projectilesPer: 1
-  isAwakened: 0
-  awakeningLevel: 1
-  awakenedSizeMultiplier: 4
-  awakenedThrowRadiusMultiplier: 3
-  awakenedBoomerangCount: 8
+    m_Bits: 128
+  cooldownRingPrefab: {fileID: 1995361298930241013, guid: 0da84dc9f4d2f0841b732bd67b86efb6, type: 3}
+  invincibleColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+  explosionRangePrefab: {fileID: 3874786201506875397, guid: 31c7331adccee134d96dc853dc92a33b, type: 3}
   references:
     version: 2
     RefIds: []

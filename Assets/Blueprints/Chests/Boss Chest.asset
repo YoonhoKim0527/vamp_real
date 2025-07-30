@@ -16,11 +16,4 @@ MonoBehaviour:
   closedChest: {fileID: 56875098, guid: 47d8a91e3026e405a96bac590c863934, type: 3}
   openingChest: {fileID: -1761747347, guid: 47d8a91e3026e405a96bac590c863934, type: 3}
   openChest: {fileID: -369494663, guid: 47d8a91e3026e405a96bac590c863934, type: 3}
-  lootTable:
-    lootTable:
-    - item: {fileID: 1437905727660197986, guid: abf49d6cb814647109c1773c37109e8e, type: 3}
-      dropChance: 0.5
-      coinType: 50
-    - item: {fileID: 5021278261004164486, guid: 258c15079a6434b34906221b5d37fef5, type: 3}
-      dropChance: 0.5
-      coinType: 2
+  lootTable: []

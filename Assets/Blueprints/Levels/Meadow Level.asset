@@ -39,6 +39,8 @@ MonoBehaviour:
   - {fileID: 7378740072262091319, guid: 035b777c757ec454ba0b4711eed2ef82, type: 3}
   - {fileID: 7378740072262091319, guid: 8e3dd1e271a61ce408e7d68b9a3f9af4, type: 3}
   - {fileID: 2873925938844760846, guid: 3d6bf64b82bcfe541985260d78488655, type: 3}
+  - {fileID: 7378740072262091319, guid: a3441294e2946e84fb3fec731947c678, type: 3}
+  - {fileID: 7378740072262091319, guid: 19ace21dc912a6149bfd80203f2ca331, type: 3}
   monsters:
   - monstersPrefab: {fileID: 8960830493049914446, guid: 12adb3a92ed404612906d2c1fe4b586e, type: 3}
     monsterBlueprints:
@@ -189,7 +191,7 @@ MonoBehaviour:
       - 1
       - 1
   chestBlueprint: {fileID: 11400000, guid: 7306af3f2b7df4c818a7f7d847d30570, type: 2}
-  chestSpawnDelay: 30
+  chestSpawnDelay: 3
   chestSpawnAmount: 2
   initialExpGemCount: 500
   initialExpGemType: 1

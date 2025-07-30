@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -9,6 +10,6 @@ namespace Vampire
         public Sprite closedChest;
         public Sprite openingChest;
         public Sprite openChest;
-        public LootTable<GameObject> lootTable;
+        public List<LootGameObject> lootTable;
     }
 }

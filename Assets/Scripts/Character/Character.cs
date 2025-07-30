@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections.Generic;
+using System;
 
 namespace Vampire
 {
@@ -163,12 +164,16 @@ namespace Vampire
         protected virtual void FixedUpdate()
         {
             if (moveDirection != Vector2.zero)
+            {
                 lookDirection = moveDirection;
+                rb.velocity = moveDirection * movementSpeed.Value; // ⭐ 핵심 변경
+                StartWalkAnimation(); // 이동 중이면 애니메이션 재생
+            }
             else
+            {
+                rb.velocity = Vector2.zero; // 정지 시 확실하게 멈춤
                 StopWalkAnimation();
-
-            if (alive)
-                rb.velocity += moveDirection * characterBlueprint.acceleration * Time.deltaTime;
+            }
         }
 
         public void GainExp(float exp)
@@ -221,30 +226,38 @@ namespace Vampire
         {
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
+        public event Action OnDamaged;
+        bool isInvincible;
 
+        public void SetInvincible(bool v) => isInvincible = v;
         public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), bool isCritical = false)
         {
-            if (alive)
+            if (!alive) return;
+
+            // ✅ 무적 체크 (추가할 경우)
+            if (isInvincible) return;
+
+            // ✅ 피격 이벤트 (예: ReverseMirageAbility 작동용)
+            OnDamaged?.Invoke();
+
+            if (armor.Value >= damage)
+                damage = damage < 1 ? damage : 1;
+            else
+                damage -= armor.Value;
+
+            healthBar.SubtractPoints(damage);
+            currentHealth -= damage;
+            rb.velocity += knockback * Mathf.Sqrt(rb.drag);
+            statsManager.IncreaseDamageTaken(damage);
+
+            if (currentHealth <= 0)
             {
-                if (armor.Value >= damage)
-                    damage = damage < 1 ? damage : 1;
-                else
-                    damage -= armor.Value;
-
-                healthBar.SubtractPoints(damage);
-                currentHealth -= damage;
-                rb.velocity += knockback * Mathf.Sqrt(rb.drag);
-                statsManager.IncreaseDamageTaken(damage);
-
-                if (currentHealth <= 0)
-                {
-                    StartCoroutine(DeathAnimation());
-                }
-                else
-                {
-                    if (hitAnimationCoroutine != null) StopCoroutine(hitAnimationCoroutine);
-                    hitAnimationCoroutine = StartCoroutine(HitAnimation());
-                }
+                StartCoroutine(DeathAnimation());
+            }
+            else
+            {
+                if (hitAnimationCoroutine != null) StopCoroutine(hitAnimationCoroutine);
+                hitAnimationCoroutine = StartCoroutine(HitAnimation());
             }
         }
 
@@ -296,7 +309,7 @@ namespace Vampire
 
         public void UpdateMoveSpeed()
         {
-            rb.drag = characterBlueprint.acceleration / (movementSpeed.Value * movementSpeed.Value);
+            rb.drag = 0f;
         }
 
         public void Move(Vector2 moveDirection)

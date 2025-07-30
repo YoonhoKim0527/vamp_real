@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3303242751642225015}
-  - component: {fileID: 8802082902539958782}
+  - component: {fileID: 2787465916098036173}
   m_Layer: 9
-  m_Name: Boomerang Ability
+  m_Name: Frog Rain Ability
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8802082902539958782
+--- !u!114 &2787465916098036173
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,15 +41,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7378740072262091319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38281ec2e561a44df8fb704e6ee81f3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 26a535d732bc7464590c579f543188a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 2888a2255a301d44086c71f6c24614bb, type: 3}
+  image: {fileID: 1333222867, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
-      m_KeyId: 21259870208
+      m_KeyId: 167525843617767424
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -58,43 +58,37 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:7293f9ffd63774eb1b5120a3e14cb7f5
     m_TableEntryReference:
-      m_KeyId: 193561878528
+      m_KeyId: 167525913998188544
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   rarity: 50
-  boomerangPrefab: {fileID: 7669521032070789568, guid: 560bda884f4ace742a3deff4d448b2b6, type: 3}
+  throwablePrefab: {fileID: 3411041709616045028, guid: 7891c4dc021f487499fe59c69b9f1e23, type: 3}
   monsterLayer:
     serializedVersion: 2
-    m_Bits: 64
-  throwRadius: 2.5
-  throwTime: 1
+    m_Bits: 128
+  throwRadius: 0
   throwRate:
-    value: 2
+    value: 0
     upgrades: []
   damage:
-    value: 10
-    upgrades:
-    - 1
-    - 1
-    - 1
-    - 1
+    value: 1
+    upgrades: []
   knockback:
     value: 0
     upgrades: []
   cooldown:
-    value: 2
+    value: 0
     upgrades: []
-  boomerangCount:
-    value: 1
-    upgrades: 010000000100000001000000
+  throwableCount:
+    value: 0
+    upgrades: 
     projectilesPer: 1
-  isAwakened: 0
-  awakeningLevel: 1
-  awakenedSizeMultiplier: 4
-  awakenedThrowRadiusMultiplier: 3
-  awakenedBoomerangCount: 8
+  minInterval: 0.1
+  maxInterval: 0.2
+  spawnHeight: 9
+  horizontalRange: 6
   references:
     version: 2
     RefIds: []

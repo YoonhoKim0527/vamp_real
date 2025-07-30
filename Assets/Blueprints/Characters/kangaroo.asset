@@ -19,7 +19,7 @@ MonoBehaviour:
   hp: 1
   recovery: 1
   armor: 1
-  movespeed: 5
+  movespeed: 1
   luck: 1
   acceleration: 5
   walkSpriteSequence:
@@ -29,7 +29,7 @@ MonoBehaviour:
   - {fileID: -979130772, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
   walkFrameTime: 0.05
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
+  - {fileID: 7378740072262091319, guid: 19ace21dc912a6149bfd80203f2ca331, type: 3}
   farmProductionPerSecond: 1
   abilityPrefab: {fileID: 0}
   abilityClassName: 
