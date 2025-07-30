@@ -47,6 +47,10 @@ namespace Vampire
             if (amount > 0)
                 Debug.Log($"[RubyManager] 루비 +{amount} (총 {rubies})");
         }
+        public void Add100Rubies()
+        {
+            AddRubies(100);
+        }
 
         public bool SpendRubies(int amount)
         {
