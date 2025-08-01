@@ -29,8 +29,8 @@ MonoBehaviour:
   - {fileID: -1668147796, guid: 3488b902bd1f9fc4daa50ee7aac2789a, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 54bc67e1508814be78d516b6fe8d264e, type: 3}
+  - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
   farmProductionPerSecond: 0
-  abilityPrefab: {fileID: 0}
-  abilityClassName: 
+  abilityPrefab: {fileID: 4536051839462506652, guid: 04a773d446f714642b5fd5615e74abba, type: 3}
+  abilityClassName: Vampire.ExpeditionSimpleAbility
   expeditionAbilityInterval: 1

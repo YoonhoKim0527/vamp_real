@@ -138,7 +138,8 @@ namespace Vampire
             }
             else
             {
-                characterSelector.StartGame(characterBlueprint);
+                characterSelector.StoreSelectedCharacter(characterBlueprint);
+                FindObjectOfType<SelectedCharacterDisplay>()?.Display(characterBlueprint);
             }
         }
 

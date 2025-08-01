@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -12,15 +11,16 @@ namespace Vampire
         [SerializeField] Transform cardContainer;
 
         CharacterCard[] characterCards;
+        CharacterBlueprint selectedBlueprint;
 
-        void OnEnable() // UI               ȣ   
+        void OnEnable()
         {
             Init();
         }
 
         public void Init()
         {
-            //               ī        ( ߺ      )
+            // 기존 카드 정리
             if (characterCards != null)
             {
                 foreach (var card in characterCards)
@@ -38,19 +38,31 @@ namespace Vampire
             }
         }
 
-        public void StartGame(CharacterBlueprint blueprint)
+        // 선택된 캐릭터 저장만 함
+        public void StoreSelectedCharacter(CharacterBlueprint blueprint)
         {
+            selectedBlueprint = blueprint;
             CrossSceneData.CharacterBlueprint = blueprint;
+            Debug.Log($"[CharacterSelector] 캐릭터 선택됨: {blueprint.name}");
+        }
+
+        // 외부 버튼에서 호출
+        public void LoadGameScene()
+        {
+            if (selectedBlueprint == null)
+            {
+                Debug.LogWarning("❌ 캐릭터가 선택되지 않았습니다.");
+                return;
+            }
 
             var gsm = FindObjectOfType<GameStateManager>();
             if (gsm != null)
             {
                 gsm.LoadGame(); // ✅ 업그레이드 반영된 playerStats 불러오기
-
-                gsm.SetSelectedCharacter(blueprint);           // ✅ 캐릭터 설정
-                gsm.ApplyCharacterMultipliers();               // ✅ 곱연산 적용
-                gsm.ApplyEquipmentMultipliers();         // ✅ 장비 곱셈 (추가!)
-                Debug.Log($"[CharacterSelector] 캐릭터 설정 + 곱연산 적용: {blueprint.name}");
+                gsm.SetSelectedCharacter(selectedBlueprint);
+                gsm.ApplyCharacterMultipliers();
+                gsm.ApplyEquipmentMultipliers();
+                Debug.Log($"[CharacterSelector] 게임 준비 완료: {selectedBlueprint.name}");
             }
             else
             {
@@ -65,6 +77,5 @@ namespace Vampire
 
             SceneManager.LoadScene(1); // GameScene
         }
-
     }
 }

@@ -31,6 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 239414c0d2c944c0d9acb1762a720983, type: 3}
   farmProductionPerSecond: 0
-  abilityPrefab: {fileID: 0}
-  abilityClassName: 
+  abilityPrefab: {fileID: 462643391439929629, guid: 8ea027dc8ccf0a4459c8772a9b924f02, type: 3}
+  abilityClassName: Vampire.BombAbility
   expeditionAbilityInterval: 1

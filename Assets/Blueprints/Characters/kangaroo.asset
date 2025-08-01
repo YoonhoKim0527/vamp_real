@@ -29,8 +29,8 @@ MonoBehaviour:
   - {fileID: -979130772, guid: affe0ebedb4707c4b89132608578aeb3, type: 3}
   walkFrameTime: 0.05
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 19ace21dc912a6149bfd80203f2ca331, type: 3}
+  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
   farmProductionPerSecond: 1
-  abilityPrefab: {fileID: 0}
-  abilityClassName: 
+  abilityPrefab: {fileID: 462643391439929629, guid: 30ca4c36069aec2419070f97f853fb34, type: 3}
+  abilityClassName: Vampire.GloveAbility
   expeditionAbilityInterval: 1
