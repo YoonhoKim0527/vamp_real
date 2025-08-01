@@ -45,10 +45,18 @@ namespace Vampire
 
         protected override void LaunchProjectile()
         {
-            float totalDamage = playerStats.attackPower * damage.Value;
-            Debug.Log($"total: {totalDamage}, attackpower: {playerStats.attackPower}, damge: {damage.Value}");
+            FireSingleProjectile(
+                playerCharacter.CenterTransform.position,
+                playerCharacter.LookDirection,
+                playerStats.attackPower,
+                1f
+            );
+        }
 
-            // ✅ 치명타 확률 적용
+        private void FireSingleProjectile(Vector3 spawnPos, Vector2 direction, float baseAttackPower, float damageMultiplier, bool isGhost = false, Color? ghostColor = null)
+        {
+            float totalDamage = baseAttackPower * damage.Value * damageMultiplier;
+
             bool isCritical = Random.value < playerStats.criticalChance;
             if (isCritical)
             {
@@ -59,23 +67,54 @@ namespace Vampire
 
             Projectile projectile = entityManager.SpawnProjectile(
                 projectileIndex,
-                playerCharacter.CenterTransform.position,
+                spawnPos,
                 totalDamage,
                 effectiveKnockback,
                 level >= 1 ? speed.Value * evolvedSpeedMultiplier : speed.Value,
                 monsterLayer
             );
 
-            // 🟥 critical 정보 넘기기
-            projectile.Launch(playerCharacter.LookDirection, isCritical);
+            projectile.Launch(direction, isCritical);
+
+            if (isGhost && ghostColor.HasValue)
+            {
+                var sr = projectile.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = ghostColor.Value;
+                }
+            }
 
             if (level >= 1 && projectile is GunProjectile gunProjectile)
             {
                 gunProjectile.EnablePiercing(evolvedLifetime, piercingEffectPrefab);
-                Debug.Log("🔫 [GunAbility] Piercing mode enabled.");
             }
 
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+        }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            StartCoroutine(FireMirrorClip(damageMultiplier, spawnPosition, ghostColor));
+        }
+
+        private IEnumerator FireMirrorClip(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            int clipSize = projectileCount.Value;
+
+            for (int i = 0; i < clipSize; i++)
+            {
+                FireSingleProjectile(
+                    spawnPosition,
+                    playerCharacter.LookDirection,
+                    playerStats.attackPower,
+                    damageMultiplier,
+                    true,         // isGhost
+                    ghostColor    // <- 새로운 파라미터
+                );
+
+                yield return new WaitForSeconds(1 / firerate.Value);
+            }
         }
     }
 }

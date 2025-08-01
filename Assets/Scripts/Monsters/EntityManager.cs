@@ -89,6 +89,13 @@ namespace Vampire
         private MonsterPool swarmMonsterPool;  // 🦇 Swarm 전용 풀
         private MonsterPool flowerMonsterPool; // 🌸 Flower 전용 풀
 
+        private int uniqueMonsterIndex = 10000; // 미니보스/보스 이후로 시작하는 안전한 값
+
+        public int GetUniqueMonsterIndex()
+        {
+            return uniqueMonsterIndex++;
+        }
+
         public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
         {
             this.levelBlueprint = levelBlueprint; // ✅ LevelBlueprint 저장
@@ -187,8 +194,12 @@ namespace Vampire
                 grid.Rebuild(playerCharacter.transform.position);
             }
 
-            swarmSpawner.Tick(); // SwarmSpawner가 자체적으로 타이머 관리
-            flowerSpawner.Tick();
+            if (swarmSpawner != null){
+                swarmSpawner.Tick(); // SwarmSpawner가 자체적으로 타이머 관리
+            }
+            if (flowerSpawner != null){
+                flowerSpawner.Tick();
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -276,10 +287,20 @@ namespace Vampire
             {
                 statsManager.IncrementMonstersKilled();
             }
-            grid.RemoveClient(monster);
-            monsterPools[monsterPoolIndex].Release(monster);
-        }
 
+            grid.RemoveClient(monster);
+
+            // ✅ 안전하게 범위 체크
+            if (monsterPoolIndex >= 0 && monsterPoolIndex < monsterPools.Length)
+            {
+                monsterPools[monsterPoolIndex].Release(monster);
+            }
+            else
+            {
+                Debug.LogWarning($"[DespawnMonster] Invalid monsterPoolIndex: {monsterPoolIndex}, destroying manually.");
+                Destroy(monster.gameObject); // fallback
+            }
+        }
         private Vector2 GetRandomMonsterSpawnPosition()
         {
             Vector2[] sideDirections = new Vector2[] { Vector2.left, Vector2.up, Vector2.right, Vector2.down };
@@ -545,5 +566,32 @@ namespace Vampire
             grid.RemoveClient(monster);
             flowerMonsterPool.Release(monster); // 🌸 Flower 전용 풀로 반환
         }
+
+        public BossMonster SpawnSplitBoss(GameObject bossPrefab, Vector2 position, BossMonsterBlueprint blueprint, float statRatio, BossMonster original) 
+        {
+            GameObject go = Instantiate(bossPrefab, position, Quaternion.identity);
+            BossMonster boss = go.GetComponent<BossMonster>();
+
+            int index = GetUniqueMonsterIndex();
+
+            // Init 먼저
+            boss.Init(this, original.PlayerCharacter);
+
+            // 분열임을 마킹
+            boss.MarkAsSplit(); // ✅
+
+            // 스탯 복사
+            boss.CopyStatsFrom(original, statRatio);
+
+            // Setup 이후 체력 등 초기화
+            boss.Setup(index, position, blueprint);
+
+            // Tracking용 등록
+            LivingMonsters.Add(boss);
+            grid.InsertClient(boss);
+
+            return boss;
+        }
+
     }
 }

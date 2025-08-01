@@ -45,6 +45,9 @@ namespace Vampire
         protected Coroutine hitAnimationCoroutine = null;
         protected Vector2 moveDirection;
 
+        public SpriteRenderer SpriteRenderer { get; private set; }
+
+
         public Vector2 LookDirection
         {
             get { return lookDirection; }
@@ -325,7 +328,8 @@ namespace Vampire
 
         public void StopWalkAnimation()
         {
-            spriteAnimator.StopAnimating(true);
+            if (spriteAnimator != null)
+                spriteAnimator.StopAnimating();
         }
 
         public void SetMoveDirection(InputAction.CallbackContext context)

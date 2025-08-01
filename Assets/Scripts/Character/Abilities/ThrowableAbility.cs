@@ -78,5 +78,49 @@ namespace Vampire
             throwable.Throw((Vector2)playerCharacter.transform.position + Random.insideUnitCircle * throwRadius);
             throwable.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
         }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPos, Color ghostColor)
+        {
+            StartCoroutine(MirrorThrowRoutine(damageMultiplier, spawnPos, ghostColor));
+        }
+
+        private IEnumerator MirrorThrowRoutine(float damageMultiplier, Vector3 spawnPos, Color ghostColor)
+        {
+            int count = throwableCount.Value;
+
+            for (int i = 0; i < count; i++)
+            {
+                // ✅ 데미지 계산
+                float totalDamage = playerStats.attackPower * damage.Value * damageMultiplier;
+
+                bool isCritical = Random.value < playerStats.criticalChance;
+                if (isCritical)
+                {
+                    totalDamage *= (1 + playerStats.criticalDamage);
+                }
+
+                float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+                Throwable throwable = entityManager.SpawnThrowable(
+                    throwableIndex,
+                    spawnPos,
+                    totalDamage,
+                    effectiveKnockback,
+                    0,
+                    monsterLayer
+                );
+
+                // ✅ critical 정보 및 시각 효과 설정
+                throwable.SetCritical(isCritical);
+                throwable.SetColor(ghostColor); // 🎨 고스트 전용 색상 추가 (추가 구현 필요)
+
+                // ✅ 랜덤 방향으로 던짐
+                throwable.Throw(spawnPos + (Vector3)(Random.insideUnitCircle * throwRadius));
+                throwable.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+
+                yield return new WaitForSeconds(1 / throwRate.Value);
+            }
+        }
+
     }
 }

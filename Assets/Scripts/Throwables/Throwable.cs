@@ -35,6 +35,17 @@ namespace Vampire
             col = GetComponent<Collider2D>();
             zPositioner = gameObject.AddComponent<ZPositioner>();
         }
+        
+        public void SetColor(Color color)
+        {
+            if (throwableSpriteRenderer == null)
+                throwableSpriteRenderer = GetComponent<SpriteRenderer>();
+
+            if (throwableSpriteRenderer != null)
+                throwableSpriteRenderer.color = color;
+            else
+                Debug.LogWarning("[Throwable] SpriteRenderer not found for SetColor.");
+        }
 
         public virtual void Init(EntityManager entityManager, Character playerCharacter)
         {

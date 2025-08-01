@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -28,6 +27,12 @@ namespace Vampire
         private const int drawCount = 10;
 
         [SerializeField] private GameObject rubyShopPanel;
+        [SerializeField] private GachaChestController chestController;
+
+        [Header("Single Result Popup")]
+        [SerializeField] private GameObject singleResultPopup;
+        [SerializeField] private Image popupIconImage;
+        [SerializeField] private TMP_Text popupNameText;
 
         public void OnSingleDrawButtonClick()
         {
@@ -37,13 +42,31 @@ namespace Vampire
                 return;
             }
 
-            Equipment drawn = DrawAndSaveEquipment(); // ✅ 저장까지
+            StartCoroutine(SingleDrawRoutine());
+        }
 
-            resultIcon.sprite = drawn.icon;
-            resultIcon.enabled = true;
-            resultNameText.text = drawn.name;
+        private IEnumerator SingleDrawRoutine()
+        {
+            chestController.ResetGlowImmediately();
+            yield return chestController.PlayChestSequence();
 
-            SetTierColor(resultIcon.GetComponentInParent<Image>(), drawn.tier);
+            Equipment drawn = DrawAndSaveEquipment();
+
+            // ✅ 기존 UI는 비활성화 (선택)
+            resultIcon.enabled = false;
+
+            // ✅ 새 팝업 UI에 정보 반영
+            popupIconImage.sprite = drawn.icon;
+            popupNameText.text = drawn.name;
+
+            // ✅ 팝업 활성화
+            singleResultPopup.SetActive(true);
+        }
+
+
+        public void OnCloseSingleResultPopup()
+        {
+            singleResultPopup.SetActive(false);
         }
 
         public void OnMultiDrawButtonClick()
@@ -54,7 +77,15 @@ namespace Vampire
                 return;
             }
 
-            StartCoroutine(PlayMultiDrawAnimation());
+            StartCoroutine(MultiDrawRoutine());
+        }
+
+        private IEnumerator MultiDrawRoutine()
+        {
+            chestController.ResetGlowImmediately();
+            yield return chestController.PlayChestSequence();
+
+            yield return StartCoroutine(PlayMultiDrawAnimation());
         }
 
         private IEnumerator PlayMultiDrawAnimation()
@@ -66,7 +97,7 @@ namespace Vampire
 
             for (int i = 0; i < drawCount; i++)
             {
-                Equipment equip = DrawAndSaveEquipment(); // ✅ 저장까지
+                Equipment equip = DrawAndSaveEquipment();
 
                 GameObject slot = Instantiate(itemSlotPrefab, gridParent);
                 Image icon = slot.transform.Find("Icon").GetComponent<Image>();
@@ -79,9 +110,6 @@ namespace Vampire
             }
         }
 
-        /// <summary>
-        /// Shop Blueprint에서 무작위로 장비를 뽑고, tier를 붙여 Equipment로 변환한 후 Player Blueprint에 저장함
-        /// </summary>
         private Equipment DrawAndSaveEquipment()
         {
             int tier = RollTier();
@@ -97,18 +125,13 @@ namespace Vampire
                 tier = tier
             };
 
-            // ✅ Player Blueprint에 저장
             EquipmentBlueprint playerBlueprint = FindObjectOfType<EquipmentManager>()?.GetPlayerBlueprint();
             if (playerBlueprint != null)
             {
                 playerBlueprint.equipments.Add(fullEquip);
-
-                // ✅ 추가: 바로 UI 새로고침
                 EquipmentManager eqManager = FindObjectOfType<EquipmentManager>();
                 if (eqManager != null && eqManager.isInitialized)
-                {
-                    eqManager.RefreshCurrentTab(); // 🔧 이 함수는 우리가 새로 추가한 것
-                }
+                    eqManager.RefreshCurrentTab();
             }
             else
             {
@@ -131,18 +154,10 @@ namespace Vampire
         {
             switch (tier)
             {
-                case 2:
-                    background.color = Color.red;
-                    break;
-                case 3:
-                    background.color = Color.yellow;
-                    break;
-                case 4:
-                    background.color = Color.white;
-                    break;
-                default:
-                    background.color = Color.blue;
-                    break;
+                case 2: background.color = Color.red; break;
+                case 3: background.color = Color.yellow; break;
+                case 4: background.color = Color.white; break;
+                default: background.color = Color.blue; break;
             }
         }
 

@@ -41,9 +41,9 @@ namespace Vampire
             Debug.Log($"[LevelManager] Loaded PlayerStats: Attack={playerStats.attackPower}, ExtraProjectiles={playerStats.extraProjectiles}");
 
             entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
-            abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, playerStats);
             abilitySelectionDialog.Init(abilityManager, entityManager, playerCharacter);
             playerCharacter.Init(entityManager, abilityManager, statsManager, playerStats);
+            abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, playerStats);
             playerCharacter.OnDeath.AddListener(GameOver);
 
             entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);

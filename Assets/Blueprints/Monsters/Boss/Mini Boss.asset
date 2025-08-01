@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d5e26e1683b468ab18460096a144c8, type: 3}
   m_Name: Mini Boss
   m_EditorClassIdentifier: 
-  name: Shotgun Boss
-  hp: 250
+  name: Split Boss
+  hp: 400
   atk: 10
   recovery: 0
   armor: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
   - {fileID: -1711853846, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
   walkFrameTime: 0.2
   abilityPrefabs:
-  - {fileID: 7744714996288908991, guid: 3440285163500438fba0dba88b03a6ee, type: 3}
+  - {fileID: 3625824504957807313, guid: 579aaee655432d24489f5354226dac2d, type: 3}
   - {fileID: 7744714996288908991, guid: cc96bcabab46e43f99ddb4181af0a3a6, type: 3}
   meleeLayer:
     serializedVersion: 2
