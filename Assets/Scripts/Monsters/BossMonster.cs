@@ -38,10 +38,6 @@ namespace Vampire
         {
             base.Setup(monsterIndex, position, monsterBlueprint, hpBuff);
             this.monsterBlueprint = (BossMonsterBlueprint)monsterBlueprint;
-<<<<<<< HEAD
-
-=======
->>>>>>> c3e2c405f305266a78ce4632c9de9e16d092fe33
             abilities = new BossAbility[this.monsterBlueprint.abilityPrefabs.Length];
             for (int i = 0; i < abilities.Length; i++)
             {
