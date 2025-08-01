@@ -37,6 +37,7 @@ MonoBehaviour:
   - {fileID: -1711853846, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
   walkFrameTime: 0.2
   abilityPrefabs:
+  - {fileID: 95164599571083344, guid: 961baa1ebb7f31a48bbff02e97922271, type: 3}
   - {fileID: 3625824504957807313, guid: 579aaee655432d24489f5354226dac2d, type: 3}
   - {fileID: 7744714996288908991, guid: cc96bcabab46e43f99ddb4181af0a3a6, type: 3}
   meleeLayer:

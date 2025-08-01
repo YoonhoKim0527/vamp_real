@@ -30,6 +30,12 @@ namespace Vampire
 
         private List<Book> books;
 
+        public CharacterStatBlueprint PlayerStats => playerStats;
+        public UpgradeableDamage DamageValue  => damage;
+        public UpgradeableKnockback Knockback => knockback;
+        public Character Character => Character;
+
+
         protected override void Use()
         {
             base.Use();
@@ -202,6 +208,54 @@ namespace Vampire
             Gizmos.DrawWireSphere(transform.position, radius.Value);
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, knockbackRadius);
+        }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            StartCoroutine(MirrorBookRoutine(damageMultiplier, spawnPosition, ghostColor));
+        }
+
+        private IEnumerator MirrorBookRoutine(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            int totalProjectiles = projectileCount.Value + bonusProjectile;
+            List<GameObject> mirrorBooks = new List<GameObject>();
+
+            for (int i = 0; i < totalProjectiles; i++)
+            {
+                GameObject bookObj = Instantiate(bookPrefab, spawnPosition, Quaternion.identity);
+                Book book = bookObj.GetComponent<Book>();
+                book.Init(this, monsterLayer, damageMultiplier, ghostColor);
+                mirrorBooks.Add(bookObj);
+            }
+
+            float duration = 6f;
+            float timer = 0f;
+
+            while (timer < duration)
+            {
+                float currentSpeed = speed.Value;
+                float currentRadius = radius.Value;
+
+                for (int i = 0; i < mirrorBooks.Count; i++)
+                {
+                    if (mirrorBooks[i] == null) continue;
+
+                    float theta = (2 * Mathf.PI * i) / mirrorBooks.Count;
+                    mirrorBooks[i].transform.position = spawnPosition + new Vector3(
+                        Mathf.Sin(theta + Time.time * currentSpeed) * currentRadius,
+                        Mathf.Cos(theta + Time.time * currentSpeed) * currentRadius,
+                        0
+                    );
+                }
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            foreach (var book in mirrorBooks)
+            {
+                if (book != null) Destroy(book);
+            }
         }
     }
 }

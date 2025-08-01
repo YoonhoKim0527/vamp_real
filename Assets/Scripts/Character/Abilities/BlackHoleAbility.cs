@@ -45,5 +45,50 @@ namespace Vampire
             }
         }
 
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            float totalDamage = playerStats.attackPower * damage.Value * damageMultiplier;
+
+            bool isCritical = Random.value < playerStats.criticalChance;
+            if (isCritical)
+                totalDamage *= (1 + playerStats.criticalDamage);
+
+            float effectiveKnockback = 0f;
+
+            var obj = entityManager.SpawnProjectile(
+                projectileIndex,
+                spawnPosition,
+                totalDamage,
+                effectiveKnockback,
+                speed.Value,
+                monsterLayer
+            );
+
+            var proj = obj.GetComponent<BlackHoleProjectile>();
+            if (proj != null)
+            {
+                proj.Init(
+                    playerCharacter.LookDirection,
+                    playerCharacter,
+                    monsterLayer,
+                    isCritical,
+                    explosionDelay,
+                    pullForce,
+                    blackHoleRadius,
+                    effectiveKnockback,
+                    blackHoleEffect,
+                    totalDamage,
+                    travelDistance
+                );
+
+                // 👻 유령 전용 시각 효과
+                var sr = proj.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = ghostColor;
+                }
+            }
+        }
+
     }
 }

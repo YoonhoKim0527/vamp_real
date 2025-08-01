@@ -63,39 +63,43 @@ namespace Vampire
             }
         }
 
-        private IEnumerator FireWaterBeam()
+        private IEnumerator FireWaterBeam(Vector3? overrideCenter = null, float damageMultiplier = 1f, Color? ghostColor = null)
         {
-            Debug.Log("[BazookaGun] 🐘 코끼리 물대포 발사!");
+            Vector3 basePos = overrideCenter ?? playerCharacter.CenterTransform.position;
 
-            // 🐘 1. 양쪽 코끼리 생성
-            Vector3 leftPosition = playerCharacter.CenterTransform.position + Vector3.left * 4f;
-            Vector3 rightPosition = playerCharacter.CenterTransform.position + Vector3.right * 4f;
+            Vector3 leftPosition = basePos + Vector3.left * 4f;
+            Vector3 rightPosition = basePos + Vector3.right * 4f;
 
             GameObject leftElephant = Instantiate(elephantLeftSprite, leftPosition, Quaternion.identity);
             GameObject rightElephant = Instantiate(elephantRightSprite, rightPosition, Quaternion.identity);
 
-            // SpriteRenderer 가져오기
-            SpriteRenderer leftSR = leftElephant.GetComponent<SpriteRenderer>();
-            SpriteRenderer rightSR = rightElephant.GetComponent<SpriteRenderer>();
+            // 유령 색상 적용
+            if (ghostColor.HasValue)
+            {
+                var lsr = leftElephant.GetComponent<SpriteRenderer>();
+                var rsr = rightElephant.GetComponent<SpriteRenderer>();
+                if (lsr != null) lsr.color = ghostColor.Value;
+                if (rsr != null) rsr.color = ghostColor.Value;
+            }
 
-            yield return new WaitForSeconds(1f); // 코끼리 등장 후 1초 대기
+            yield return new WaitForSeconds(1f);
 
-            // 💧 2. 물대포 생성
-            Vector3 beamStart = new Vector3(leftSR.bounds.max.x, leftPosition.y, 0f);  // 왼쪽 코끼리 오른쪽 끝
-            Vector3 beamEnd = new Vector3(rightSR.bounds.min.x, rightPosition.y, 0f); // 오른쪽 코끼리 왼쪽 끝
-
+            Vector3 beamStart = new Vector3(leftElephant.GetComponent<SpriteRenderer>().bounds.max.x, leftPosition.y, 0f);
+            Vector3 beamEnd = new Vector3(rightElephant.GetComponent<SpriteRenderer>().bounds.min.x, rightPosition.y, 0f);
             Vector3 beamCenter = (beamStart + beamEnd) / 2f;
+
             float beamWidth = Vector3.Distance(beamStart, beamEnd);
-            float beamHeight = waterBeamSprite.transform.localScale.y * 3f; // 두께 3배
+            float beamHeight = waterBeamSprite.transform.localScale.y * 3f;
 
             GameObject waterBeam = Instantiate(waterBeamSprite, beamCenter, Quaternion.identity);
-            waterBeam.transform.localScale = new Vector3(
-                beamWidth,
-                beamHeight,
-                1f
-            );
+            waterBeam.transform.localScale = new Vector3(beamWidth, beamHeight, 1f);
 
-            // 💥 3. 물대포 범위 내 몬스터 데미지
+            if (ghostColor.HasValue)
+            {
+                var sr = waterBeam.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.color = ghostColor.Value;
+            }
+
             float elapsed = 0f;
             while (elapsed < beamDuration)
             {
@@ -106,24 +110,21 @@ namespace Vampire
                     monsterLayer
                 );
 
-                Debug.Log($"[BazookaGun] 🌊 감지 몬스터 수: {hitMonsters.Length}");
-
                 foreach (Collider2D collider in hitMonsters)
                 {
                     Monster monster = collider.GetComponent<Monster>();
                     if (monster != null)
                     {
-                        // ✅ CharacterStatBlueprint 기반 데미지 계산
-                        float damageThisFrame = beamDamagePerSecond * Time.deltaTime * playerStats.attackPower;
+                        float damageThisFrame = beamDamagePerSecond * Time.deltaTime * playerStats.attackPower * damageMultiplier;
 
-                        // ✅ 치명타 확률 적용
+                        bool isCrit = false;
                         if (Random.value < playerStats.criticalChance)
                         {
                             damageThisFrame *= (1 + playerStats.criticalDamage);
-                            isCritical = true;
+                            isCrit = true;
                         }
 
-                        monster.TakeDamage(damageThisFrame, Vector2.zero, isCritical);
+                        monster.TakeDamage(damageThisFrame, Vector2.zero, isCrit);
                     }
                 }
 
@@ -134,8 +135,6 @@ namespace Vampire
             Destroy(leftElephant);
             Destroy(rightElephant);
             Destroy(waterBeam);
-
-            Debug.Log("[BazookaGun] 🐘 물대포 종료");
         }
 
         private IEnumerator LaunchProjectileAnimation()
@@ -191,6 +190,12 @@ namespace Vampire
 
             // 발사체 날리기
             projectile.Launch(launchDirection);
+        }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            if (!isEvolved) return;
+            StartCoroutine(FireWaterBeam(spawnPosition, damageMultiplier, ghostColor));
         }
     }
 }
