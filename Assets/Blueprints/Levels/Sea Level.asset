@@ -15,7 +15,7 @@ MonoBehaviour:
   levelTime: 600
   backgroundTexture: {fileID: 2800000, guid: d50c4000c654f40ec942ab7f2211a77f, type: 3}
   backgroundTiles:
-  - {fileID: 11400000, guid: ce5f2f9acd8e9b744ae1d88b6111a722, type: 2}
+  - {fileID: 11400000, guid: f20424ce43a471c438f19223c3e16321, type: 2}
   abilityPrefabs:
   - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
   - {fileID: 7378740072262091319, guid: 68faf193e4e8d451aa2229ed6155917b, type: 3}
@@ -198,3 +198,4 @@ MonoBehaviour:
   chestSpawnAmount: 2
   initialExpGemCount: 500
   initialExpGemType: 1
+  isInitialized: 1

@@ -31,6 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 8208614024823823667, guid: 3336ff37de27dbb4198158029e13c031, type: 3}
   farmProductionPerSecond: 0
-  abilityPrefab: {fileID: 0}
-  abilityClassName: 
+  abilityPrefab: {fileID: 4536051839462506652, guid: d6aa78f0d97a38646beec90fd601e8c2, type: 3}
+  abilityClassName: Vampire.ExpeditionIceAbility
   expeditionAbilityInterval: 1

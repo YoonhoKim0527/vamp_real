@@ -31,6 +31,6 @@ MonoBehaviour:
   startingAbilities:
   - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
   farmProductionPerSecond: 2
-  abilityPrefab: {fileID: 0}
-  abilityClassName: 
+  abilityPrefab: {fileID: 462643391439929629, guid: 3b9fc9d9bad7a7e408da2cc05e6ebe54, type: 3}
+  abilityClassName: Vampire.TornadoAbility
   expeditionAbilityInterval: 1
