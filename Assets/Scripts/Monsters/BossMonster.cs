@@ -37,7 +37,11 @@ namespace Vampire
         public override void Setup(int monsterIndex, Vector2 position, MonsterBlueprint monsterBlueprint, float hpBuff = 0)
         {
             base.Setup(monsterIndex, position, monsterBlueprint, hpBuff);
+<<<<<<< HEAD
             this.monsterBlueprint = (BossMonsterBlueprint) monsterBlueprint;
+=======
+            this.monsterBlueprint = (BossMonsterBlueprint)monsterBlueprint;
+>>>>>>> 4c39b7bfb6aa3a0732f898c832b745875a59236c
             abilities = new BossAbility[this.monsterBlueprint.abilityPrefabs.Length];
             for (int i = 0; i < abilities.Length; i++)
             {
