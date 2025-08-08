@@ -21,22 +21,21 @@ namespace Vampire
 
         protected override void Attack()
         {
-            StartCoroutine(Stab());
+            StartCoroutine(Stab(playerCharacter.CenterTransform.position, playerCharacter.LookDirection, isMirror: false));
         }
 
-        protected virtual IEnumerator Stab()
+        protected virtual IEnumerator Stab(Vector2 origin, Vector2 direction, bool isMirror)
         {
             hitMonsters = new FastList<GameObject>();
             timeSinceLastAttack -= stabTime;
             float t = 0;
+            weaponSize = weaponSpriteRenderer.bounds.size;
             weaponSpriteRenderer.enabled = true;
-            Vector2 dir = playerCharacter.LookDirection;
 
             while (t < stabTime)
             {
-                Vector2 attackBoxPosition = (Vector2)playerCharacter.CenterTransform.position
-                                            + dir * (weaponSize.x / 2 + stabOffset + stabDistance / stabTime * t);
-                float attackAngle = Vector2.SignedAngle(Vector2.right, dir);
+                Vector2 attackBoxPosition = origin + direction * (weaponSize.x / 2 + stabOffset + stabDistance / stabTime * t);
+                float attackAngle = Vector2.SignedAngle(Vector2.right, direction);
                 Collider2D[] hitColliders = Physics2D.OverlapBoxAll(attackBoxPosition, weaponSize, attackAngle, targetLayer);
 
                 weaponSpriteRenderer.transform.position = attackBoxPosition;
@@ -49,25 +48,27 @@ namespace Vampire
                         hitMonsters.Add(collider.gameObject);
                         Monster monster = collider.gameObject.GetComponentInParent<Monster>();
 
-                        // ✅ CharacterStatBlueprint 기반 데미지 계산
                         float totalDamage = playerStats.attackPower * damage.Value;
-
-                        // ✅ 치명타 여부 계산
+                        float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
                         bool isCritical = false;
-                        if (Random.value < playerStats.criticalChance)
+
+                        if (!isMirror && Random.value < playerStats.criticalChance)
                         {
                             totalDamage *= (1 + playerStats.criticalDamage);
                             isCritical = true;
                         }
 
-                        // ✅ 넉백 계산
-                        Vector2 knockbackForce = dir * knockback.Value * (1 + playerStats.defense * 0.1f);
+                        if (isMirror)
+                        {
+                            totalDamage *= 0.6f;
+                            totalKnockback *= 0.5f;
+                        }
 
-                        // ✅ 데미지 처리 (치명타 포함)
+                        Vector2 knockbackForce = direction * totalKnockback;
                         DamageMonster(monster, totalDamage, knockbackForce, isCritical);
 
-                        // ✅ 플레이어의 총 데미지 이벤트 호출
-                        playerCharacter.OnDealDamage.Invoke(totalDamage);
+                        if (!isMirror)
+                            playerCharacter.OnDealDamage.Invoke(totalDamage);
                     }
                 }
 
@@ -79,13 +80,14 @@ namespace Vampire
             t = 0;
             while (t < 1)
             {
-                weaponSpriteRenderer.transform.localPosition = (Vector2)playerCharacter.CenterTransform.position
-                    + dir * (weaponSpriteRenderer.transform.localScale.x / initialScale.x * weaponSize.x / 2
-                             + stabOffset + stabDistance);
+                weaponSpriteRenderer.transform.localPosition = origin
+                    + direction * (weaponSpriteRenderer.transform.localScale.x / initialScale.x * weaponSize.x / 2
+                                   + stabOffset + stabDistance);
                 weaponSpriteRenderer.transform.localScale = Vector2.Lerp(initialScale, Vector2.zero, EasingUtils.EaseInQuart(t));
                 t += Time.deltaTime * 4;
                 yield return null;
             }
+
             weaponSpriteRenderer.transform.localScale = initialScale;
             weaponSpriteRenderer.enabled = false;
         }
@@ -97,6 +99,12 @@ namespace Vampire
                 monster.TakeDamage(damage, knockback, isCritical);
                 entityManager.SpawnDamageText(monster.CenterTransform.position, damage, isCritical);
             }
+        }
+
+        // 👻 ghost용 MirrorActivate
+        public virtual void MirrorActivate(Vector2 spawnPosition, Vector2 direction)
+        {
+            StartCoroutine(Stab(spawnPosition, direction.normalized, true));
         }
     }
 }

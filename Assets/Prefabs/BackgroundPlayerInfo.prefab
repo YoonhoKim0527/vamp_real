@@ -810,10 +810,17 @@ GameObject:
   - component: {fileID: 4948999650609113655}
   - component: {fileID: 3886412697443419110}
 <<<<<<< HEAD
+<<<<<<< HEAD
   - component: {fileID: 5838293426360970502}
 =======
   - component: {fileID: 1967090898}
 >>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
+=======
+  - component: {fileID: 1967090898}
+=======
+  - component: {fileID: 5838293426360970502}
+>>>>>>> 3b8f15f6620b94df386e8893edbbd68c1fb17b01
+>>>>>>> ff5e3dc9be809cb5f652445316169a795fee3684
   m_Layer: 5
   m_Name: BackgroundPlayerInfo
   m_TagString: Untagged
@@ -885,10 +892,17 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &5838293426360970502
 =======
 --- !u!114 &1967090898
 >>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
+=======
+--- !u!114 &1967090898
+=======
+--- !u!114 &5838293426360970502
+>>>>>>> 3b8f15f6620b94df386e8893edbbd68c1fb17b01
+>>>>>>> ff5e3dc9be809cb5f652445316169a795fee3684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -901,10 +915,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< HEAD
+<<<<<<< HEAD
   settingsButton: {fileID: 8056735274836384500}
   closeButton: {fileID: 0}
   settingsPanel: {fileID: 0}
 =======
+=======
+>>>>>>> ff5e3dc9be809cb5f652445316169a795fee3684
   settingsButton: {fileID: 0}
   questButton: {fileID: 0}
   messengerButton: {fileID: 0}
@@ -914,7 +931,15 @@ MonoBehaviour:
   settingCloseButton: {fileID: 0}
   questCloseButton: {fileID: 0}
   messengerCloseButton: {fileID: 0}
+<<<<<<< HEAD
 >>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
+=======
+=======
+  settingsButton: {fileID: 8056735274836384500}
+  closeButton: {fileID: 0}
+  settingsPanel: {fileID: 0}
+>>>>>>> 3b8f15f6620b94df386e8893edbbd68c1fb17b01
+>>>>>>> ff5e3dc9be809cb5f652445316169a795fee3684
 --- !u!1 &7976053016989726982
 GameObject:
   m_ObjectHideFlags: 0

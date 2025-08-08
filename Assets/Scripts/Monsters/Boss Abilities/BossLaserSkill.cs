@@ -21,6 +21,7 @@ namespace Vampire
             yield return LaserAttackOnce(); // 이걸 직접 기다리게 하면 Act()가 정상 동작함
         }
 
+
         private IEnumerator LaserAttackOnce()
         {
             yield return new WaitForSeconds(warningInterval);
@@ -62,6 +63,16 @@ namespace Vampire
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (active && monster != null && playerCharacter != null)
+            {
+                Vector2 moveDirection = (playerCharacter.transform.position - monster.transform.position).normalized;
+                monster.Move(moveDirection, Time.fixedDeltaTime);
+                entityManager.Grid.UpdateClient(monster);
+            }
+        }
+        
         private Vector2 GetRandomPositionOnScreen()
         {
             Vector2 screenMin = Camera.main.ViewportToWorldPoint(Vector2.zero);
