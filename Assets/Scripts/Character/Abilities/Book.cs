@@ -13,15 +13,26 @@ namespace Vampire
         private Color? ghostColor = null;
         private bool isGhost = false;
 
+<<<<<<< HEAD
         public void Init(BookAbility bookAbility, LayerMask monsterLayer, float damageMultiplier = 1f, Color? ghostColor = null)
+=======
+        private bool isAwakened = false;
+
+        public void Init(BookAbility bookAbility, LayerMask monsterLayer, float damageMultiplier = 1f, Color? ghostColor = null, bool isAwakened = false)
+>>>>>>> 09a8974
         {
             this.bookAbility = bookAbility;
             this.monsterLayer = monsterLayer;
             this.damageMultiplier = damageMultiplier;
             this.ghostColor = ghostColor;
             this.isGhost = ghostColor.HasValue;
+<<<<<<< HEAD
 
             // 유령 효과 적용
+=======
+            this.isAwakened = isAwakened;
+
+>>>>>>> 09a8974
             if (isGhost && TryGetComponent(out SpriteRenderer sr))
                 sr.color = ghostColor.Value;
         }
@@ -45,9 +56,15 @@ namespace Vampire
                         totalDamage *= (1 + bookAbility.PlayerStats.criticalDamage);
 
                     Vector2 knockbackDir = (damageable.transform.position - transform.position).normalized;
+<<<<<<< HEAD
                     damageable.TakeDamage(totalDamage, bookAbility.Knockback.Value * knockbackDir, isCritical);
 
                     bookAbility.Character.OnDealDamage.Invoke(totalDamage);
+=======
+                    damageable.TakeDamage(totalDamage, bookAbility.KnockbackValue.Value * knockbackDir, isCritical);
+
+                    bookAbility.PlayerCharacter.OnDealDamage.Invoke(totalDamage);
+>>>>>>> 09a8974
                 }
             }
         }

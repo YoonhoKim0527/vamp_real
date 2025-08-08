@@ -29,7 +29,8 @@ MonoBehaviour:
   - {fileID: 1097689610, guid: 2c4f09c3c8c134c4f8b316f6a1780e55, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 8208614024823823667, guid: 3336ff37de27dbb4198158029e13c031, type: 3}
+  - {fileID: 7378740072262091319, guid: 710069dc0dc9445e5ae3f9ef5a764abb, type: 3}
+  - {fileID: 503157957391706520, guid: 472c9af83ee3fdb459c65de885f7cfdd, type: 3}
   farmProductionPerSecond: 0
   abilityPrefab: {fileID: 4536051839462506652, guid: d6aa78f0d97a38646beec90fd601e8c2, type: 3}
   abilityClassName: Vampire.ExpeditionIceAbility

@@ -31,18 +31,23 @@ namespace Vampire
         private List<Book> books;
 
         public CharacterStatBlueprint PlayerStats => playerStats;
+<<<<<<< HEAD
         public UpgradeableDamage DamageValue  => damage;
         public UpgradeableKnockback Knockback => knockback;
         public Character Character => Character;
 
+=======
+        public Character PlayerCharacter => playerCharacter;
+        public UpgradeableDamage DamageValue => damage;
+        public UpgradeableKnockback KnockbackValue => knockback;
+>>>>>>> 09a8974
 
         protected override void Use()
         {
             base.Use();
 
-            // ✅ CharacterStatBlueprint 기반 bonusProjectile 계산
             bonusProjectile = playerStats.extraProjectiles;
-            Debug.Log($"[BookAbility] Blueprint Stats -> ExtraProjectiles: {playerStats.extraProjectiles}, Attack: {playerStats.attackPower}");
+            Debug.Log($"[BookAbility] ExtraProjectiles: {playerStats.extraProjectiles}, Attack: {playerStats.attackPower}");
 
             gameObject.SetActive(true);
             projectileCount.OnChanged.AddListener(RefreshBooks);
@@ -72,9 +77,7 @@ namespace Vampire
                 awakenTimer += Time.deltaTime;
 
                 if (isExpanded)
-                {
                     currentSpeed *= 3f;
-                }
 
                 if (!isExpanded && awakenTimer >= expandInterval)
                 {
@@ -85,9 +88,7 @@ namespace Vampire
 
             float currentRadius = radius.Value;
             if (isAwakened && isExpanded)
-            {
                 currentRadius *= expandMultiplier;
-            }
 
             for (int i = 0; i < books.Count; i++)
             {
@@ -114,7 +115,6 @@ namespace Vampire
             isExpanded = true;
             Debug.Log("[BookAbility] Expanding orbit!");
 
-            // ✅ CharacterStatBlueprint의 defense 사용
             float effectiveKnockback = awakenedPushForce * (1 + playerStats.defense * 0.1f);
 
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(playerCharacter.transform.position, knockbackRadius, monsterLayer);
@@ -123,7 +123,7 @@ namespace Vampire
                 Vector2 direction = (enemy.transform.position - playerCharacter.transform.position).normalized;
                 if (enemy.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(0, effectiveKnockback * direction); // 데미지 없이 넉백만
+                    damageable.TakeDamage(0, effectiveKnockback * direction);
                 }
             }
 
@@ -146,7 +146,7 @@ namespace Vampire
 
                 if (enemy.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(0, awakenedPushForce * direction); // 넉백
+                    damageable.TakeDamage(0, awakenedPushForce * direction);
                 }
             }
             Debug.Log("[BookAbility] Forced enemies outside radius!");
@@ -154,10 +154,8 @@ namespace Vampire
 
         public void Damage(IDamageable damageable)
         {
-            // ✅ CharacterStatBlueprint 기반 데미지 계산
             float totalDamage = playerStats.attackPower * damage.Value;
 
-            // ✅ 치명타 확률 적용
             if (Random.value < playerStats.criticalChance)
             {
                 totalDamage *= (1 + playerStats.criticalDamage);
@@ -176,8 +174,7 @@ namespace Vampire
             {
                 foreach (var book in books)
                 {
-                    if (book != null)
-                        Destroy(book.gameObject);
+                    if (book != null) Destroy(book.gameObject);
                 }
                 books.Clear();
             }
@@ -224,7 +221,20 @@ namespace Vampire
             {
                 GameObject bookObj = Instantiate(bookPrefab, spawnPosition, Quaternion.identity);
                 Book book = bookObj.GetComponent<Book>();
+<<<<<<< HEAD
                 book.Init(this, monsterLayer, damageMultiplier, ghostColor);
+=======
+
+                // isAwakened 상태도 전달
+                book.Init(
+                    this,
+                    monsterLayer,
+                    damageMultiplier,
+                    ghostColor,
+                    isAwakened // ✅ 추가
+                );
+
+>>>>>>> 09a8974
                 mirrorBooks.Add(bookObj);
             }
 
@@ -236,6 +246,15 @@ namespace Vampire
                 float currentSpeed = speed.Value;
                 float currentRadius = radius.Value;
 
+<<<<<<< HEAD
+=======
+                if (isAwakened)
+                {
+                    currentSpeed *= 3f;
+                    currentRadius *= expandMultiplier;
+                }
+
+>>>>>>> 09a8974
                 for (int i = 0; i < mirrorBooks.Count; i++)
                 {
                     if (mirrorBooks[i] == null) continue;

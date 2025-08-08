@@ -11,7 +11,7 @@ namespace Vampire
         protected Coroutine act = null;
 
         // 추가된 필드
-        protected float moveSpeed; // 직접 선언함
+        public float moveSpeed { get; set; }  // 접근 가능하게 프로퍼티로 만들기
 
         public Rigidbody2D Rigidbody => rb;
         public SpriteAnimator Animator => monsterSpriteAnimator;
@@ -32,6 +32,22 @@ namespace Vampire
         public void MarkAsSplit()
         {
             IsSplit = true;
+        }
+
+        public Vector2 LookDirection
+        {
+            get
+            {
+                Vector2 toPlayer = playerCharacter.transform.position - transform.position;
+                return toPlayer.normalized;
+            }
+        }
+
+        public SpriteRenderer SpriteRenderer => monsterSpriteAnimator?.SpriteRenderer;
+
+        public void Stop()
+        {
+            rb.velocity = Vector2.zero;
         }
 
         public override void Setup(int monsterIndex, Vector2 position, MonsterBlueprint monsterBlueprint, float hpBuff = 0)
