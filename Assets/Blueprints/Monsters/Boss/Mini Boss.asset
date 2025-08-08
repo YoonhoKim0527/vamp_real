@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Mini Boss
   m_EditorClassIdentifier: 
   name: Split Boss
-  hp: 400
+  hp: 11000
   atk: 10
   recovery: 0
   armor: 0
   atkspeed: 1
   movespeed: 0.9
-  acceleration: 5
+  acceleration: 50000
   gemLootTable:
     lootTable:
     - item: 50
@@ -31,13 +31,16 @@ MonoBehaviour:
       dropChance: 1
       coinType: 0
   walkSpriteSequence:
-  - {fileID: 917104541, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
-  - {fileID: -1159827789, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
-  - {fileID: -1498753039, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
-  - {fileID: -1711853846, guid: 7e513dbfca8774c7c89285ffb164b2a5, type: 3}
+  - {fileID: 21300000, guid: 94caff217bb07db409f74b699a388d5d, type: 3}
+  - {fileID: 21300000, guid: 94caff217bb07db409f74b699a388d5d, type: 3}
+  - {fileID: 21300000, guid: 94caff217bb07db409f74b699a388d5d, type: 3}
+  - {fileID: 21300000, guid: 94caff217bb07db409f74b699a388d5d, type: 3}
+  - {fileID: 21300000, guid: 94caff217bb07db409f74b699a388d5d, type: 3}
+  - {fileID: 21300000, guid: 5a97ce50f64805a48b0286c627920ca3, type: 3}
   walkFrameTime: 0.2
   abilityPrefabs:
-  - {fileID: 3625824504957807313, guid: 579aaee655432d24489f5354226dac2d, type: 3}
+  - {fileID: 7744714996288908991, guid: 3d66328dc8309b5478058061ef1f2fa1, type: 3}
+  - {fileID: 7744714996288908991, guid: 58d4e525be2dad0469caed9819dbf2ea, type: 3}
   - {fileID: 7744714996288908991, guid: cc96bcabab46e43f99ddb4181af0a3a6, type: 3}
   meleeLayer:
     serializedVersion: 2

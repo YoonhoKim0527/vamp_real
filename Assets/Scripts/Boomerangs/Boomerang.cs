@@ -11,6 +11,7 @@ namespace Vampire
         [SerializeField] protected SpriteRenderer boomerangSpriteRenderer;
         [SerializeField] protected float rotationSpeed = 2;
         [SerializeField] protected float damageDelay = 0.1f;
+
         protected Vector2 initialScale;
         protected float throwTime = 1;
         protected float maxDistance;
@@ -18,12 +19,14 @@ namespace Vampire
         protected LayerMask targetLayer;
         protected float damage;
         protected float knockback;
+
         protected EntityManager entityManager;
         protected Character playerCharacter;
         protected ZPositioner zPositioner;
         protected int boomerangIndex;
+
         protected TrailRenderer trailRenderer = null;
-        private bool isCriticalHit = false; // ✅ 크리티컬 여부
+        private bool isCriticalHit = false;
 
         public UnityEvent<float> OnHitDamageable { get; private set; }
         public float Range => maxDistance;
@@ -40,6 +43,10 @@ namespace Vampire
         {
             this.entityManager = entityManager;
             this.playerCharacter = playerCharacter;
+
+            if (zPositioner == null)
+                zPositioner = gameObject.AddComponent<ZPositioner>();
+
             zPositioner.Init(playerCharacter.transform);
         }
 
@@ -58,7 +65,7 @@ namespace Vampire
 
         public void InitCritical(bool isCritical)
         {
-            this.isCriticalHit = isCritical; // ✅ 크리티컬 여부 저장
+            this.isCriticalHit = isCritical;
         }
 
         public virtual void Throw(Transform returnTransform, Vector2 toPosition)
@@ -72,9 +79,7 @@ namespace Vampire
             Dictionary<GameObject, float> hitMonsterTimes = new Dictionary<GameObject, float>();
             Vector2 prevPosition = transform.position;
             Vector2 a = transform.position;
-            Vector2 b = (Vector2)transform.position + direction * throwDistance / 2 + new Vector2(direction.y, -direction.x) * throwDistance;
             Vector2 c = (Vector2)transform.position + direction * throwDistance;
-            Vector2 d = (Vector2)transform.position + direction * throwDistance / 2 - new Vector2(direction.y, -direction.x) * throwDistance;
 
             float t = 0;
             while (t < 1)
@@ -91,17 +96,16 @@ namespace Vampire
                         hitMonsterTimes[hitObj] = 0.0f;
                         IDamageable damageable = hitObj.GetComponentInParent<IDamageable>();
                         float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage;
-                        damageable.TakeDamage(totalDamage, circleCastDir.normalized * knockback, isCriticalHit); // ✅ 크리티컬 여부 전달
+                        damageable.TakeDamage(totalDamage, circleCastDir.normalized * knockback, isCriticalHit);
                         OnHitDamageable.Invoke(totalDamage);
                     }
                 }
-                prevPosition = transform.position;
 
+                prevPosition = transform.position;
                 boomerangSpriteRenderer.transform.RotateAround(boomerangSpriteRenderer.transform.position, Vector3.back, Time.deltaTime * 100 * rotationSpeed);
                 boomerangSpriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, initialScale, t * 5);
 
-                GameObject[] keys = hitMonsterTimes.Keys.ToArray();
-                foreach (GameObject key in keys)
+                foreach (var key in hitMonsterTimes.Keys.ToArray())
                 {
                     hitMonsterTimes[key] += Time.deltaTime;
                 }
@@ -113,7 +117,11 @@ namespace Vampire
             t = 0;
             while (t < 1)
             {
-                transform.position = Vector2.Lerp(c, returnTransform.position, EasingUtils.EaseInQuad(t));
+                Vector3 returnTarget = (playerCharacter != null && playerCharacter.CenterTransform != null)
+                    ? playerCharacter.CenterTransform.position
+                    : returnTransform != null ? returnTransform.position : transform.position;
+
+                transform.position = Vector2.Lerp(c, returnTarget, EasingUtils.EaseInQuad(t));
 
                 Vector2 circleCastDir = (Vector2)transform.position - prevPosition;
                 RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(prevPosition, radius, circleCastDir.normalized, circleCastDir.magnitude, targetLayer);
@@ -125,17 +133,16 @@ namespace Vampire
                         hitMonsterTimes[hitObj] = 0.0f;
                         IDamageable damageable = hitObj.GetComponentInParent<IDamageable>();
                         float totalDamage = playerCharacter.Stats.GetTotalDamage() * damage;
-                        damageable.TakeDamage(totalDamage, -circleCastDir.normalized * knockback, isCriticalHit); // ✅ 크리티컬 여부 전달
+                        damageable.TakeDamage(totalDamage, -circleCastDir.normalized * knockback, isCriticalHit);
                         OnHitDamageable.Invoke(totalDamage);
                     }
                 }
-                prevPosition = transform.position;
 
+                prevPosition = transform.position;
                 boomerangSpriteRenderer.transform.RotateAround(boomerangSpriteRenderer.transform.position, Vector3.back, Time.deltaTime * 100 * rotationSpeed);
                 boomerangSpriteRenderer.transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, (t - 0.8f) * 5);
 
-                GameObject[] keys = hitMonsterTimes.Keys.ToArray();
-                foreach (GameObject key in keys)
+                foreach (var key in hitMonsterTimes.Keys.ToArray())
                 {
                     hitMonsterTimes[key] += Time.deltaTime;
                 }

@@ -38,6 +38,14 @@ namespace Vampire
 
         protected float maxHealth; // ✅ 추가
 
+        protected bool isInvincible = false;
+        public bool IsInvincible => isInvincible;
+
+        public void SetInvincible(bool value)
+        {
+            isInvincible = value;
+        }
+
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -105,11 +113,14 @@ namespace Vampire
 
         public override void Knockback(Vector2 knockback)
         {
+            if (IsInvincible) return; // ✅ 무적 상태면 넉백도 무시
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
         public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), bool isCritical = false)
         {
+            if (!alive || IsInvincible)  // ✅ 무적 상태일 때 데미지 무시
+                return;
             if (alive)
             {
                 // ✅ 크리티컬 여부 전달

@@ -160,5 +160,57 @@ namespace Vampire
                 Debug.Log("🪃 BoomerangAbility: Awakened skill activated!");
             }
         }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            StartCoroutine(MirrorBoomerangRoutine(damageMultiplier, spawnPosition, ghostColor));
+        }
+
+        private IEnumerator MirrorBoomerangRoutine(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            int mirrorCount = isAwakened ? awakenedBoomerangCount : boomerangCount.Value;
+
+            for (int i = 0; i < mirrorCount; i++)
+            {
+                float totalDamage = playerStats.attackPower * damage.Value * damageMultiplier;
+                float totalKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+                bool isCritical = false;
+                if (Random.value < playerStats.criticalChance)
+                {
+                    totalDamage *= (1 + playerStats.criticalDamage);
+                    isCritical = true;
+                }
+
+                Boomerang boomerang = entityManager.SpawnBoomerang(
+                    boomerangIndex,
+                    spawnPosition,
+                    totalDamage,
+                    totalKnockback,
+                    isAwakened ? throwRadius * awakenedThrowRadiusMultiplier : throwRadius,
+                    throwTime,
+                    monsterLayer
+                );
+
+                if (isAwakened)
+                {
+                    boomerang.transform.localScale = boomerangPrefab.transform.localScale * awakenedSizeMultiplier;
+                }
+
+                boomerang.InitCritical(isCritical);
+
+                if (boomerang.TryGetComponent(out SpriteRenderer sr))
+                {
+                    sr.color = ghostColor;
+                }
+
+                Vector2 throwDir = Random.insideUnitCircle.normalized;
+                Vector2 target = (Vector2)spawnPosition + throwDir * (isAwakened ? throwRadius * awakenedThrowRadiusMultiplier : throwRadius);
+                boomerang.Throw(null, target);  // Mirror는 playerCharacter 없이 null 가능
+                boomerang.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+            }
+
+            yield break;
+        }
     }
 }
