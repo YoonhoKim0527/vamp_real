@@ -44,7 +44,6 @@ namespace Vampire
             selectedBlueprint = blueprint;
             CrossSceneData.CharacterBlueprint = blueprint;
             Debug.Log($"[CharacterSelector] 캐릭터 선택됨: {blueprint.name}");
-            LoadGameScene();
         }
 
         // 외부 버튼에서 호출
