@@ -117,6 +117,7 @@ namespace Vampire
 
         public void Selected()
         {
+            Debug.Log($"characterBlueprint.owned: {characterBlueprint.owned}");
             if (!characterBlueprint.owned)
             {
                 int coinCount = CoinManager.Instance.GetCoins(); // ✅ GetCoins() 사용

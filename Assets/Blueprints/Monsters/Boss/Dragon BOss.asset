@@ -37,11 +37,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d1afa16a01ae27940bacfc907cede380, type: 3}
   walkFrameTime: 0.2
   abilityPrefabs:
-  - {fileID: 7744714996288908991, guid: 660f5880e93344f4f93e570d858c8a14, type: 3}
+  - {fileID: 7744714996288908991, guid: 5f9db995602d3414a9a87278a6d25f8b, type: 3}
   - {fileID: 7744714996288908991, guid: cc96bcabab46e43f99ddb4181af0a3a6, type: 3}
-  - {fileID: 7744714996288908991, guid: d55cafe6a47b20a4ca6161bd5061afe6, type: 3}
-  - {fileID: 7744714996288908991, guid: 3d66328dc8309b5478058061ef1f2fa1, type: 3}
-  - {fileID: 95164599571083344, guid: 961baa1ebb7f31a48bbff02e97922271, type: 3}
   meleeLayer:
     serializedVersion: 2
     m_Bits: 512
