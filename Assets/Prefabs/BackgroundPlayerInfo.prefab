@@ -688,6 +688,7 @@ GameObject:
   - component: {fileID: 1821286339880214317}
   - component: {fileID: 4948999650609113655}
   - component: {fileID: 3886412697443419110}
+  - component: {fileID: 1967090898}
   m_Layer: 5
   m_Name: BackgroundPlayerInfo
   m_TagString: Untagged
@@ -704,7 +705,7 @@ RectTransform:
   m_GameObject: {fileID: 4334233412829423330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 19.230213, y: 2.8208423, z: 1.0088}
+  m_LocalScale: {x: 19.230215, y: 2.8208427, z: 1.0088003}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 865878513555240062}
@@ -757,6 +758,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1967090898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4334233412829423330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aab6de472b978434b930943fa2bddde6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settingsButton: {fileID: 0}
+  questButton: {fileID: 0}
+  messengerButton: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  questPanel: {fileID: 0}
+  messengerPanel: {fileID: 0}
+  settingCloseButton: {fileID: 0}
+  questCloseButton: {fileID: 0}
+  messengerCloseButton: {fileID: 0}
 --- !u!1 &7976053016989726982
 GameObject:
   m_ObjectHideFlags: 0
