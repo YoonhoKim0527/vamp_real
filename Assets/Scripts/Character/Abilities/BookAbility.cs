@@ -31,16 +31,10 @@ namespace Vampire
         private List<Book> books;
 
         public CharacterStatBlueprint PlayerStats => playerStats;
-<<<<<<< HEAD
         public UpgradeableDamage DamageValue  => damage;
         public UpgradeableKnockback Knockback => knockback;
         public Character Character => Character;
 
-=======
-        public Character PlayerCharacter => playerCharacter;
-        public UpgradeableDamage DamageValue => damage;
-        public UpgradeableKnockback KnockbackValue => knockback;
->>>>>>> 09a8974
 
         protected override void Use()
         {
@@ -221,20 +215,7 @@ namespace Vampire
             {
                 GameObject bookObj = Instantiate(bookPrefab, spawnPosition, Quaternion.identity);
                 Book book = bookObj.GetComponent<Book>();
-<<<<<<< HEAD
                 book.Init(this, monsterLayer, damageMultiplier, ghostColor);
-=======
-
-                // isAwakened 상태도 전달
-                book.Init(
-                    this,
-                    monsterLayer,
-                    damageMultiplier,
-                    ghostColor,
-                    isAwakened // ✅ 추가
-                );
-
->>>>>>> 09a8974
                 mirrorBooks.Add(bookObj);
             }
 
@@ -246,15 +227,6 @@ namespace Vampire
                 float currentSpeed = speed.Value;
                 float currentRadius = radius.Value;
 
-<<<<<<< HEAD
-=======
-                if (isAwakened)
-                {
-                    currentSpeed *= 3f;
-                    currentRadius *= expandMultiplier;
-                }
-
->>>>>>> 09a8974
                 for (int i = 0; i < mirrorBooks.Count; i++)
                 {
                     if (mirrorBooks[i] == null) continue;
