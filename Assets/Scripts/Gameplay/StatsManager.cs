@@ -22,6 +22,8 @@ namespace Vampire
         {
             monstersKilled++;
             monstersKilledText.text = monstersKilled.ToString();
+            if (EnemyKillTracker.Instance != null)
+                EnemyKillTracker.Instance.ReportKill();
         }
 
         public void IncreaseCoinsGained(int amount)

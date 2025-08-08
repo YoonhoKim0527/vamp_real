@@ -809,7 +809,11 @@ GameObject:
   - component: {fileID: 1821286339880214317}
   - component: {fileID: 4948999650609113655}
   - component: {fileID: 3886412697443419110}
+<<<<<<< HEAD
   - component: {fileID: 5838293426360970502}
+=======
+  - component: {fileID: 1967090898}
+>>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
   m_Layer: 5
   m_Name: BackgroundPlayerInfo
   m_TagString: Untagged
@@ -880,7 +884,11 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+<<<<<<< HEAD
 --- !u!114 &5838293426360970502
+=======
+--- !u!114 &1967090898
+>>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -892,9 +900,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab6de472b978434b930943fa2bddde6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   settingsButton: {fileID: 8056735274836384500}
   closeButton: {fileID: 0}
   settingsPanel: {fileID: 0}
+=======
+  settingsButton: {fileID: 0}
+  questButton: {fileID: 0}
+  messengerButton: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  questPanel: {fileID: 0}
+  messengerPanel: {fileID: 0}
+  settingCloseButton: {fileID: 0}
+  questCloseButton: {fileID: 0}
+  messengerCloseButton: {fileID: 0}
+>>>>>>> 4f4eb6b6bcbeb359ad3305283cfff14e1f75afab
 --- !u!1 &7976053016989726982
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,28 @@
+{
+  "messages": [
+    {
+      "id": "welcome_bonus 1",
+      "title": "Welcome Bonus",
+      "content": "Welcome to the game!",
+      "claimed": false,
+      "rewardType": 0,
+      "rewardAmount": 100
+    },
+    {
+      "id": "returning_user 2",
+      "title": "Returning User Reward",
+      "content": "It's been a while! Here's your returning reward.",
+      "claimed": false,
+      "rewardType": 1,
+      "rewardAmount": 10
+    },
+        {
+      "id": "returning_TO_user 3",
+      "title": "Returning User Reward",
+      "content": "It's been a while! Here's your returning reward.",
+      "claimed": false,
+      "rewardType": 1,
+      "rewardAmount": 10
+    }
+  ]
+}
