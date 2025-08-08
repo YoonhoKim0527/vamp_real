@@ -29,7 +29,8 @@ MonoBehaviour:
   - {fileID: -1209027723, guid: 655d54593c380bc45b6fed69f682493e, type: 3}
   walkFrameTime: 0.1
   startingAbilities:
-  - {fileID: 7378740072262091319, guid: 48e31f1d1283b43748c060fbc24e3df8, type: 3}
+  - {fileID: 7378740072262091319, guid: bbcc2d2a11140f34db00daa95bdb86f0, type: 3}
+  - {fileID: 503157957391706520, guid: 472c9af83ee3fdb459c65de885f7cfdd, type: 3}
   farmProductionPerSecond: 2
   abilityPrefab: {fileID: 462643391439929629, guid: 3b9fc9d9bad7a7e408da2cc05e6ebe54, type: 3}
   abilityClassName: Vampire.TornadoAbility

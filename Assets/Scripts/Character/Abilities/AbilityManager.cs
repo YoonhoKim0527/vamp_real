@@ -8,7 +8,7 @@ namespace Vampire
     public class AbilityManager : MonoBehaviour
     {
         private LevelBlueprint levelBlueprint;
-        private Character playerCharacter;
+        [SerializeField] private Character playerCharacter;
         private WeightedAbilities newAbilities;
         private WeightedAbilities ownedAbilities;
         private FastList<IUpgradeableValue> registeredUpgradeableValues;
@@ -32,6 +32,7 @@ namespace Vampire
         public int RotationSpeedUpgradeablesCount { get; set; } = 0;
 
         [SerializeField] private CharacterStatBlueprint playerStats; // ✅ 추가
+        public Character PlayerCharacter => playerCharacter;
 
         public void Init(LevelBlueprint levelBlueprint, EntityManager entityManager, Character playerCharacter, CharacterStatBlueprint playerStats)
         {
@@ -41,6 +42,7 @@ namespace Vampire
 
             registeredUpgradeableValues = new FastList<IUpgradeableValue>();
             ownedAbilities = new WeightedAbilities();
+
 
             foreach (GameObject abilityPrefab in playerCharacter.Blueprint.startingAbilities)
             {
@@ -56,15 +58,32 @@ namespace Vampire
             {
                 if (playerCharacter.Blueprint.startingAbilities.Contains(abilityPrefab)) continue;
 
+                Debug.Log("into ability ###################");
                 Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
                 // ✅ Ability에도 PlayerStats 전달
                 ability.Init(this, entityManager, playerCharacter, this.playerStats);
                 newAbilities.Add(ability);
             }
+            
+            var ghost = GetComponentInChildren<GhostMirroredAbility>();
+            if (ghost != null)
+                ghost.Init(this);
+            else{
+                Debug.Log("[AbilityManager] Ghost is null");
+            }
+            
         }
 
         public void RegisterUpgradeableValue(IUpgradeableValue upgradeableValue, bool inUse = false)
         {
+            Debug.Log("[AbilityManager] RegisterUpgradeableValue called");
+
+            if (registeredUpgradeableValues == null)
+            {
+                Debug.LogError("[AbilityManager] registeredUpgradeableValues is null. Initializing...");
+                registeredUpgradeableValues = new FastList<IUpgradeableValue>();
+            }
+
             upgradeableValue.Register(this);
             registeredUpgradeableValues.Add(upgradeableValue);
             if (inUse) upgradeableValue.RegisterInUse();
@@ -228,6 +247,11 @@ namespace Vampire
             return Random.Range(0.0f, 1.0f) < chanceFunction();
         }
 
+        public List<Ability> GetOwnedAbilities()
+        {
+            return ownedAbilities.ToList();
+        }
+
         private class WeightedAbilities : IEnumerable<Ability>
         {
             private FastList<Ability> abilities;
@@ -265,6 +289,7 @@ namespace Vampire
             {
                 return GetEnumerator();
             }
+
         }
     }
 }

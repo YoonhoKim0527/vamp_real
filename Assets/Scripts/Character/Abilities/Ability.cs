@@ -101,5 +101,11 @@ namespace Vampire
             Legendary = 9,
             Exotic = 1
         }
+
+        public virtual void MirrorActivate(float damageMultiplier, Vector3 spawnPosition, Color ghostColor)
+        {
+            // 기본적으로는 아무 일도 하지 않음. 각 Ability에서 override해서 구현
+        }
+
     }
 }

@@ -76,5 +76,61 @@ namespace Vampire
                 }
             }
         }
+
+        public override void MirrorActivate(float damageMultiplier, Vector3 spawnPos, Color ghostColor)
+        {
+            if (level >= 0)
+            {
+                StartCoroutine(MirrorFireEvolvedGrenades(damageMultiplier, spawnPos, ghostColor));
+            }
+            else
+            {
+                base.MirrorActivate(damageMultiplier, spawnPos, ghostColor);
+            }
+        }
+
+        private IEnumerator MirrorFireEvolvedGrenades(float damageMultiplier, Vector3 spawnPos, Color ghostColor)
+        {
+            for (int repeat = 0; repeat < evolvedRepeatCount; repeat++)
+            {
+                for (int i = 0; i < evolvedProjectileCount; i++)
+                {
+                    float angle = i * evolvedAngleStep;
+                    Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
+
+                    float totalDamage = playerStats.attackPower * damage.Value * damageMultiplier;
+
+                    bool isCritical = Random.value < playerStats.criticalChance;
+                    if (isCritical)
+                    {
+                        totalDamage *= (1 + playerStats.criticalDamage);
+                    }
+
+                    float effectiveKnockback = knockback.Value * (1 + playerStats.defense * 0.1f);
+
+                    GrenadeThrowable grenade = (GrenadeThrowable)entityManager.SpawnThrowable(
+                        throwableIndex,
+                        spawnPos,
+                        totalDamage,
+                        effectiveKnockback,
+                        0,
+                        monsterLayer
+                    );
+
+                    grenade.SetupGrenade(fragmentCount.Value);
+                    grenade.SetCritical(isCritical);
+                    grenade.SetColor(ghostColor); // 👈 추가 구현 필요
+
+                    grenade.Throw(spawnPos + (Vector3)(direction * throwRadius));
+                    grenade.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+                }
+
+                if (repeat < evolvedRepeatCount - 1)
+                {
+                    yield return new WaitForSeconds(evolvedRepeatDelay);
+                }
+            }
+        }
+
     }
 }

@@ -198,22 +198,43 @@ public class SpatialHashGrid
         if (client.ListIndexByCellIndex == null)
         {
             Debug.LogWarning("[SpatialHashGrid] Tried to remove client before it was inserted.");
-            return; // 🟥 grid에 등록된 적 없으면 그냥 무시
+            return;
         }
 
-        foreach (var indices in client.ListIndexByCellIndex)
+        foreach (var kvp in client.ListIndexByCellIndex)
         {
-            int endIndex = cells[indices.Key].Count - 1;
-            ISpatialHashGridClient endClient = cells[indices.Key][endIndex];
-            if (endClient != client)
+            int cellIndex = kvp.Key;
+            int listIndex = kvp.Value;
+
+            if (cellIndex < 0 || cellIndex >= cells.Length)
             {
-                endClient.ListIndexByCellIndex[indices.Key] = indices.Value;
-                cells[indices.Key][indices.Value] = endClient;
+                Debug.LogWarning($"[SpatialHashGrid] Invalid cell index: {cellIndex}. Skipping.");
+                continue;
             }
-            cells[indices.Key].RemoveAt(endIndex);
+
+            List<ISpatialHashGridClient> cellList = cells[cellIndex];
+
+            if (listIndex < 0 || listIndex >= cellList.Count)
+            {
+                Debug.LogWarning($"[SpatialHashGrid] Invalid list index: {listIndex} in cell {cellIndex}. Skipping.");
+                continue;
+            }
+
+            int endIndex = cellList.Count - 1;
+            ISpatialHashGridClient endClient = cellList[endIndex];
+
+            // Only swap if not removing the last element
+            if (listIndex != endIndex)
+            {
+                cellList[listIndex] = endClient;
+                endClient.ListIndexByCellIndex[cellIndex] = listIndex;
+            }
+
+            cellList.RemoveAt(endIndex);
         }
+
         client.ListIndexByCellIndex.Clear();
-        client.ListIndexByCellIndex = null; // 🟢 제거 후 null로 초기화
+        client.ListIndexByCellIndex = null;
     }
 
     public bool CloseToEdge(ISpatialHashGridClient client)

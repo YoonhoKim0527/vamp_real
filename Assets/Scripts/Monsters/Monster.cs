@@ -36,6 +36,16 @@ namespace Vampire
         public Dictionary<int, int> ListIndexByCellIndex { get; set; }
         public int QueryID { get; set; } = -1;
 
+        protected float maxHealth; // ✅ 추가
+
+        protected bool isInvincible = false;
+        public bool IsInvincible => isInvincible;
+
+        public void SetInvincible(bool value)
+        {
+            isInvincible = value;
+        }
+
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -61,7 +71,10 @@ namespace Vampire
             rb.position = position;
             transform.position = position;
             // Reset health to max
-            currentHealth = monsterBlueprint.hp + hpBuff;
+            // ✅ 체력 설정
+            maxHealth = monsterBlueprint.hp + hpBuff;
+            currentHealth = maxHealth;
+
             // Toggle alive flag on
             alive = true;
             // Add to list of living monsters
@@ -88,6 +101,7 @@ namespace Vampire
 
         protected virtual void Update()
         {
+            if (playerCharacter == null) return;
             // Direction
             monsterSpriteRenderer.flipX = ((playerCharacter.transform.position.x - rb.position.x) < 0);
         }
@@ -99,11 +113,14 @@ namespace Vampire
 
         public override void Knockback(Vector2 knockback)
         {
+            if (IsInvincible) return; // ✅ 무적 상태면 넉백도 무시
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
         public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), bool isCritical = false)
         {
+            if (!alive || IsInvincible)  // ✅ 무적 상태일 때 데미지 무시
+                return;
             if (alive)
             {
                 // ✅ 크리티컬 여부 전달
@@ -132,19 +149,15 @@ namespace Vampire
 
         public virtual IEnumerator Killed(bool killedByPlayer = true)
         {
-            // Toggle alive flag off and disable hitbox
             alive = false;
             monsterHitbox.enabled = false;
-            // Remove from list of living monsters
             entityManager.LivingMonsters.Remove(this);
-            // Drop loot
+
             if (killedByPlayer)
                 DropLoot();
 
             if (deathParticles != null)
-            {       
                 deathParticles.Play();
-            }
 
             yield return HitAnimation();
 
@@ -152,26 +165,23 @@ namespace Vampire
             {
                 monsterSpriteRenderer.enabled = false;
                 shadow.SetActive(false);
-                yield return new WaitForSeconds(deathParticles.main.duration - 0.15f);
-                monsterSpriteRenderer.enabled = true;
-                shadow.SetActive(true);
-            }
-            // monsterSpriteRenderer.material = dissolveMaterial;
-            // float t = 0;
-            // while (t < 1)
-            // {
-            //     monsterSpriteRenderer.material.SetFloat("_Dissolve", t);
-            //     t += Time.deltaTime*2;
-            //     yield return null;
-            // }
-            // monsterSpriteRenderer.sharedMaterial = defaultMaterial;
-            //yield return new WaitForSeconds(0.2f);
 
-            // Invoke monster killed callback and remove all listeners
+                // ✅ 스프라이트 재활성화 제거 → 잔류 방지
+                // yield return new WaitForSeconds(deathParticles.main.duration - 0.15f);
+                // monsterSpriteRenderer.enabled = true;
+                // shadow.SetActive(true);
+            }
+
             OnKilled.Invoke(this);
             OnKilled.RemoveAllListeners();
-            entityManager.DespawnMonster(monsterIndex, this, true);
+
+            // ✅ Index 검증
+            if (monsterIndex >= 0)
+                entityManager.DespawnMonster(monsterIndex, this, true);
+            else
+                Destroy(gameObject); // 분열된 보스 등 수동 삭제
         }
+
 
         protected virtual void DropLoot()
         {
