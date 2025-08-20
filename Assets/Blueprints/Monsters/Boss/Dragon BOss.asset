@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Dragon BOss
   m_EditorClassIdentifier: 
   name: Dragon
-  hp: 11000
+  hp: 100000
   atk: 10
   recovery: 0
   armor: 0
   atkspeed: 1
   movespeed: 1
-  acceleration: 50
+  acceleration: 5000
   gemLootTable:
     lootTable:
     - item: 50
@@ -37,8 +37,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d1afa16a01ae27940bacfc907cede380, type: 3}
   walkFrameTime: 0.2
   abilityPrefabs:
+  - {fileID: 7744714996288908991, guid: 0a654f955ecc04d4f8a9444c2b824d40, type: 3}
   - {fileID: 7744714996288908991, guid: 5f9db995602d3414a9a87278a6d25f8b, type: 3}
+  - {fileID: 7744714996288908991, guid: 3d66328dc8309b5478058061ef1f2fa1, type: 3}
+  - {fileID: 7744714996288908991, guid: 660f5880e93344f4f93e570d858c8a14, type: 3}
   - {fileID: 7744714996288908991, guid: cc96bcabab46e43f99ddb4181af0a3a6, type: 3}
+  - {fileID: 7744714996288908991, guid: c7b1743ed4bf54f77b6c080991dceb67, type: 3}
   meleeLayer:
     serializedVersion: 2
     m_Bits: 512

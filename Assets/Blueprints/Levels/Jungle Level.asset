@@ -61,8 +61,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 1b3587b35d7cb4a008d17889617a4db5, type: 2}
   miniBosses:
   - bossPrefab: {fileID: 8960830493049914446, guid: bf088821f793b4654a2ba39cb4266ae9, type: 3}
-    bossBlueprint: {fileID: 11400000, guid: 6aa76d11a438f4bd0aab1e7b138ef8f9, type: 2}
-    spawnTime: 300
+    bossBlueprint: {fileID: 11400000, guid: 0dea91021e059a24380d2fcc274b7603, type: 2}
+    spawnTime: 0
   finalBoss:
     bossPrefab: {fileID: 8960830493049914446, guid: bf088821f793b4654a2ba39cb4266ae9, type: 3}
     bossBlueprint: {fileID: 11400000, guid: f8c41435c677742d699bbf048ae85731, type: 2}
@@ -199,3 +199,4 @@ MonoBehaviour:
   chestSpawnAmount: 2
   initialExpGemCount: 500
   initialExpGemType: 1
+  isInitialized: 0

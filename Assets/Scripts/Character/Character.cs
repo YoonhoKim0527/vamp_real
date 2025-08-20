@@ -71,12 +71,16 @@ namespace Vampire
         private CharacterStats stats;
         public CharacterStats Stats => stats;
 
+        private bool isStunned = false;
+        private Color originalColor;
+
         void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             zPositioner = gameObject.AddComponent<ZPositioner>();
             spriteAnimator = GetComponentInChildren<SpriteAnimator>();
             spriteRenderer = spriteAnimator.GetComponent<SpriteRenderer>();
+            originalColor = spriteRenderer.color;
         }
 
         void Start()
@@ -335,6 +339,32 @@ namespace Vampire
         public void SetMoveDirection(InputAction.CallbackContext context)
         {
             moveDirection = context.action.ReadValue<Vector2>().normalized;
+        }
+
+        public void Stun(float duration)
+        {
+            if (!isStunned)
+                StartCoroutine(StunRoutine(duration));
+        }
+
+        private IEnumerator StunRoutine(float duration)
+        {
+            isStunned = true;
+            // 이동/공격 입력 차단 로직 필요
+            yield return new WaitForSeconds(duration);
+            isStunned = false;
+        }
+
+        public void SetTemporaryColor(Color color, float duration)
+        {
+            StartCoroutine(ColorRoutine(color, duration));
+        }
+
+        private IEnumerator ColorRoutine(Color color, float duration)
+        {
+            spriteRenderer.color = color;
+            yield return new WaitForSeconds(duration);
+            spriteRenderer.color = originalColor;
         }
     }
 }
