@@ -49,9 +49,8 @@ namespace Vampire
 
         private EquipmentUIMode currentMode = EquipmentUIMode.Fusion;
 
-        public bool isInitialized { get; private set; } = false; 
-        
-        private static EquipmentManager instance;
+        public bool isInitialized { get; private set; } = false;
+
 
         [Header("Fusion Settings")]
         [SerializeField] private float successRate = 0.7f; // 70% 확률로 성공
@@ -59,19 +58,34 @@ namespace Vampire
         [SerializeField] private GameObject failEffectUIPrefab;    // 실패 이펙트
         [SerializeField] private RectTransform effectLayerTransform;
 
+        public event System.Action<EquipmentType, Equipment> EquippedChanged;
+        [SerializeField] private GameObject equipmentPanelRoot;
+        [SerializeField] private EquipSlotUI[] equipSlots;     // (옵션) 무기/방어구/부츠/헬멧/악세 슬롯들
+        private readonly Dictionary<EquipmentType, EquipSlotUI> slotByType = new();
+        public static EquipmentManager Instance { get; private set; }
+
 
         private void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
+            // 싱글턴 고정
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
+                return;
             }
-            Debug.Log("instance destroy on load");
+            Instance = this;
+            // 패널만 쓰는 구조면 굳이 유지할 필요 없음.
+            // DontDestroyOnLoad(gameObject);
+
+            // 슬롯 매핑
+            slotByType.Clear();
+            if (equipSlots != null)
+            {
+                foreach (var s in equipSlots)
+                {
+                    if (s != null) slotByType[s.slotType] = s;
+                }
+            }
         }
 
         private void Start()
@@ -92,6 +106,110 @@ namespace Vampire
             accessoryTabButton.onClick.AddListener(() => SwitchTab(EquipmentType.Accessory));
 
             ApplyTierSort(); // 초기 정렬 및 기본 무기 탭 표시
+        }
+
+        private void UpdateSlotUI(EquipmentType type)
+        {
+            // 슬롯 UI를 안 쓰면 그냥 리턴
+            if (!slotByType.TryGetValue(type, out var slot) || slot == null)
+                return;
+
+            if (equippedByType.TryGetValue(type, out var itemUI) && itemUI != null)
+            {
+                var eq = itemUI.GetEquipmentData();
+                slot.SetEquipment(eq);
+            }
+            else
+            {
+                slot.SetEmpty();
+            }
+        }
+
+        private void RefreshAllSlots()
+        {
+            if (slotByType.Count == 0) return; // 슬롯 UI 없음 → 무시
+            foreach (var kv in slotByType)
+                UpdateSlotUI(kv.Key);
+        }
+
+        public void OpenEquipmentPanelForType(EquipmentType type)
+        {
+            currentFilterType = type;
+            if (!equipmentPanelRoot)
+            {
+                Debug.LogError("[Equip] equipmentPanelRoot is NULL");
+                return;
+            }
+
+            // 1) 활성 & 부모 체인 활성
+            equipmentPanelRoot.SetActive(true);
+            Transform t = equipmentPanelRoot.transform;
+            while (t != null)
+            {
+                if (!t.gameObject.activeSelf) t.gameObject.SetActive(true);
+                t = t.parent;
+            }
+
+            // 2) 렌더 보정
+            equipmentPanelRoot.transform.SetAsLastSibling();     // Canvas 자식 순서 최상단
+            equipmentPanelRoot.transform.localScale = Vector3.one;  // 애니메이션/닫기에서 0으로 남는 것 방지
+
+            var cg = equipmentPanelRoot.GetComponent<CanvasGroup>() 
+                    ?? equipmentPanelRoot.AddComponent<CanvasGroup>();
+            cg.alpha = 1f; 
+            cg.interactable = true; 
+            cg.blocksRaycasts = true;
+
+            // (선택) 캔버스 정렬 우선순위 올리기 — 다른 패널이 덮지 않도록
+            var cv = equipmentPanelRoot.GetComponent<Canvas>();
+            if (!cv) cv = equipmentPanelRoot.AddComponent<Canvas>();
+            cv.overrideSorting = true; 
+            cv.sortingOrder = 3000;
+
+            if (!equipmentPanelRoot.GetComponent<UnityEngine.UI.GraphicRaycaster>())
+                equipmentPanelRoot.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+
+            // 3) RectTransform 보정 (화면 밖/크기0 방지)
+            var rt = equipmentPanelRoot.GetComponent<RectTransform>();
+            if (rt)
+            {
+                rt.anchorMin = Vector2.zero; 
+                rt.anchorMax = Vector2.one;
+                rt.anchoredPosition = Vector2.zero; 
+                rt.sizeDelta = Vector2.zero; 
+                rt.localScale = Vector3.one;
+            }
+
+            // 4) 탭/그리드 갱신 (동일 탭 재오픈이어도 리스트 재구성)
+            if (sortByWeapon) ApplyWeaponSort();
+            else ApplyTierSort();
+
+            // 5) 레이아웃 강제 재빌드 (닫았다가 열 때 레이아웃 멈춤 방지)
+            Canvas.ForceUpdateCanvases();
+            if (gridParent)
+            {
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(
+                    gridParent as RectTransform
+                );
+            }
+
+            // 6) 슬롯 아이콘도 재동기화 (보이면 패스)
+            RefreshAllSlots();
+        }
+        
+        private void EnsureGridBuiltForType(EquipmentType type)
+        {
+            var prevType = currentFilterType;
+            var prevSortByWeapon = sortByWeapon;
+
+            currentFilterType = type;
+            if (prevSortByWeapon) ApplyWeaponSort();
+            else ApplyTierSort();
+
+            // 원래 상태로 되돌리기
+            currentFilterType = prevType;
+            if (prevSortByWeapon) ApplyWeaponSort();
+            else ApplyTierSort();
         }
 
         private void SwitchTab(EquipmentType type)
@@ -268,6 +386,7 @@ namespace Vampire
 
                 if (sortByWeapon) ApplyWeaponSort();
                 else ApplyTierSort();
+                FusionTracker.Instance?.AddFusions(1);
             }
             else
             {
@@ -355,21 +474,28 @@ namespace Vampire
         {
             EquipmentType type = itemUI.GetEquipmentType();
 
-            // 이전 장착 해제
+            // 이전 장착 해제 (안전 가드)
             if (equippedByType.TryGetValue(type, out var oldEquipped))
             {
-                oldEquipped.SetEquipped(false);
+                if (oldEquipped != null && !oldEquipped.Equals(null) && oldEquipped.gameObject != null)
+                {
+                    oldEquipped.SetEquipped(false);
+                }
+                else
+                {
+                    // 죽은 참조 정리
+                    equippedByType[type] = null;
+                }
             }
 
             // 새로 장착
             equippedByType[type] = itemUI;
             itemUI.SetEquipped(true);
 
-            Debug.Log($"[RegisterEquip] Equipped: {type} -> {itemUI.GetEquipmentData().name} (tier {itemUI.GetEquipmentData().tier})");
-
-            // ✅ 장착 완료 후 즉시 저장
             SaveEquippedItemsToFile();
-
+            UpdateSlotUI(type);
+            EquippedChanged?.Invoke(type, itemUI.GetEquipmentData());
+            FindObjectOfType<GameStateManager>()?.RecomputeAllStatsFromBase();
         }
 
         private void SaveEquippedItemsToFile()
@@ -479,31 +605,35 @@ namespace Vampire
         {
             if (equippedList == null) return;
 
+            equippedByType.Clear();
+
             foreach (var saved in equippedList)
             {
-                var matchedEquip = blueprint.equipments.FirstOrDefault(e =>
-                    e.name == saved.equipmentName &&
-                    e.type == saved.type &&
-                    e.tier == saved.tier); // ✅ 정확한 tier까지 비교
+                EnsureGridBuiltForType(saved.type); // 이전 답변의 보강안 사용 권장
 
+                var matchedEquip = blueprint.equipments.FirstOrDefault(e =>
+                    e.name == saved.equipmentName && e.type == saved.type && e.tier == saved.tier);
 
                 if (matchedEquip == null) continue;
 
-                var ui = gridParent.GetComponentsInChildren<EquipItemUI>()
-                    .FirstOrDefault(ui => ui.GetEquipmentData() == matchedEquip);
+                var ui = gridParent.GetComponentsInChildren<EquipItemUI>(true)
+                    .FirstOrDefault(u => u.GetEquipmentData() == matchedEquip);
 
                 if (ui != null)
                 {
-                    Debug.Log($"[LoadEquippedItems] Setting equipped: {matchedEquip.name} (Tier {matchedEquip.tier})");
                     ui.SetEquipped(true);
                     equippedByType[saved.type] = ui;
-                }
-                else
-                {
-                    Debug.LogWarning($"[LoadEquippedItems] UI not found for: {matchedEquip.name} (Tier {matchedEquip.tier})");
+
+                    // 타입별 개별 이벤트
+                    EquippedChanged?.Invoke(saved.type, matchedEquip);
                 }
             }
-            Debug.Log("hi");
+
+            RefreshAllSlots(); // 쓰는 중이면
+            Debug.Log("[LoadEquippedItems] Equipped mapping restored.");
+
+            var gsm = FindObjectOfType<GameStateManager>();
+            gsm?.RecomputeAllStatsFromBase();
         }
 
         public List<EquipItemUI> GetEquippedItems()
@@ -526,6 +656,17 @@ namespace Vampire
             {
                 ApplyTierSort();
             }
+        }
+        public List<Equipment> GetEquippedEquipmentData()
+        {
+            var list = new List<Equipment>();
+            foreach (var kv in equippedByType)
+            {
+                if (kv.Value == null) continue;
+                var eq = kv.Value.GetEquipmentData();
+                if (eq != null) list.Add(eq);
+            }
+            return list;
         }
     }
 }

@@ -43,6 +43,14 @@ namespace Vampire
 
         private void LoadMainMenu(string dialog)
         {
+            // ✅ 씬 전환 전에 익스페디션 진행상황 저장
+            var expeditionMgr = FindObjectOfType<Vampire.ExpeditionManager>(true);
+            if (expeditionMgr != null)
+            {
+                Debug.Log("[SceneJumpController] Pre-save before loading MainMenu");
+                expeditionMgr.ForceSave();
+            }
+
             _pendingDialog = dialog;
             SceneManager.LoadScene(mainMenuSceneName);
         }

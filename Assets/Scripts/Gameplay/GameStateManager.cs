@@ -25,6 +25,8 @@ namespace Vampire
 
         public float TotalDamage => playerStats.attackPower;
 
+        private CharacterStatBlueprint baseStats;
+
         void Awake()
         {
             // ✅ 싱글턴 처리
@@ -129,6 +131,44 @@ namespace Vampire
 
             playerStats = data.playerStats ?? new CharacterStatBlueprint();
             Debug.Log("[GameStateManager] Player stats restored.");
+
+            if (baseStats == null)
+            {
+                baseStats = new CharacterStatBlueprint();
+                baseStats.CopyFrom(playerStats);
+                Debug.Log("[GameStateManager] Base stats snapshot captured.");
+            }
+
+            // ✅ 메인 메뉴에서 장비 로드까지 끝났다면, 최종 스탯 재계산
+            // (equipmentManager.LoadEquippedItems(...) 이후에 호출되도록 배치된 상태)
+            RecomputeAllStatsFromBase();
+        }
+        public void RecomputeAllStatsFromBase()
+        {
+            if (baseStats == null)
+            {
+                baseStats = new CharacterStatBlueprint();
+                baseStats.CopyFrom(playerStats);
+            }
+
+            // 1) 기준값으로 리셋
+            playerStats.CopyFrom(baseStats);
+
+            // 2) 캐릭터 배율 (선택된 캐릭터가 있으면)
+            if (selectedCharacter != null)
+            {
+                playerStats.attackPower    *= selectedCharacter.baseDamage;
+                playerStats.maxHealth      *= selectedCharacter.hp;
+                playerStats.moveSpeed      *= selectedCharacter.movespeed;
+                playerStats.defense        *= selectedCharacter.armor;
+                playerStats.healthRegen    *= selectedCharacter.recovery;
+                playerStats.criticalChance *= selectedCharacter.luck;
+            }
+
+            // 3) 장비 배율
+            ApplyEquipmentMultipliers();
+
+            Debug.Log("[GameStateManager] Recomputed all stats from base.");
         }
 
         private void RestoreItems(SaveData data)
@@ -210,51 +250,47 @@ namespace Vampire
             Debug.Log("[GameStateManager] Character stat multipliers applied.");
         }
 
-        public void ApplyEquipmentMultipliers()
+    public void ApplyEquipmentMultipliers()
+    {
+        if (equipmentManager == null)
         {
-            if (equipmentManager == null)
-            {
-                Debug.LogWarning("[GameStateManager] equipmentManager is null. 장비 곱연산 스킵.");
-                return;
-            }
-
-            Debug.Log("[GameStateManager] ApplyEquipmentMultipliers()");
-
-            var equippedItems = equipmentManager.GetEquippedItems(); // 장착된 EquipItemUI 리스트 가져오기
-
-            foreach (var itemUI in equippedItems)
-            {
-                var equip = itemUI.GetEquipmentData();
-                if (equip == null)
-                {
-                    Debug.LogWarning("[GameStateManager] 장비 데이터가 null임");
-                    continue;
-                }
-
-                switch (equip.type)
-                {
-                    case EquipmentType.Weapon:
-                        playerStats.attackPower *= equip.multiply;
-                        break;
-                    case EquipmentType.Armor:
-                        playerStats.defense *= equip.multiply;
-                        break;
-                    case EquipmentType.Boots:
-                        playerStats.moveSpeed *= equip.multiply;
-                        break;
-                    case EquipmentType.Helmet:
-                        playerStats.criticalChance *= equip.multiply;
-                        break;
-                    case EquipmentType.Accessory:
-                        playerStats.healthRegen *= equip.multiply;
-                        break;
-                }
-
-                Debug.Log($"[GameStateManager] {equip.name} (Tier {equip.tier}) - multiply {equip.multiply} 적용");
-            }
-
-            Debug.Log("[GameStateManager] Equipment stat multipliers applied.");
+            Debug.LogWarning("[GameStateManager] equipmentManager is null. 장비 곱연산 스킵.");
+            return;
         }
+
+        Debug.Log("[GameStateManager] ApplyEquipmentMultipliers()");
+
+        // ✅ 데이터 기반(Equipment)으로 읽기 — UI 생성 여부와 무관
+        var equippedData = equipmentManager.GetEquippedEquipmentData();
+
+        foreach (var equip in equippedData)
+        {
+            if (equip == null) continue;
+
+            switch (equip.type)
+            {
+                case EquipmentType.Weapon:
+                    playerStats.attackPower *= equip.multiply;
+                    break;
+                case EquipmentType.Armor:
+                    playerStats.defense *= equip.multiply;
+                    break;
+                case EquipmentType.Boots:
+                    playerStats.moveSpeed *= equip.multiply;
+                    break;
+                case EquipmentType.Helmet:
+                    playerStats.criticalChance *= equip.multiply;
+                    break;
+                case EquipmentType.Accessory:
+                    playerStats.healthRegen *= equip.multiply;
+                    break;
+            }
+
+            Debug.Log($"[GameStateManager] {equip.name} (Tier {equip.tier}) - multiply {equip.multiply} 적용");
+        }
+
+        Debug.Log("[GameStateManager] Equipment stat multipliers applied.");
+    }
 
         public void ResetCharacterStats()
         {

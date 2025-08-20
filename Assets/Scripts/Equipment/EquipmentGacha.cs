@@ -51,6 +51,7 @@ namespace Vampire
             yield return chestController.PlayChestSequence();
 
             Equipment drawn = DrawAndSaveEquipment();
+            GachaDrawTracker.Instance?.AddDraws(1);
 
             // ✅ 기존 UI는 비활성화 (선택)
             resultIcon.enabled = false;
@@ -108,6 +109,7 @@ namespace Vampire
 
                 yield return new WaitForSeconds(0.5f);
             }
+            GachaDrawTracker.Instance?.AddDraws(10);
         }
 
         private Equipment DrawAndSaveEquipment()
