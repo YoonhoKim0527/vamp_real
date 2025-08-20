@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace Vampire
 {
@@ -54,14 +55,21 @@ namespace Vampire
                 Debug.LogWarning("❌ 캐릭터가 선택되지 않았습니다.");
                 return;
             }
+            StartCoroutine(PrepareAndLoad());
+        }
 
+        private IEnumerator PrepareAndLoad()
+        {
             var gsm = FindObjectOfType<GameStateManager>();
             if (gsm != null)
             {
-                gsm.LoadGame(); // ✅ 업그레이드 반영된 playerStats 불러오기
+                yield return gsm.LoadGame(); // ✅ 로드 완료 대기
                 gsm.SetSelectedCharacter(selectedBlueprint);
-                gsm.ApplyCharacterMultipliers();
-                gsm.ApplyEquipmentMultipliers();
+
+                // 기준 스탯 → 캐릭터 → 장비 순으로 재계산 추천
+                // (RecomputeAllStatsFromBase()를 이전 답변대로 만들었다면 한 줄로 대체 가능)
+                gsm.RecomputeAllStatsFromBase();
+
                 Debug.Log($"[CharacterSelector] 게임 준비 완료: {selectedBlueprint.name}");
             }
             else
@@ -72,10 +80,10 @@ namespace Vampire
             if (CrossSceneData.LevelBlueprint == null)
             {
                 Debug.LogError("LevelBlueprint is null!");
-                return;
+                yield break;
             }
 
-            SceneManager.LoadScene(1); // GameScene
+            SceneManager.LoadScene(1);
         }
     }
 }

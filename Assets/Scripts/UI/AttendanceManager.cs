@@ -120,6 +120,7 @@ namespace Vampire
             PlayerPrefs.Save();
 
             UpdateCalendarUI();
+            AttendanceQuestTracker.Instance?.MarkAttendanceDoneToday();
             UpdateClaimButton();
         }
         void UpdateCalendarUI()

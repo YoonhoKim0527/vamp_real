@@ -179,81 +179,97 @@ namespace Vampire
             spawnedCharacters.Add(character);
 
         }
-void LoadExpeditionData()
-{
-    var data = saveManager.LoadExpeditionData();
-    Debug.Log("🚀 불러오기 시도");
-
-    currentBossIndex = data.bossIndex;
-
-    SpawnBoss(isLoading: true);
-    currentBoss?.SetHP(data.bossCurrentHP);
-
-    // 캐릭터 슬롯 초기화
-    for (int i = 0; i < selectedCharacters.Length; i++)
-        selectedCharacters[i] = null;
-
-    // 캐릭터 오브젝트 제거
-    foreach (var existingChar in spawnedCharacters)
-        Destroy(existingChar.gameObject);
-    spawnedCharacters.Clear();
-
-    // 캐릭터 복원 (씬 오브젝트 + 슬롯 모두)
-    foreach (var c in data.characters)
-    {
-        var blueprint = FindBlueprintByName(c.characterName);
-        if (blueprint == null) continue;
-
-        // 슬롯에 이미 있는지 확인 (중복 방지)
-        int slotIndex = -1;
-        if (data.selectedCharacterNames != null)
+        void LoadExpeditionData()
         {
-            slotIndex = data.selectedCharacterNames.FindIndex(name => name == c.characterName);
-            if (slotIndex >= 0 && slotIndex < selectedCharacters.Length)
-                selectedCharacters[slotIndex] = blueprint;
+            var data = saveManager.LoadExpeditionData();
+            Debug.Log("🚀 불러오기 시도");
+
+            currentBossIndex = data.bossIndex;
+
+            SpawnBoss(isLoading: true);
+            currentBoss?.SetHP(data.bossCurrentHP);
+
+            // 캐릭터 슬롯 초기화
+            for (int i = 0; i < selectedCharacters.Length; i++)
+                selectedCharacters[i] = null;
+
+            // 캐릭터 오브젝트 제거
+            foreach (var existingChar in spawnedCharacters)
+                Destroy(existingChar.gameObject);
+            spawnedCharacters.Clear();
+
+            // 캐릭터 복원 (씬 오브젝트 + 슬롯 모두)
+            foreach (var c in data.characters)
+            {
+                var blueprint = FindBlueprintByName(c.characterName);
+                if (blueprint == null) continue;
+
+                // 슬롯에 이미 있는지 확인 (중복 방지)
+                int slotIndex = -1;
+                if (data.selectedCharacterNames != null)
+                {
+                    slotIndex = data.selectedCharacterNames.FindIndex(name => name == c.characterName);
+                    if (slotIndex >= 0 && slotIndex < selectedCharacters.Length)
+                        selectedCharacters[slotIndex] = blueprint;
+                }
+
+                // 오브젝트 생성
+                GameObject go = new GameObject($"ExpeditionChar_{c.characterName}");
+                go.transform.position = c.position;
+
+                if (c.facingLeft)
+                    go.transform.localScale = new Vector3(-1, 1, 1);
+
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sprite = blueprint.walkSpriteSequence.Length > 0 ? blueprint.walkSpriteSequence[0] : null;
+
+                var animator = go.AddComponent<SpriteAnimator>();
+                animator.Init(blueprint.walkSpriteSequence, blueprint.walkFrameTime);
+                animator.StartAnimating();
+
+                var character = go.AddComponent<ExpeditionCharacter>();
+                character.Initialize(blueprint, currentBoss?.transform);
+                spawnedCharacters.Add(character);
+            }
+
+            // 부스트 복원
+            foreach (var boost in data.activeBoosts)
+                BoostManager.Instance.ActivateBoost(boost.type, 2f, boost.remainingTime);
         }
-
-        // 오브젝트 생성
-        GameObject go = new GameObject($"ExpeditionChar_{c.characterName}");
-        go.transform.position = c.position;
-
-        if (c.facingLeft)
-            go.transform.localScale = new Vector3(-1, 1, 1);
-
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = blueprint.walkSpriteSequence.Length > 0 ? blueprint.walkSpriteSequence[0] : null;
-
-        var animator = go.AddComponent<SpriteAnimator>();
-        animator.Init(blueprint.walkSpriteSequence, blueprint.walkFrameTime);
-        animator.StartAnimating();
-
-        var character = go.AddComponent<ExpeditionCharacter>();
-        character.Initialize(blueprint, currentBoss?.transform);
-        spawnedCharacters.Add(character);
-    }
-
-    // 부스트 복원
-    foreach (var boost in data.activeBoosts)
-        BoostManager.Instance.ActivateBoost(boost.type, 2f, boost.remainingTime);
-}
 
         CharacterBlueprint FindBlueprintByName(string name)
         {
             return System.Array.Find(allBlueprints, bp => bp.name == name);
         }
-void SaveExpeditionData()
-{
-    Debug.Log($"[Save] 보스: {currentBoss?.name}, HP: {currentBoss?.HP}");
-    Debug.Log($"[Save] 캐릭터 수: {spawnedCharacters.Count}");
 
-    saveManager.SaveExpeditionData(
-        currentBossIndex,
-        currentBoss?.HP ?? 0f,
-        currentBoss?.name,
-        spawnedCharacters.ConvertAll(go => go.gameObject),
-        new List<CharacterBlueprint>(selectedCharacters)
-    );
-}
+        void SaveExpeditionData()
+        {
+            Debug.Log($"[Save] 보스: {currentBoss?.name}, HP: {currentBoss?.HP}");
+            Debug.Log($"[Save] 캐릭터 수: {spawnedCharacters.Count}");
+
+            saveManager.SaveExpeditionData(
+                currentBossIndex,
+                currentBoss?.HP ?? 0f,
+                currentBoss?.name,
+                spawnedCharacters.ConvertAll(go => go.gameObject),
+                new List<CharacterBlueprint>(selectedCharacters)
+            );
+        }
+        void OnDisable()
+        {
+            Debug.Log("📝 씬 전환 등으로 ExpeditionManager 비활성화 → 저장 실행");
+            SaveExpeditionData();
+        }
+
+        void OnDestroy()
+        {
+            Debug.Log("💾 ExpeditionManager 파괴 → 저장 실행");
+            SaveExpeditionData();
+        }
+        public void ForceSave()
+        {
+            SaveExpeditionData();
+        }
 
     }
     

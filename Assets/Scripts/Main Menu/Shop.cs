@@ -19,7 +19,7 @@ namespace Vampire
         {
             if (IsInitialized)
             {
-                Debug.Log("[Shop] Already initialized. Skipping Init().");
+                Debug.Log("[Shop] Already initialized. Skipping Init()");
                 return;
             }
 
